@@ -41,8 +41,8 @@ const Deawer= () => {
               </Pressable>
             </View>
             <View>
-               <Pressable onPress={()=>navigation.navigate('AllCategory')}>
-                <Text>All Category</Text>
+               <Pressable onPress={()=>navigation.navigate('NoInternet')}>
+                <Text>No Internet</Text>
                </Pressable>
   
             </View>

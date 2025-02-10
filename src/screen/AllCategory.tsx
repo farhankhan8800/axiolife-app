@@ -34,7 +34,7 @@ import CategoryCard from '../components/CategoryCard';
       <SafeAreaView className="flex-1 bg-[#F6F6F6]">
        <SmallHeader name='All Category'/>
         <ScrollView className="flex-1">
-          <View className="justify-around pt-5 flex-row flex-wrap items-start w-full px-3 gap-y-5  pb-28">
+          <View className="justify-around pt-5 flex-row flex-wrap items-start w-full px-3 gap-y-5 gap-x-3 pb-28">
             {_category_data.map((item, i) => {
               return <CategoryCard key={i} item={item} navigation={navigation} />;
             })}

@@ -3,7 +3,7 @@ import React, {useEffect} from 'react';
 import {ScreenProps} from '../navigation/types';
 
 const Splash: React.FC<ScreenProps<'Splash'>> = ({navigation}) => {
-  const next_screen = 'Home'; // Onboarding  , Home
+  const next_screen = 'EnterOTP'; // Onboarding  , Home
   useEffect(() => {
     setTimeout(() => {
       navigation.navigate(next_screen);

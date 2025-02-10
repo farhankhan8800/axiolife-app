@@ -1,4 +1,5 @@
 import {
+  BackHandler,
   Button,
   FlatList,
   Image,
@@ -9,11 +10,12 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {TYPO} from '../assets/typo';
 import {
   responsiveFontSize,
   responsiveHeight,
+  responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import {ScreenProps} from '../navigation/types';
 import {_product_data, _store_data} from '../utils/data_';
@@ -21,6 +23,9 @@ import {gstyle} from '../assets/gstyle';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import Octicons from 'react-native-vector-icons/Octicons';
 import ProductCard from '../components/ProductCard';
+import Modal from 'react-native-modal';
+import {AlignLeft, Menu, X} from 'react-native-feather';
+import Swiper from 'react-native-swiper';
 
 const ProductScreen: React.FC<ScreenProps<'Product'>> = ({
   navigation,
@@ -29,8 +34,6 @@ const ProductScreen: React.FC<ScreenProps<'Product'>> = ({
   const {slug} = route.params || {};
 
   const [showFilter, setShowFilter] = useState<boolean>(false);
-
-  console.log(showFilter);
 
   return (
     <SafeAreaView className="flex-1 bg-[#F6F6F6]">
@@ -67,32 +70,87 @@ const ProductScreen: React.FC<ScreenProps<'Product'>> = ({
         </Pressable>
       </View>
       <ScrollView className="flex-1">
-        {showFilter && (
-          <View className="my-5">
-            <ScrollView
-              horizontal={true}
-              showsHorizontalScrollIndicator={false}>
-              <View className="px-3 ">
-                <View>
-                  <Text>Category</Text>
-                  <View style={{flexDirection: 'row', gap: 10}}>
-                    <Pressable className="p-2 bg-gray-200 rounded-full">
-                      <Text>All</Text>
-                    </Pressable>
-                  </View>
-                </View>
-              </View>
-            </ScrollView>
-          </View>
-        )}
-        <View className="justify-start flex-row flex-wrap items-start w-full gap-y-5 gap-x-[4%] pb-28">
+        <Swiper
+          autoplay={true}
+          height={responsiveHeight(18)}
+          showsPagination={false}
+          containerStyle={{marginTop: responsiveHeight(2)}}
+          style={{}}>
+          {_product_data.map((item, i) => {
+            return (
+              <Pressable key={i} className="px-3 ">
+                <Image
+                  source={{
+                    uri: item.image,
+                  }}
+                  resizeMode="cover"
+                  className="w-full h-40 rounded-md "
+                />
+              </Pressable>
+            );
+          })}
+        </Swiper>
+
+        <View className="justify-start pt-5 px-3 flex-row flex-wrap items-start w-full gap-y-5 gap-x-[4%] pb-28">
           {_product_data.map((item, i) => {
             return <ProductCard key={i} item={item} navigation={navigation} />;
           })}
         </View>
       </ScrollView>
+      {showFilter && (
+        <FilterModel showFilter={showFilter} setShowFilter={setShowFilter} />
+      )}
     </SafeAreaView>
   );
 };
 
 export default ProductScreen;
+
+const FilterModel: React.FC<{
+  showFilter: boolean;
+  setShowFilter: (value: boolean) => void;
+}> = ({showFilter, setShowFilter}) => {
+  useEffect(() => {
+    const backAction = () => {
+      if (showFilter) {
+        setShowFilter(false);
+        return true;
+      }
+      return false;
+    };
+
+    const backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      backAction,
+    );
+
+    return () => backHandler.remove();
+  }, [showFilter]);
+
+  return (
+    <Modal style={{margin: 0}} avoidKeyboard={true} isVisible={showFilter}>
+      <View
+        className="bg-white absolute px-2 py-4"
+        style={{
+          height: responsiveHeight(50),
+          bottom: 0,
+          width: responsiveWidth(100),
+        }}>
+        <View className="justify-between flex-row">
+          <View className="flex justify-center flex-row gap-2 items-baseline">
+            <Text className="text-dark_blue text-2xl font-mulish_exbold">
+              Product
+            </Text>
+            <Text className="text-dark_blue text-lg font-mulish_medium">
+              Filter
+            </Text>
+          </View>
+          <Pressable onPress={() => setShowFilter(false)}>
+            <X color={TYPO.colors.dark_blue} />
+          </Pressable>
+        </View>
+        <View></View>
+      </View>
+    </Modal>
+  );
+};

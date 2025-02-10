@@ -26,9 +26,9 @@ const BottomTab = () => {
           />
         </Pressable>
 
-        <Pressable onPress={() => navigation.navigate("Store")}>
+        <Pressable onPress={() => navigation.navigate("AllStore")}>
           <Ionicons
-            name={currentRouteName === "Store" ? "pricetags" : "pricetags-outline"}
+            name={currentRouteName === "AllStore" ? "pricetags" : "pricetags-outline"}
             color={TYPO.colors.light}
             size={responsiveFontSize(2.4)}
           />
@@ -42,7 +42,7 @@ const BottomTab = () => {
           />
         </Pressable>
 
-        <Pressable onPress={() => navigation.navigate("Profile")}>
+        <Pressable onPress={() => navigation.navigate("SignIn")}>
           <FontAwesome
             name={currentRouteName === "Profile" ? "user" : "user-o"}
             color={TYPO.colors.light}

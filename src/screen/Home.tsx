@@ -71,7 +71,7 @@ const HomeScreen: React.FC<ScreenProps<'Home'>> = ({navigation}) => {
               <Pressable
                 className="mx-1 rounded-full overflow-hidden "
                 key={item.id}
-                onPress={() => navigation.navigate('Store')}>
+                onPress={() => navigation.navigate('StoreDetail',{slug:'adidas'})}>
                 <Image
                   source={{uri: item.image}}
                   resizeMode="cover"
@@ -83,7 +83,7 @@ const HomeScreen: React.FC<ScreenProps<'Home'>> = ({navigation}) => {
         </ScrollView>
         <Pressable
           className="mx-3 mt-7"
-          onPress={() => navigation.navigate('Store')}>
+          onPress={() => navigation.navigate('ProductDetail',{slug:''})}>
           <Image
             source={{
               uri: 'https://t3.ftcdn.net/jpg/03/16/37/64/360_F_316376413_nYL2jpLONPQPOsy31DE86n7FPpSxPIi3.jpg',
@@ -134,8 +134,8 @@ const HomeScreen: React.FC<ScreenProps<'Home'>> = ({navigation}) => {
             horizontal={true}
             showsHorizontalScrollIndicator={false}
             className="mt-7 pb-28">
-            <View className="mx-3 flex-row gap-6">
-              {_category_data.slice(0,4).map((item, i) => {
+            <View className="mx-3 flex-row gap-x-6">
+              {_category_data.map((item, i) => {
                 return (
                   <CategoryCard key={i} item={item} navigation={navigation} />
                 );

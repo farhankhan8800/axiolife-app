@@ -30,10 +30,8 @@ const SmallHeader: React.FC<SHProps> = ({name}) => {
       </Pressable>
 
       <Text
-        className="text-dark_blue text-lg font-medium max-w-64"
-        numberOfLines={1}>
-        {name}
-      </Text>
+        className="text-dark_blue text-lg font-medium capitalize"
+        numberOfLines={1}>{name}</Text>
 
       {/* <Pressable style={gstyle.shadow_s} className="relative p-2 bg-gray-200 rounded-full">
         <Entypo
@@ -42,7 +40,7 @@ const SmallHeader: React.FC<SHProps> = ({name}) => {
           size={responsiveFontSize(2.2)}
         />
       </Pressable> */}
-      <View></View>
+      <View className='w-10'></View>
     </View>
   );
 };

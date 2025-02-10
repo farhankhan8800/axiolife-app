@@ -5,7 +5,8 @@ export type RootStackParamList = {
   Onboarding: undefined;
   Home: undefined;
   Search: undefined;
-  Store: undefined;
+  AllStore: undefined;
+  StoreDetail: { slug:string};
   Profile: undefined;
   ProductDetail: { slug: string }; 
   Notification: undefined 
@@ -13,6 +14,10 @@ export type RootStackParamList = {
   Product: { slug: string }  
   AllCategory:undefined 
   CategoryDetail: { slug: string }   
+  NoInternet: undefined ;
+  SignUp: undefined ;
+  SignIn: undefined ;
+  EnterOTP: undefined ;
 };
 
 
