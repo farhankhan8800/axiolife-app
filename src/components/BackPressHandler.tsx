@@ -1,38 +1,48 @@
-import { useEffect, useState } from "react";
-import { BackHandler, ToastAndroid } from "react-native";
+import React, { useState, useCallback } from "react";
+import { BackHandler } from "react-native";
 import Toast from "react-native-toast-message";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 
-const BackPressHandler = () => {
+const BackPressHandler = ({ navigateTo }: { navigateTo?: string }) => {
   const [exitApp, setExitApp] = useState(false);
+  const navigation = useNavigation();
 
-  useEffect(() => {
-    const backAction = () => {
-      if (exitApp) {
-        BackHandler.exitApp(); 
-      } else {
-        Toast.show({
-            type: 'ExitAppToast',
-            text1: 'Press back again to exit',
-            position: "bottom",  
-            visibilityTime: 2000,
-          });
-        setExitApp(true);
-        setTimeout(() => {
-          setExitApp(false);
-        }, 2000);
-      }
-      return true; 
-    };
+ 
+  const backAction = useCallback(() => {
+    if (navigateTo) {
+      navigation.navigate(navigateTo as never);
+      return true;
+    }
 
-   
-    const backHandler = BackHandler.addEventListener("hardwareBackPress", backAction);
+    if (exitApp) {
+      BackHandler.exitApp();
+    } else {
+      Toast.show({
+        type: "ExitAppToast",
+        text1: "Press back again to exit",
+        position: "bottom",
+        visibilityTime: 2000,
+      });
 
-    return () => {
-        backHandler.remove();
-    };
-  }, [exitApp]);
+      setExitApp(true);
 
-  return null; 
+      setTimeout(() => {
+        setExitApp(false);
+      }, 2000);
+    }
+    return true;
+  }, [exitApp, navigateTo, navigation]); 
+  useFocusEffect(
+    useCallback(() => {
+      const backHandler =  BackHandler.addEventListener("hardwareBackPress", backAction);
+
+      return () => {
+        backHandler.remove()
+      };
+    }, [backAction]) 
+  );
+
+  return null;
 };
 
 export default BackPressHandler;

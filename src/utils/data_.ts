@@ -341,4 +341,32 @@ export const _store_data = [
     },
 ];
 
+export const user_address = [
+  {
+    id: 1,
+    name: "John Doe",
+    phone: "+91 9876543210",
+    address: "123, MG Road, Indiranagar",
+    city: "Bangalore",
+    state: "Karnataka",
+    pincode: "560038",
+    country: "India",
+    landmark: "Near Metro Station",
+    type: "Home",
+    isDefault: true,
+  },
+  {
+    id: 2,
+    name: "Jane Smith",
+    phone: "+1 415-123-4567",
+    address: "456 Market Street, Apt 23B",
+    city: "San Francisco",
+    state: "California",
+    pincode: "94103",
+    country: "USA",
+    landmark: "Opposite Starbucks",
+    type: "Work",
+    isDefault: false,
+  },
 
+];
