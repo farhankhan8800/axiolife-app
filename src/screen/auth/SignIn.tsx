@@ -24,7 +24,9 @@ const SignIn: React.FC<ScreenProps<'SignIn'>> = ({navigation}) => {
         </View>
 
         <View className="px-3 mb-10" style={{marginTop: responsiveHeight(10)}}>
-          <Pressable className="mt-6 bg-main py-3 rounded-xl border border-main  flex items-center">
+          <Pressable
+            onPress={() => navigation.navigate('Home')}
+            className="mt-6 bg-main py-3 rounded-xl border border-main  flex items-center">
             <Text className="text-white text-lg font-mulish_semibold">
               Sign In
             </Text>
