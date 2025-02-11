@@ -42,7 +42,7 @@ const BottomTab = () => {
           />
         </Pressable>
 
-        <Pressable onPress={() => navigation.navigate("SignIn")}>
+        <Pressable onPress={() => navigation.navigate("Profile")}> 
           <FontAwesome
             name={currentRouteName === "Profile" ? "user" : "user-o"}
             color={TYPO.colors.light}

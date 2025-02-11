@@ -18,6 +18,10 @@ import NoInternet from '../screen/NoInternet';
 import SignUp from '../screen/auth/SignUp';
 import SignIn from '../screen/auth/SignIn';
 import EnterOTP from '../screen/auth/EnterOTP';
+import EditProfile from '../screen/user/EditProfile';
+import UserAddress from '../screen/user/Address';
+import UserOrder from '../screen/user/Order';
+import UserFavorite from '../screen/user/UserFavorite';
 
 const Stack = createStackNavigator<RootStackParamList>();
 
@@ -46,6 +50,10 @@ function MainNavigator() {
        <Stack.Screen name="SignUp" component={SignUp} />
        <Stack.Screen name="SignIn" component={SignIn} />
        <Stack.Screen name="EnterOTP" component={EnterOTP} />
+       <Stack.Screen name="EditProfile" component={EditProfile} />
+       <Stack.Screen name="Address" component={UserAddress} />
+       <Stack.Screen name="Order" component={UserOrder} />
+       <Stack.Screen name="UserFavorite" component={UserFavorite} />
     </Stack.Navigator>
   );
 }

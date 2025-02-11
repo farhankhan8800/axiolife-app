@@ -20,12 +20,14 @@ import {ScreenProps} from '../navigation/types';
 import {_category_data, _product_data, _store_data} from '../utils/data_';
 import ProductCard from '../components/ProductCard';
 import CategoryCard from '../components/CategoryCard';
+import BackPressHandler from '../components/BackPressHandler';
 
 const HomeScreen: React.FC<ScreenProps<'Home'>> = ({navigation}) => {
   return (
     <SafeAreaView className="flex-1 bg-[#F6F6F6]">
       <HomeHeader />
       <BottomTab />
+      <BackPressHandler />
       <ScrollView className="flex-1">
         <View className="px-3 mt-3">
           <Pressable
@@ -56,10 +58,13 @@ const HomeScreen: React.FC<ScreenProps<'Home'>> = ({navigation}) => {
                 </Text>
               </View>
             </View>
+            <Pressable onPress={()=>navigation.navigate('Address')}>
             <ChevronRight
               width={responsiveFontSize(2.3)}
               color={TYPO.colors.dark}
             />
+            </Pressable>
+          
           </View>
         </View>
         <ScrollView

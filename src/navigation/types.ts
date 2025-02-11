@@ -18,6 +18,10 @@ export type RootStackParamList = {
   SignUp: undefined ;
   SignIn: undefined ;
   EnterOTP: undefined ;
+  EditProfile: undefined ;
+  Address: undefined ;
+  Order: undefined ;
+  UserFavorite: undefined ;
 };
 
 

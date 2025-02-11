@@ -1,12 +1,20 @@
-import {Pressable, SafeAreaView, Text, TextInput, View} from 'react-native';
-import React from 'react';
+import {Pressable, SafeAreaView, StyleSheet, Text, TextInput, View} from 'react-native';
+import React, { useState } from 'react';
 import {ScreenProps} from '../../navigation/types';
 import {responsiveHeight} from 'react-native-responsive-dimensions';
-import { OtpInput } from "react-native-otp-entry";
-
+import {OtpInput} from 'react-native-otp-entry';
+import { TYPO } from '../../assets/typo';
 
 const EnterOTP: React.FC<ScreenProps<'EnterOTP'>> = ({navigation}) => {
   const mobile_number = '8768686864';
+  const [otp, setOtp] = useState('');
+
+
+  const OTPFilled = (otpText:string) => {
+    console.log(`OTP is ${otpText}`)
+  }
+
+
 
   return (
     <SafeAreaView className="flex-1">
@@ -19,43 +27,33 @@ const EnterOTP: React.FC<ScreenProps<'EnterOTP'>> = ({navigation}) => {
             Enter the 4 digits code that you recived on your mobile number +91
             ******{mobile_number.slice(-4)}
           </Text>
-          <View className="mt-16">
-            {/* <TextInput
-              className="mt-2 bg-[#1C242A] text-white text-lg font-mulish_medium px-4 py-3 rounded-xl border border-gray-800"
-              placeholder="+91 8899888800"
-              placeholderTextColor="#A0A5A8"
-              keyboardType="phone-pad"
-            /> */}
-
-<OtpInput
-  numberOfDigits={4}
-  focusColor="green"
-  autoFocus={false}
-  hideStick={true}
-  placeholder="******"
-  blurOnFilled={true}
-  disabled={false}
-  type="numeric"
-  secureTextEntry={false}
-  focusStickBlinkingDuration={500}
-  onFocus={() => console.log("Focused")}
-  onBlur={() => console.log("Blurred")}
-  onTextChange={(text) => console.log(text)}
-  onFilled={(text) => console.log(`OTP is ${text}`)}
-  textInputProps={{
-    accessibilityLabel: "One-Time Password",
-  }}
-//   theme={{
-//     containerStyle: styles.container,
-//     pinCodeContainerStyle: styles.pinCodeContainer,
-//     pinCodeTextStyle: styles.pinCodeText,
-//     focusStickStyle: styles.focusStick,
-//     focusedPinCodeContainerStyle: styles.activePinCodeContainer,
-//     placeholderTextStyle: styles.placeholderText,
-//     filledPinCodeContainerStyle: styles.filledPinCodeContainer,
-//     disabledPinCodeContainerStyle: styles.disabledPinCodeContainer,
-//   }}
-/>
+          <View className="mt-16 px-10">
+          
+            <OtpInput
+              numberOfDigits={4}
+              focusColor="green"
+              autoFocus={false}
+              hideStick={true}
+              placeholder="0000"
+              blurOnFilled={true}
+              disabled={false}
+              type="numeric"
+              secureTextEntry={false}
+              focusStickBlinkingDuration={500}
+              // onFocus={() => console.log('Focused')}
+              // onBlur={() => console.log('Blurred')}
+              onTextChange={text => console.log(text)}
+              onFilled={text => OTPFilled(text)}
+              textInputProps={{
+                accessibilityLabel: 'One-Time Password',
+              }}
+                theme={{
+                  containerStyle: styles.container,
+                  pinCodeContainerStyle: styles.pinCodeContainer,
+                  pinCodeTextStyle: styles.pinCodeText,
+                  placeholderTextStyle: styles.placeholderText,
+                }}
+            />
           </View>
           <View className="flex-row justify-center items-center  gap-1 pt-10">
             <Text className="text-base text-light font-mulish_semibold">
@@ -84,3 +82,31 @@ const EnterOTP: React.FC<ScreenProps<'EnterOTP'>> = ({navigation}) => {
 export default EnterOTP;
 
 // https://dribbble.com/shots/22809076-Mobile-App-Login-Screen-Dark-Theme
+
+
+const styles = StyleSheet.create({
+  container: {
+   
+  },
+  pinCodeContainer: {
+    height: 50,
+    width: 70,
+    borderWidth: 1,
+    borderColor: '#1C242A',
+    borderRadius: 12,
+    backgroundColor:'#1C242A',
+  },
+  pinCodeText: {
+    fontSize: 16,
+    fontFamily:TYPO.fontfamily.mulish_medium,
+    color: TYPO.colors.light,
+  },
+  placeholderText:{
+    fontSize: 16,
+    fontFamily:TYPO.fontfamily.mulish_medium,
+    color: TYPO.colors.light_gray,
+  },
+  activePinCodeContainer:{
+    borderColor:TYPO.colors.main
+  }
+})
