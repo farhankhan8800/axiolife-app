@@ -47,6 +47,15 @@ const Deawer= () => {
                <Pressable onPress={()=>navigation.navigate('NotFound')}>
                 <Text>NotFound</Text>
                </Pressable>
+               <Pressable onPress={()=>navigation.navigate('HelpDesk')}>
+                <Text>HelpDesk</Text>
+               </Pressable>
+               <Pressable onPress={()=>navigation.navigate('ContactUs')}>
+                <Text>ContactUs</Text>
+               </Pressable>
+               <Pressable onPress={()=>navigation.navigate('PrivacyTc')}>
+                <Text>Privacy Policy / Terms and Conditions</Text>
+               </Pressable>
   
             </View>
           </View>

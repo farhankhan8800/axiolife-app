@@ -1,7 +1,6 @@
 import {createStackNavigator} from '@react-navigation/stack';
 import Search from '../screen/Search';
 import HomeScreen from '../screen/Home';
-import Profile from '../screen/user/Profile';
 import Splash from '../screen/Splash';
 import Onboarding from '../screen/Onboarding';
 import ProductDetail from '../screen/ProductDetail';
@@ -15,14 +14,20 @@ import StoreDetail from '../screen/StoreDetail';
 import SignUp from '../screen/auth/SignUp';
 import SignIn from '../screen/auth/SignIn';
 import EnterOTP from '../screen/auth/EnterOTP';
-import EditProfile from '../screen/user/EditProfile';
-import UserAddress from '../screen/user/Address';
 import UserOrder from '../screen/user/Order';
 import UserFavorite from '../screen/user/UserFavorite';
 import NoInternet from '../screen/common/NoInternet';
 import NotFound from '../screen/common/NotFound';
 import AddAddress from '../screen/user/AddAddress';
 import OrderDetail from '../screen/user/OrderDetail';
+import EditProfile from '../screen/user/EditProfile';
+import Profile from '../screen/user/Profile';
+import UserAddress from '../screen/user/Address'
+import HelpDesk from '../screen/common/HelpDesk';
+import ContactUs from '../screen/common/ContactUs';
+import PrivacyTc from '../screen/common/PrivacyTc';
+
+
 
 const Stack = createStackNavigator();
 
@@ -56,6 +61,9 @@ function MainNavigator() {
       <Stack.Screen name="UserFavorite" component={UserFavorite} />
       <Stack.Screen name="NotFound" component={NotFound} />
       <Stack.Screen name="AddAddress" component={AddAddress} />
+      <Stack.Screen name="HelpDesk" component={HelpDesk} />
+      <Stack.Screen name="ContactUs" component={ContactUs} />
+      <Stack.Screen name="PrivacyTc" component={PrivacyTc} />
       <Stack.Screen
         name="OrderDetail"
         options={{

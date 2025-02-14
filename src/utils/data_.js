@@ -214,6 +214,25 @@ export const _store_data = [
       image:'https://static.vecteezy.com/system/resources/previews/036/175/110/non_2x/jeans-black-icon-isolated-on-white-background-free-vector.jpg',
       slug:'jins',
     },
+    {
+      id:1,
+      name:'Toy',
+      image:'https://static.vecteezy.com/system/resources/previews/002/205/906/non_2x/shopping-bag-icon-free-vector.jpg',
+      slug:'bag',
+    },
+    {
+      id:1,
+      name:'Mobile',
+      image:'https://img.freepik.com/premium-vector/shoe-icon-black-shoe-silhouette-symbol-white-background-vector-illustration_89223-484.jpg?w=360',
+      slug:'shose',
+    },
+    {
+      id:1,
+      name:'Shirt',
+      image:'https://static.vecteezy.com/system/resources/previews/036/175/110/non_2x/jeans-black-icon-isolated-on-white-background-free-vector.jpg',
+      slug:'Shirt',
+    },
+   
 
   ]
 
@@ -486,4 +505,143 @@ export const order_detail_data = {
   itemimage: "https://images-cdn.ubuy.co.in/633b4d0ec453a05ef838979c-damyuan-running-shoes-men-fashion.jpg",
   order_date: "30 Jan 2025, 03:00 PM",
   order_status: "Delivered on 05 Feb 2025",
-}
+
+
+
+  // Customer Details
+  customer: {
+    name: "John Doe",
+    phone: "+91 9876543210",
+    alternate_phone: "+91 9876500000",
+    email: "johndoe@example.com",
+    address: {
+      street: "123, MG Road, Indiranagar",
+      city: "Bangalore",
+      state: "Karnataka",
+      pincode: "560038",
+      country: "India",
+      landmark: "Near Metro Station",
+      type: "Home",
+    },
+  },
+
+  // Payment Details
+  payment: {
+    method: "Credit Card",
+    transaction_id: "TXN987654321",
+    status: "Paid",
+    tax_amount: 150,
+    discount_applied: 0,
+    total_paid: 2900,
+  },
+
+  // Item Details
+  items: [
+    {
+      product: {
+        product_id: "P101",
+        name: "Damyuan Running Shoes",
+        brand: "Damyuan",
+        category: "Men's Footwear",
+        size: "UK 10",
+        color: "Black",
+        quantity: 1,
+        price: 2900,
+        image: "https://images-cdn.ubuy.co.in/633b4d0ec453a05ef838979c-damyuan-running-shoes-men-fashion.jpg",
+      },
+      tracking: {
+        shipped_date: "01 Feb 2025",
+        estimated_delivery: "05 Feb 2025",
+        actual_delivery: "05 Feb 2025",
+        courier: "Blue Dart",
+        tracking_id: "BLD123456789",
+        status: "Delivered",
+      },
+    },
+    {
+      product: {
+        product_id: "P102",
+        name: "Damyuan Running Shoes",
+        brand: "Damyuan",
+        category: "Men's Footwear",
+        size: "UK 10",
+        color: "Black",
+        quantity: 1,
+        price: 2900,
+        image: "https://images-cdn.ubuy.co.in/633b4d0ec453a05ef838979c-damyuan-running-shoes-men-fashion.jpg",
+      },
+      tracking: {
+        shipped_date: "01 Feb 2025",
+        estimated_delivery: "05 Feb 2025",
+        actual_delivery: "05 Feb 2025",
+        courier: "Blue Dart",
+        tracking_id: "BLD123456789",
+        status: "Delivered",
+      },
+    },
+  ],
+
+  // Order Summary
+  summary: {
+    subtotal: 2750,
+    tax: 150,
+    discount: 0,
+    shipping_fee: 0,
+    total: 2900,
+    payment_status: "Paid",
+  },
+};
+
+
+export const faqdata = [
+  {
+    "id": 1,
+    "question": "What is React Native, and how is it different from React.js?",
+    "answer": "React Native is a framework that allows developers to build mobile applications using JavaScript and React. Unlike React.js, which is used for web applications and renders HTML elements, React Native renders native components for iOS and Android, giving a more native feel and better performance. React Native also allows developers to write a single codebase for both platforms, reducing development time."
+  },
+  {
+    "id": 2,
+    "question": "What are the core components of React Native?",
+    "answer": "React Native provides several built-in components for building user interfaces. Some of the most commonly used components include:\n- **View**: A basic container for layout.\n- **Text**: Used for displaying text.\n- **Image**: For displaying images.\n- **ScrollView**: A scrollable container for child elements.\n- **FlatList**: A performant way to render long lists.\n- **TextInput**: An input field for user text entry."
+  },
+  {
+    "id": 3,
+    "question": "How does React Native handle styling?",
+    "answer": "React Native uses a styling system similar to CSS but with JavaScript objects. Instead of using traditional CSS classes, styles are defined using JavaScript objects with properties written in camelCase. It also supports inline styles and StyleSheet API for better performance.\nExample:\n```js\nconst styles = StyleSheet.create({\n  container: {\n    flex: 1,\n    backgroundColor: 'white',\n    padding: 10\n  },\n  text: {\n    fontSize: 16,\n    color: 'black'\n  }\n});\n```\n"
+  },
+  {
+    "id": 4,
+    "question": "What is the difference between useEffect and useLayoutEffect in React Native?",
+    "answer": "Both `useEffect` and `useLayoutEffect` are React hooks that allow running side effects in function components. The key difference is:\n- `useEffect`: Runs asynchronously **after** the render cycle and does not block the UI.\n- `useLayoutEffect`: Runs **synchronously** after all DOM mutations but **before** the screen updates, ensuring that UI changes are visible immediately.\n\n`useLayoutEffect` is useful when you need to measure layout changes or update the UI before the user sees the changes."
+  },
+  {
+    "id": 5,
+    "question": "How does React Native handle navigation?",
+    "answer": "React Native does not include built-in navigation like web applications. Instead, developers use third-party libraries such as:\n- **React Navigation**: The most popular library, providing stack, tab, and drawer navigation.\n- **React Native Navigation**: A library by Wix that offers a more native-like navigation experience.\n\nExample using React Navigation:\n```js\nimport { createStackNavigator } from '@react-navigation/stack';\nimport { NavigationContainer } from '@react-navigation/native';\nconst Stack = createStackNavigator();\nfunction App() {\n  return (\n    <NavigationContainer>\n      <Stack.Navigator>\n        <Stack.Screen name='Home' component={HomeScreen} />\n        <Stack.Screen name='Profile' component={ProfileScreen} />\n      </Stack.Navigator>\n    </NavigationContainer>\n  );\n}\nexport default App;\n```\n"
+  },
+  {
+    "id": 6,
+    "question": "What is the role of Metro Bundler in React Native?",
+    "answer": "Metro Bundler is the JavaScript bundler that comes with React Native. It compiles and optimizes JavaScript code for mobile applications. Metro handles the following tasks:\n- Transpiling JavaScript (ES6/ES7) to older JavaScript versions for compatibility.\n- Minifying and optimizing assets.\n- Hot Module Replacement (HMR) for faster development.\n- Resolving dependencies efficiently.\nMetro ensures that JavaScript code runs smoothly across different mobile devices."
+  },
+  {
+    "id": 7,
+    "question": "How does React Native handle state management?",
+    "answer": "React Native applications can manage state in multiple ways:\n1. **React's Built-in State**: Using `useState` and `useContext` for small-scale apps.\n2. **Redux**: A centralized state management solution for large applications.\n3. **Recoil**: A modern state management library optimized for React.\n4. **Zustand**: A lightweight alternative to Redux, providing simple store management.\n\nExample using `useState`:\n```js\nconst [count, setCount] = useState(0);\nreturn <Button title={`Count: ${count}`} onPress={() => setCount(count + 1)} />;\n```\n"
+  },
+  {
+    "id": 8,
+    "question": "How do you handle offline data in a React Native app?",
+    "answer": "Handling offline data is crucial for user experience. Methods include:\n- **AsyncStorage**: A simple key-value storage for caching data.\n- **SQLite**: A lightweight database for structured storage.\n- **Realm**: A high-performance local database.\n- **WatermelonDB**: An optimized database for React Native.\n\nExample using AsyncStorage:\n```js\nimport AsyncStorage from '@react-native-async-storage/async-storage';\nconst storeData = async (key, value) => {\n  await AsyncStorage.setItem(key, JSON.stringify(value));\n};\nconst getData = async (key) => {\n  const value = await AsyncStorage.getItem(key);\n  return value ? JSON.parse(value) : null;\n};\n```\n"
+  },
+  {
+    "id": 9,
+    "question": "How does React Native communicate with native code?",
+    "answer": "React Native interacts with native code using the **Bridge** and **Native Modules**. This allows JavaScript to communicate with native APIs in Android and iOS. Some key ways include:\n- **Native Modules**: Used to access platform-specific functionalities like sensors and Bluetooth.\n- **Event Emitters**: Allow sending data between JavaScript and native modules.\n\nExample of a Native Module in Android:\n```java\npackage com.myapp;\nimport android.widget.Toast;\nimport com.facebook.react.bridge.ReactApplicationContext;\nimport com.facebook.react.bridge.ReactContextBaseJavaModule;\nimport com.facebook.react.bridge.ReactMethod;\npublic class ToastModule extends ReactContextBaseJavaModule {\n  public ToastModule(ReactApplicationContext reactContext) {\n    super(reactContext);\n  }\n  @ReactMethod\n  public void showToast(String message) {\n    Toast.makeText(getReactApplicationContext(), message, Toast.LENGTH_SHORT).show();\n  }\n}\n```\n"
+  },
+  {
+    "id": 10,
+    "question": "What is the purpose of Hermes in React Native?",
+    "answer": "Hermes is an open-source JavaScript engine optimized for React Native applications. It improves performance by:\n- Reducing app startup time.\n- Minimizing memory usage.\n- Pre-compiling JavaScript bytecode.\n\nTo enable Hermes, modify your `android/app/build.gradle` file:\n```gradle\nproject.ext.react = [\n  enableHermes: true  // Enable Hermes for better performance\n]\n```\n\nEnabling Hermes makes React Native apps faster, especially on low-end devices."
+  }
+]

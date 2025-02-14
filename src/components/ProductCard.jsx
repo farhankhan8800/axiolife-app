@@ -12,8 +12,8 @@ import { NavigationProp } from "@react-navigation/native";
 const ProductCard = ({item, navigation}) => {
   return (
     <Pressable className=" w-[48%]" onPress={()=> navigation.navigate('ProductDetail',{slug:item.slug})}>
-      <View className="w-full relative rounded-3xl shadow-white   justify-center items-center h-44 bg-light mb-0 ">
-        <Pressable className='absolute top-3 right-3 z-10 p-[6px] bg-gray-200 rounded-full'>
+      <View className="w-full relative rounded-3xl shadow-white   justify-center items-center h-44 bg-gray-100 mb-0 ">
+        <Pressable className='absolute top-3 right-3 z-10 p-[6px] bg-light rounded-full'>
           {
             item.like == 1 ? <Icon name='heart' color={TYPO.colors.main} size={responsiveFontSize(2.2)} /> :  <Icon name='hearto' color={TYPO.colors.dark_blue} size={responsiveFontSize(2.2)} />
           }  

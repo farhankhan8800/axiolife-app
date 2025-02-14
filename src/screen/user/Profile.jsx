@@ -20,7 +20,6 @@ import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {getRandomColor} from '../../utils/utils';
 
-
 let link_ = [
   {
     id: 1,
@@ -71,7 +70,10 @@ const Profile = ({navigation}) => {
           My Profile
         </Text>
 
-        <Pressable onPress={() => navigation.navigate('EditProfile')} style={gstyle.shadow_s} className="">
+        <Pressable
+          onPress={() => navigation.navigate('EditProfile')}
+          style={gstyle.shadow_s}
+          className="">
           <Text className="text-dark_blue text-base capitalize font-mulish_regular underline max-w-64">
             Edit
           </Text>
@@ -98,11 +100,16 @@ const Profile = ({navigation}) => {
               </Pressable>
             </View>
           </View>
-          <View className='mt-7 px-1'>
+          <View className="mt-7 px-1">
             {link_.map((item, i) => {
               return (
-                <View
+                <Pressable
                   key={item.id}
+                  onPress={() =>
+                    navigation.navigate({
+                      name: item.route,
+                    })
+                  }
                   className="py-4 px-1 border-b-[1px] border-gray-200 flex-row justify-between items-center mb-1">
                   <View className="flex-row justify-start items-center gap-3">
                     <MaterialCommunityIcons
@@ -114,18 +121,14 @@ const Profile = ({navigation}) => {
                       {item.name}
                     </Text>
                   </View>
-                  <Pressable
-                    onPress={() =>
-                      navigation.navigate({
-                        name: item.route })
-                    }>
-                      <FontAwesome6
+                  <View>
+                    <FontAwesome6
                       name={'angle-right'}
                       color={TYPO.colors.light_gray}
                       size={responsiveFontSize(1.6)}
                     />
-                    </Pressable>
-                </View>
+                  </View>
+                </Pressable>
               );
             })}
           </View>

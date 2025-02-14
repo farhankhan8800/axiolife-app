@@ -22,7 +22,7 @@ import Swiper from 'react-native-swiper';
 
 const AllStore = ({navigation}) => {
   return (
-    <SafeAreaView className="flex-1 bg-[#F6F6F6]">
+    <SafeAreaView className="flex-1 bg-light">
       <SmallHeader name="All Store" />
       <ScrollView className="flex-1">
         <Swiper
@@ -49,7 +49,7 @@ const AllStore = ({navigation}) => {
         <View className="px-2 flex-row flex-wrap flex-start gap-5 mt-5">
           {_store_data.map((item, i) => (
             <Pressable
-              className="mx-1 "
+              className="mx-1 bg-gray-100 "
               key={item.id}
               onPress={() => navigation.navigate('AllStore')}>
               <Image

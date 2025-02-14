@@ -27,10 +27,7 @@ import Modal from 'react-native-modal';
 import {AlignLeft, Menu, X} from 'react-native-feather';
 import Swiper from 'react-native-swiper';
 
-const ProductScreen = ({
-  navigation,
-  route,
-}) => {
+const ProductScreen = ({navigation, route}) => {
   const {slug} = route.params || {};
 
   const [showFilter, setShowFilter] = useState(false);
@@ -97,9 +94,7 @@ const ProductScreen = ({
           })}
         </View>
       </ScrollView>
-      {showFilter && (
-        <FilterModel showFilter={showFilter} setShowFilter={setShowFilter} />
-      )}
+      <FilterModel showFilter={showFilter} setShowFilter={setShowFilter} />
     </SafeAreaView>
   );
 };
@@ -107,22 +102,13 @@ const ProductScreen = ({
 export default ProductScreen;
 
 const FilterModel = ({showFilter, setShowFilter}) => {
+  const closeFilter = () => {
+    setShowFilter(false);
+  };
+
   useEffect(() => {
-    const backAction = () => {
-      if (showFilter) {
-        setShowFilter(false);
-        return true;
-      }
-      return false;
-    };
-
-    const backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      backAction,
-    );
-
-    return () => backHandler.remove();
-  }, [showFilter]);
+    return () => {};
+  }, []);
 
   return (
     <Modal style={{margin: 0}} avoidKeyboard={true} isVisible={showFilter}>
@@ -142,7 +128,7 @@ const FilterModel = ({showFilter, setShowFilter}) => {
               Filter
             </Text>
           </View>
-          <Pressable onPress={() => setShowFilter(false)}>
+          <Pressable onPress={closeFilter}>
             <X color={TYPO.colors.dark_blue} />
           </Pressable>
         </View>

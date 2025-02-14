@@ -9,25 +9,30 @@ import {
 import Icon from 'react-native-vector-icons/AntDesign';
 import {TYPO} from '../assets/typo';
 
-
-
-
-const CategoryCard  = ({item, navigation}) => {
+export const CategoryCardHome = ({item, navigation}) => {
   return (
     <Pressable
-      className=" w-[40%] max-w-36"
+      className=" w-[130px]"
       onPress={() => navigation.navigate('CategoryDetail', {slug: item.slug})}>
-      <View className="w-full relative rounded-3xl shadow-white   justify-center items-center  p-4 bg-light ">
+      <View className="w-full  relative rounded-3xl overflow-hidden shadow-white   justify-center items-center  bg-light ">
         <Image
-          source={{uri: item.image}}
-          resizeMode="contain"
-          style={{width: '100%', height: responsiveHeight(11)}}
-          className="w-28 h-28"
+          source={{
+            uri: 'https://www.teach-this.com/images/images-ideas/first-day-of-class-activities.png',
+          }}
+          resizeMode="cover"
+          style={{width: '100%', height: responsiveHeight(15)}}
+          className="rounded-md"
         />
+
+        <View
+          style={{height: responsiveHeight(15)}}
+          className="w-full h-28 absolute top-0 left-0 bg-[rgba(0,0,0,.2)]"></View>
       </View>
-      <Text className='text-lg text-dark_blue font-mulish_semibold text-center mt-2'>{item.name}</Text>
+      <Text className="text-lg  text-dark_blue font-mulish_semibold text-center mt-2">
+        {item.name}
+      </Text>
     </Pressable>
   );
 };
 
-export default CategoryCard;
+

@@ -59,7 +59,7 @@ const CartScreen = ({navigation}) => {
           {_product_data.slice(0, 3).map((item, i) => {
             return (
               <View key={i} className="flex-row mb-5 gap-4">
-                <View className="w-[30%] p-3  bg-gray-200 rounded-2xl overflow-hidden justify-center items-center">
+                <View className="w-[30%] p-3  bg-gray-100 rounded-2xl overflow-hidden justify-center items-center">
                   <Image
                     source={{uri: item.image}}
                     resizeMode="contain"
@@ -76,7 +76,7 @@ const CartScreen = ({navigation}) => {
                     <Text className="text-xl font-mulish_bold text-dark_blue">
                       ${item.price}
                     </Text>
-                    <View className="flex-row justify-between items-center bg-gray-200 rounded-full p-1">
+                    <View className="flex-row justify-between items-center bg-gray-100 rounded-full p-1">
                       <Pressable className="rounded-full bg-light p-[1px]">
                         <Entypo
                           name="minus"
@@ -143,7 +143,7 @@ const CartScreen = ({navigation}) => {
                 {coupon_code.map((code, index) => {
                   return (
                     <Pressable
-                      className="bg-gray-200 py-1 px-2 rounded-full"
+                      className="bg-gray-100 py-1 px-2 rounded-full"
                       onPress={() => {
                         setShowCoupponBox(false);
                       }}>

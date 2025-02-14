@@ -15,16 +15,22 @@ import HomeHeader from '../components/HomeHeader';
 import BottomTab from '../components/BottomTab';
 import {ChevronRight, MapPin, Search} from 'react-native-feather';
 import {TYPO} from '../assets/typo';
-import {responsiveFontSize} from 'react-native-responsive-dimensions';
+import {
+  responsiveFontSize,
+  responsiveHeight,
+  responsiveWidth,
+} from 'react-native-responsive-dimensions';
 
 import {_category_data, _product_data, _store_data} from '../utils/data_';
 import ProductCard from '../components/ProductCard';
-import CategoryCard from '../components/CategoryCard';
+import  { CategoryCardHome } from '../components/CategoryCard';
 import BackPressHandler from '../components/BackPressHandler';
+import Swiper from 'react-native-swiper';
+import BestDeal from '../components/BestDeal';
 
 const HomeScreen = ({navigation}) => {
   return (
-    <SafeAreaView className="flex-1 bg-[#F6F6F6]">
+    <SafeAreaView className="flex-1 bg-light">
       <HomeHeader />
       <BottomTab />
       <BackPressHandler />
@@ -58,13 +64,12 @@ const HomeScreen = ({navigation}) => {
                 </Text>
               </View>
             </View>
-            <Pressable onPress={()=>navigation.navigate('Address')}>
-            <ChevronRight
-              width={responsiveFontSize(2.3)}
-              color={TYPO.colors.dark}
-            />
+            <Pressable onPress={() => navigation.navigate('Address')}>
+              <ChevronRight
+                width={responsiveFontSize(2.3)}
+                color={TYPO.colors.dark}
+              />
             </Pressable>
-          
           </View>
         </View>
         <ScrollView
@@ -74,19 +79,47 @@ const HomeScreen = ({navigation}) => {
           <View className="px-2 flex-row">
             {_store_data.map((item, i) => (
               <Pressable
-                className="mx-1 rounded-full overflow-hidden "
+                className="mx-1 rounded-full overflow-hidden"
                 key={item.id}
-                onPress={() => navigation.navigate('StoreDetail',{slug:'adidas'})}>
+                style={{backgroundColor: TYPO.colors.light_gray}}
+                onPress={() =>
+                  navigation.navigate('StoreDetail', {slug: 'adidas'})
+                }>
                 <Image
                   source={{uri: item.image}}
                   resizeMode="cover"
-                  className="h-28 w-28"
+                  style={{
+                    height: responsiveWidth(20),
+                    width: responsiveWidth(20),
+                  }}
+                  // className="h-20 w-20"
                 />
               </Pressable>
             ))}
           </View>
         </ScrollView>
-        <Pressable
+        <Swiper
+          autoplay={true}
+          height={responsiveHeight(18)}
+          showsPagination={false}
+          containerStyle={{marginTop: responsiveHeight(2)}}
+          style={{}}>
+          {_store_data.map((item, i) => {
+            return (
+              <Pressable key={i} className="px-3">
+                <Image
+                  source={{
+                    uri: 'https://t3.ftcdn.net/jpg/03/16/37/64/360_F_316376413_nYL2jpLONPQPOsy31DE86n7FPpSxPIi3.jpg',
+                  }}
+                  resizeMode="cover"
+                  className="w-full h-40 rounded-md"
+                />
+              </Pressable>
+            );
+          })}
+        </Swiper>
+
+        {/* <Pressable
           className="mx-3 mt-7"
           onPress={() => navigation.navigate('ProductDetail',{slug:''})}>
           <Image
@@ -96,7 +129,10 @@ const HomeScreen = ({navigation}) => {
             resizeMode="cover"
             className="w-full h-36 rounded-2xl"
           />
-        </Pressable>
+        </Pressable> */}
+
+
+        <BestDeal navigation={navigation}/>
 
         <View className="mt-7 mx-3">
           <View className="flex-row items-center justify-between mb-3">
@@ -126,10 +162,7 @@ const HomeScreen = ({navigation}) => {
             <Text className="text-xl font-mulish_semibold text-dark_blue">
               Category
             </Text>
-            <Pressable
-              onPress={() =>
-                navigation.navigate('AllCategory')
-              }>
+            <Pressable onPress={() => navigation.navigate('AllCategory')}>
               <Text className="text-sm font-mulish_medium text-main">
                 See all
               </Text>
@@ -138,11 +171,11 @@ const HomeScreen = ({navigation}) => {
           <ScrollView
             horizontal={true}
             showsHorizontalScrollIndicator={false}
-            className="mt-7 pb-28">
-            <View className="px-3 flex-row gap-x-6">
+            className="mt-2 pb-28">
+            <View className="px-3 flex-row gap-x-5">
               {_category_data.map((item, i) => {
                 return (
-                  <CategoryCard key={i} item={item} navigation={navigation} />
+                  <CategoryCardHome key={i} item={item} navigation={navigation} />
                 );
               })}
             </View>

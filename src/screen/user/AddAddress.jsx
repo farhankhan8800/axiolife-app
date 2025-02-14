@@ -111,9 +111,9 @@ import Toast from "react-native-toast-message";
               { key: "landmark", placeholder: "Landmark (Optional)" },
               { key: "type", placeholder: "Address Type (Home, Work, etc.)" },
             ].map(({ key, placeholder, keyboardType }) => (
-              <View key={key} className="mt-3">
+              <View key={key} className="mt-2">
                 <TextInput
-                  className="mt-2 text-dark text-lg font-mulish_medium px-4 py-3 rounded-xl border border-gray-300"
+                  className="mt-2 text-dark text-base font-mulish_medium px-4 py-[8px] rounded-xl border border-gray-300"
                   placeholder={placeholder}
                   placeholderTextColor="#A0A5A8"
                   keyboardType={keyboardType || "default"}
