@@ -1,13 +1,19 @@
 import {SafeAreaView, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect} from 'react';
 
-
 const Splash = ({navigation}) => {
-  const next_screen = 'Home'; // Onboarding  , Home
+
+  const next_screen = async () => {
+    navigation.replace('Home');
+    // navigation.replace('Onboarding');
+  };
+
   useEffect(() => {
-    setTimeout(() => {
-      navigation.navigate(next_screen);
+    const timer = setTimeout(() => {
+      next_screen();
     }, 4000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   return (

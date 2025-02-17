@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import {responsiveHeight} from 'react-native-responsive-dimensions';
 import {OtpInput} from 'react-native-otp-entry';
 import { TYPO } from '../../assets/typo';
+import BackPressHandler from '../../components/BackPressHandler';
 
 const EnterOTP = ({navigation}) => {
 
@@ -12,13 +13,33 @@ const EnterOTP = ({navigation}) => {
 
 
   const OTPFilled = (otpText) => {
-    console.log(`OTP is ${otpText}`)
+    // console.log(`OTP is ${otpText}`)
+    setOtp(otpText)
+  }
+
+  const newuser = true
+
+
+
+  const submitotp = ()=>{
+    if(otp.length == 4 && newuser){
+     console.log('new user')
+
+      navigation.navigate('SignUp');
+    } else if(otp.length == 4){
+      console.log('old user user')
+      navigation.navigate('Home');
+    }else{
+      console.log('add otp')
+      
+    }
   }
 
 
 
   return (
     <SafeAreaView className="flex-1">
+      <BackPressHandler />
       <View className="flex-1 bg-[#0D1318]">
         <View className="px-3 flex-1" style={{marginTop: responsiveHeight(15)}}>
           <Text className="text-light text-4xl font-mulish_bold">
@@ -69,7 +90,7 @@ const EnterOTP = ({navigation}) => {
         </View>
 
         <View className="px-3 mb-10" style={{marginTop: responsiveHeight(10)}}>
-          <Pressable className="mt-6 bg-main py-3 rounded-xl border border-main  flex items-center">
+          <Pressable onPress={submitotp} className="mt-6 bg-main py-3 rounded-xl border border-main  flex items-center">
             <Text className="text-white text-lg font-mulish_semibold">
               Submit
             </Text>

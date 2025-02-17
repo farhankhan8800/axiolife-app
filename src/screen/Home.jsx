@@ -56,8 +56,8 @@ const HomeScreen = ({navigation}) => {
               <MapPin width={responsiveFontSize(2)} color={TYPO.colors.main} />
               <View className="flex-row items-center">
                 <Text className="text-base text-dark font-mulish_medium ml-2 ">
-                  Ship to{' '}
-                </Text>{' '}
+                  Ship top
+                </Text>
                 <Text
                   numberOfLines={1}
                   className="text-base text-dark font-mulish_semibold max-w-72">
