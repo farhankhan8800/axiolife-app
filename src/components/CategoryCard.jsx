@@ -8,19 +8,20 @@ import {
 
 import Icon from 'react-native-vector-icons/AntDesign';
 import {TYPO} from '../assets/typo';
-
+import FastImage from 'react-native-fast-image';
 export const CategoryCardHome = ({item, navigation}) => {
+  console.log('item', item);
   return (
     <Pressable
       className=" w-[130px]"
       onPress={() => navigation.navigate('CategoryDetail', {slug: item.slug})}>
       <View className="w-full  relative rounded-3xl overflow-hidden shadow-white   justify-center items-center  bg-light ">
-        <Image
+        <FastImage
           source={{
-            uri: 'https://www.teach-this.com/images/images-ideas/first-day-of-class-activities.png',
+            uri: 'https://i.pinimg.com/originals/16/de/e0/16dee07755c2b841ea7c603fcd8f880c.gif',
           }}
           resizeMode="cover"
-          style={{width: '100%', height: responsiveHeight(15)}}
+          style={{width: '100%', height: responsiveHeight(22)}}
           className="rounded-md"
         />
 
@@ -34,5 +35,3 @@ export const CategoryCardHome = ({item, navigation}) => {
     </Pressable>
   );
 };
-
-

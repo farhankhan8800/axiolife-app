@@ -21,6 +21,7 @@
     "react-native": "0.77.0",
     "react-native-autoheight-webview": "^1.6.5",
     "react-native-dotenv": "^3.4.11",
+    "react-native-fast-image": "^8.6.3",
     "react-native-feather": "^1.1.2",
     "react-native-gesture-handler": "^2.23.1",
     "react-native-modal": "^13.0.1",

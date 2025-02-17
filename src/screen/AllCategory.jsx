@@ -10,6 +10,7 @@ import React from 'react';
 import {responsiveHeight} from 'react-native-responsive-dimensions';
 import SmallHeader from '../components/SmallHeader';
 import {_category_data} from '../utils/data_';
+import FastImage from 'react-native-fast-image';
 
 const AllCategory = ({navigation}) => {
   return (
@@ -20,40 +21,39 @@ const AllCategory = ({navigation}) => {
           {_category_data.map((item, index) => {
             const isBigItem = index % 6 === 0 || index % 6 === 5;
 
-           
             if (isBigItem) {
               return (
-               <View className='w-[46%]'>
-                 <Pressable
-                  key={index}
-                  className="w-full justify-center items-center rounded-lg"
-                  style={{height: responsiveHeight(36)}}
-                  onPress={() =>
-                    navigation.navigate('CategoryDetail', {slug: item.slug})
-                  }>
-                  <View className="w-full relative rounded-3xl overflow-hidden shadow-lg bg-white items-center">
-                    <Image
-                      source={{
-                        uri: 'https://www.teach-this.com/images/images-ideas/first-day-of-class-activities.png',
-                      }}
-                      resizeMode="cover"
-                      className="w-full rounded-md"
-                      style={{height: responsiveHeight(34)}}
-                    />
-                    <View
-                      className="w-full absolute top-0 left-0 bg-[rgba(0,0,0,0.2)]"
-                      style={{height: responsiveHeight(34)}}
-                    />
-                  </View>
-                  <Text className="text-lg text-dark_blue font-mulish_semibold text-center mt-1">
-                    {item.name}
-                  </Text>
-                </Pressable>
-               </View>
+                <View className="w-[46%]">
+                  <Pressable
+                    key={index + 1}
+                    className="w-full justify-center items-center rounded-lg"
+                    style={{height: responsiveHeight(36)}}
+                    onPress={() =>
+                      navigation.navigate('CategoryDetail', {slug: item.slug})
+                    }>
+                    <View className="w-full relative rounded-3xl overflow-hidden shadow-lg bg-white items-center">
+                      <FastImage
+                        source={{
+                          uri: 'https://cdn.mos.cms.futurecdn.net/whowhatwear/posts/267743/zara-outfits-267743-1666989738327-square.gif',
+                        }}
+                        resizeMode="cover"
+                        className="w-full rounded-md"
+                        style={{width: '100%', height: responsiveHeight(34)}}
+                      />
+
+                      <View
+                        className="w-full absolute top-0 left-0 bg-[rgba(0,0,0,0.2)]"
+                        style={{height: responsiveHeight(34)}}
+                      />
+                    </View>
+                    <Text className="text-lg text-dark_blue font-mulish_semibold text-center mt-1">
+                      {item.name}
+                    </Text>
+                  </Pressable>
+                </View>
               );
             }
 
-           
             if (index % 6 === 1 || index % 6 === 3) {
               return (
                 <View key={index} className="w-[46%] justify-between">
@@ -64,13 +64,13 @@ const AllCategory = ({navigation}) => {
                       navigation.navigate('CategoryDetail', {slug: item.slug})
                     }>
                     <View className="w-full relative rounded-3xl overflow-hidden shadow-lg bg-white items-center">
-                      <Image
+                      <FastImage
                         source={{
-                          uri: 'https://www.teach-this.com/images/images-ideas/first-day-of-class-activities.png',
+                          uri: 'https://i.pinimg.com/originals/16/de/e0/16dee07755c2b841ea7c603fcd8f880c.gif',
                         }}
                         resizeMode="cover"
                         className="w-full rounded-md"
-                        style={{height: responsiveHeight(15)}}
+                        style={{width: '100%', height: responsiveHeight(15)}}
                       />
                       <View
                         className="w-full absolute top-0 left-0 bg-[rgba(0,0,0,0.2)]"
@@ -82,7 +82,6 @@ const AllCategory = ({navigation}) => {
                     </Text>
                   </Pressable>
 
-                 
                   {index + 1 < _category_data.length && (
                     <Pressable
                       key={index + 1}
@@ -94,13 +93,13 @@ const AllCategory = ({navigation}) => {
                         })
                       }>
                       <View className="w-full relative rounded-3xl overflow-hidden shadow-lg bg-white items-center">
-                        <Image
+                        <FastImage
                           source={{
-                            uri: 'https://www.teach-this.com/images/images-ideas/first-day-of-class-activities.png',
+                            uri: 'https://i.gifer.com/4KDr.gif',
                           }}
                           resizeMode="cover"
                           className="w-full rounded-md"
-                          style={{height: responsiveHeight(15)}}
+                          style={{width: '100%', height: responsiveHeight(15)}}
                         />
                         <View
                           className="w-full absolute top-0 left-0 bg-[rgba(0,0,0,0.2)]"

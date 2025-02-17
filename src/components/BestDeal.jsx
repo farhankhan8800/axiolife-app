@@ -1,10 +1,4 @@
-import {
-  Image,
-  Pressable,
-  Text,
-  View,
-  Animated,
-} from 'react-native';
+import {Image, Pressable, Text, View, Animated} from 'react-native';
 import React, {useRef, useState} from 'react';
 import {TYPO} from '../assets/typo';
 import {
@@ -55,21 +49,21 @@ const BestDeal = ({navigation}) => {
       renderItem={({index}) => {
         console.log(index);
         return (
-          <View key={index} className="=">
+          <View key={index} className="-my-7">
             <View className=" justify-center items-center">
               <Image
                 source={{
-                  uri: 'https://www.zoomshoes.in/cdn/shop/products/9_1.jpg?v=1619594466',
+                  uri: 'https://cdn.shopify.com/s/files/1/0788/3869/4173/products/jordan-air-jordan-1-low-golf-travis-scott_20550718_47602899_2048.jpg?v=1706721415 ',
                 }}
                 resizeMode="cover"
                 style={{
-                  height: responsiveHeight(25),
+                  height: responsiveHeight(20),
                 }}
                 className="w-full "
               />
             </View>
 
-            <View className="items-center mt-10 ">
+            <View className="items-center mt-6 ">
               <Text
                 className="text-xl text-dark_blue font-mulish_semibold "
                 numberOfLines={1}>
@@ -79,7 +73,7 @@ const BestDeal = ({navigation}) => {
                 ₹ 11880
               </Text>
             </View>
-            <View className="pt-16">
+            <View className="pt-8">
               <Pressable
                 onPressIn={handlePressIn}
                 onPressOut={handlePressOut}

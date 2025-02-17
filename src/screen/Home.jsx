@@ -23,10 +23,11 @@ import {
 
 import {_category_data, _product_data, _store_data} from '../utils/data_';
 import ProductCard from '../components/ProductCard';
-import  { CategoryCardHome } from '../components/CategoryCard';
+import {CategoryCardHome} from '../components/CategoryCard';
 import BackPressHandler from '../components/BackPressHandler';
 import Swiper from 'react-native-swiper';
 import BestDeal from '../components/BestDeal';
+import Banner from '../components/Banner';
 
 const HomeScreen = ({navigation}) => {
   return (
@@ -119,22 +120,11 @@ const HomeScreen = ({navigation}) => {
           })}
         </Swiper>
 
-        {/* <Pressable
-          className="mx-3 mt-7"
-          onPress={() => navigation.navigate('ProductDetail',{slug:''})}>
-          <Image
-            source={{
-              uri: 'https://t3.ftcdn.net/jpg/03/16/37/64/360_F_316376413_nYL2jpLONPQPOsy31DE86n7FPpSxPIi3.jpg',
-            }}
-            resizeMode="cover"
-            className="w-full h-36 rounded-2xl"
-          />
-        </Pressable> */}
+        {/* <Banner navigation={navigation} /> */}
 
+        <BestDeal navigation={navigation} />
 
-        <BestDeal navigation={navigation}/>
-
-        <View className="mt-7 mx-3">
+        <View className="-my-8 mx-3">
           <View className="flex-row items-center justify-between mb-3">
             <Text className="text-xl font-mulish_semibold text-dark_blue">
               Featured Products
@@ -157,7 +147,7 @@ const HomeScreen = ({navigation}) => {
           </View>
         </View>
 
-        <View className="mt-7 ">
+        <View className="mt-14">
           <View className="flex-row mx-3 items-center justify-between mb-3">
             <Text className="text-xl font-mulish_semibold text-dark_blue">
               Category
@@ -175,7 +165,11 @@ const HomeScreen = ({navigation}) => {
             <View className="px-3 flex-row gap-x-5">
               {_category_data.map((item, i) => {
                 return (
-                  <CategoryCardHome key={i} item={item} navigation={navigation} />
+                  <CategoryCardHome
+                    key={i}
+                    item={item}
+                    navigation={navigation}
+                  />
                 );
               })}
             </View>
