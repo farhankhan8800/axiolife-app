@@ -5,12 +5,35 @@ import {TYPO} from '../assets/typo';
 import Modal from 'react-native-modal';
 import {responsiveWidth} from 'react-native-responsive-dimensions';
 import {useNavigation} from '@react-navigation/native';
-import {getRandomColor} from '../utils/utils';
+import {getFirstLetter, getRandomColor} from '../utils/utils';
+import {useDispatch, useSelector} from 'react-redux';
+import {logout} from '../reduxstore/slice/auth_slice';
+import Toast from 'react-native-toast-message';
+import LogoutScreen from './LogoutScreen';
 
 const Deawer = () => {
   const [isModalVisible, setModalVisible] = useState(false);
-
+  const {user, token, isAuthenticated} = useSelector(state => state.auth);
   const navigation = useNavigation();
+  const [showLogout, setShowLogout] = useState(false)
+  
+
+  const dispatch = useDispatch()
+
+  const logoutuser = () => {
+    dispatch(logout());
+    Toast.show({
+      type: 'BasicToast',
+      text1: 'Logged out successfully!',
+      position: 'bottom',
+      visibilityTime: 3000,
+    });
+    navigation.navigate('SignIn');
+  };
+
+  const handleLogoutPress = () => {
+    setShowLogout(true)
+  };
 
   return (
     <>
@@ -29,17 +52,27 @@ const Deawer = () => {
               <View
                 style={{backgroundColor: getRandomColor(9)}}
                 className="h-14 w-14 rounded-full justify-center items-center">
-                <Text className="text-light text-3xl font-mulish_bold">G</Text>
+                <Text className="text-light text-3xl font-mulish_bold">
+                  {isAuthenticated ? (
+                    <>{getFirstLetter(user.name || user.phone)}</>
+                  ) : (
+                    'G'
+                  )}
+                </Text>
               </View>
               <View>
                 <Text className="text-xl text-light font-bold mb-2">
-                  Welcome Guest
+                  Welcome {isAuthenticated ? user?.name || user.phone : 'Guest'}
                 </Text>
                 <Pressable
-                  onPress={() => navigation.navigate('SignIn')}
+                  onPress={() => {
+                    !isAuthenticated
+                      ? navigation.navigate('SignIn')
+                      : navigation.navigate('Profile');
+                  }}
                   className="py-2 px-4 rounded-xl bg-gray-200">
                   <Text className="text-[14px] text-gray-600 text-center uppercase font-mulish_bold">
-                    Login/Sign UP
+                    {isAuthenticated ? user.phone : 'Login/Sign UP'}
                   </Text>
                 </Pressable>
               </View>
@@ -113,20 +146,27 @@ const Deawer = () => {
             </View>
           </View>
           <View className="flex-row justify-between items-center pb-3">
-            <Pressable
-              className=" px-4 flex-row justify-center gap-2 items-center"
-              onPress={() => navigation.navigate('SignIn')}>
-              <LogOut width={responsiveWidth(6)} color="#d30c0c" />
-              <Text className="text-base text-[#d30c0c] uppercase font-mulish_bold">
-                Logout
-              </Text>
-            </Pressable>
+            {isAuthenticated && (
+              <Pressable
+                className=" px-4 flex-row justify-center gap-2 bg-pink-600 items-center"
+                onPress={handleLogoutPress}>
+                <LogOut width={responsiveWidth(6)} color="#d30c0c" />
+                <Text className="text-base text-[#d30c0c] uppercase font-mulish_bold">
+                  Logout
+                </Text>
+              </Pressable>
+            )}
+
             <Text className="text-[12px] text-white text-center  font-mulish_light">
               App version - V0.1
             </Text>
           </View>
         </View>
       </Modal>
+
+      {/* {
+        showLogout && <LogoutScreen />
+      } */}
     </>
   );
 };

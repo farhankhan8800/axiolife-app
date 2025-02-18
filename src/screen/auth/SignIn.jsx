@@ -10,6 +10,7 @@ import React, {useState} from 'react';
 import {responsiveHeight} from 'react-native-responsive-dimensions';
 import MakeRequest from '../../utils/axiosInstance';
 import {LOGIN_API} from '../../service/API';
+import Toast from 'react-native-toast-message';
 
 const SignIn = ({navigation}) => {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -21,24 +22,56 @@ const SignIn = ({navigation}) => {
 
   const verifyUser = async () => {
     if (!isValidPhoneNumber(phoneNumber)) {
-      Alert.alert(
-        'Invalid Number',
-        'Please enter a valid 10-digit mobile number.',
-      );
+        Toast.show({
+              type: 'ErrorToastIcon',
+              text1: 'Please enter a valid 10-digit mobile number.',
+              position: 'bottom',
+              visibilityTime: 5000,
+            });
       return;
     }
 
     try {
-      // Ensure LOGIN_API is a valid endpoint string
-      const {data} = await MakeRequest(LOGIN_API, {
-        phone: phoneNumber,
-        name: 'Farhan Khan',
-      });
+      
+      const {data} = await MakeRequest(
+        LOGIN_API,
+        {
+          phone: phoneNumber
+        },
+        {},
+        'application/json',
+      );
 
       console.log('Response data:', data);
+      if(data.response.userType=='banned' || data.response.userType=='deleted'){
+        Toast.show({
+          type: 'ErrorToast',
+          text1: data.message,
+          position: 'bottom',
+          visibilityTime: 5000,
+        });
+      }
+
+      if(data.status == 1){
+        Toast.show({
+          type: 'GreenToast',
+          text1: data.message,
+          position: 'bottom',
+          visibilityTime: 5000,
+        });
+        navigation.navigate('EnterOTP',{number:phoneNumber});
+        setPhoneNumber('')
+      }
+
     } catch (error) {
       console.error('Verification failed:', error);
-      Alert.alert('Error', 'Something went wrong. Please try again.');
+      Toast.show({
+        type: 'ErrorToast',
+        text1: 'Something went wrong. Please try again.',
+        position: 'bottom',
+        visibilityTime: 5000,
+      });
+   
     }
   };
 
@@ -47,7 +80,7 @@ const SignIn = ({navigation}) => {
       <View className="flex-1 bg-[#0D1318] relative">
         <Pressable
           className="absolute top-3 right-3 p-1"
-          onPress={() => navigation.navigate('Home')}>
+          onPress={() => navigation.goBack()}>
           <Text className="text-base text-white font-mulish_semibold underline">
             Skip
           </Text>

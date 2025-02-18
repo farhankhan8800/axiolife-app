@@ -26,12 +26,25 @@ import UserAddress from '../screen/user/Address'
 import HelpDesk from '../screen/common/HelpDesk';
 import ContactUs from '../screen/common/ContactUs';
 import PrivacyTc from '../screen/common/PrivacyTc';
+import { useDispatch } from 'react-redux';
+import { loadAuthState } from '../reduxstore/slice/auth_slice';
+import { useEffect } from 'react';
 
 
 
 const Stack = createStackNavigator();
 
 function MainNavigator() {
+
+const dispatch = useDispatch();
+
+useEffect(() => {
+    dispatch(loadAuthState()); 
+}, [dispatch]);
+
+
+
+
   return (
     <Stack.Navigator
       screenOptions={{

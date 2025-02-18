@@ -10,9 +10,14 @@ import {
   useNavigation,
   useNavigationState,
 } from '@react-navigation/native';
+import { useSelector } from 'react-redux';
 
 const BottomTab = () => {
   const navigation = useNavigation();
+
+  const {user, token, isAuthenticated} = useSelector(state => state.auth);
+
+
 
   const currentRouteName = useNavigationState(
     state => state.routes[state.index]?.name,
@@ -64,7 +69,7 @@ const BottomTab = () => {
         {/* Notifications Button */}
         <Pressable
           className=""
-          onPress={() => navigation.navigate('Notification')}>
+          onPress={() => navigation.navigate(isAuthenticated ? 'Notification':'SignIn')}>
           <FontAwesome
             name={currentRouteName === 'Notifications' ? 'bell' : 'bell-o'}
             color={TYPO.colors.light}

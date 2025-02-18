@@ -3,12 +3,20 @@ import {NavigationContainer} from '@react-navigation/native';
 import MainNavigator from './src/navigation/MainNavigator';
 import './global.css';
 import './gesture-handler';
-import {Provider, useDispatch} from 'react-redux';
+import {Provider } from 'react-redux';
 import {store_redux} from './src/reduxstore/store';
 import Toast from 'react-native-toast-message';
 import CustomToast from './src/components/CustomToast';
 
+
 const App = () => {
+
+
+
+ 
+
+
+
   return (
     <>
       <NavigationContainer>

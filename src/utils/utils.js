@@ -41,3 +41,7 @@ export const getDeviceType = () => {
   }
   return deviceType;
 };
+
+export const getFirstLetter = (name) => {
+  return name.trim().charAt(0).toUpperCase();
+};

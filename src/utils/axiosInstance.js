@@ -1,45 +1,33 @@
 import axios from 'axios';
 import {API_URL, API_TOKEN} from '@env';
 import {getDeviceType} from './utils';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const MakeRequest = async (
   end_point,
   data = {},
-  options = {},
+  headers = {},
   request_type = 'application/json',
 ) => {
   const api_url = API_URL + end_point;
-  const deviceType = getDeviceType();
 
-  const defaultOptions = {
-    timeout: 10000,
-    // 'x-api-key': API_TOKEN,
-    'Content-Type': 'application/json',
+  const token = await AsyncStorage.getItem('token');
+
+  const defaultHeaders = {
+    'x-api-key': API_TOKEN,
+    'Content-Type': request_type,
+    Authorization: token ? token : '',
+    ...headers,
   };
 
-  const defaultData = {
-    deviceType: deviceType,
-  };
-
-  let mergedData = {};
-  let mergedOptions = {};
-
-  if (request_type === 'form-data') {
-    mergedData = data;
-    mergedOptions = {...options};
-  } else if (request_type === 'application/json') {
-    mergedData = {...defaultData, ...data};
-    mergedOptions = {...defaultOptions, ...options};
-  }
+  let defaultData =
+    request_type === 'application/json' ? {deviceType: getDeviceType()} : {};
+  const requestData = {...defaultData, ...data};
 
   try {
-    // Correct axios request syntax
-    const res = await axios.post(api_url, mergedData, {
-      headers: mergedOptions,
-      timeout: mergedOptions.timeout,
+    const res = await axios.post(api_url, requestData, {
+      headers: defaultHeaders,
     });
-
-    console.log('Response status :', res.status); // its done now you can move @bablu
     return res;
   } catch (error) {
     console.error('Request error:', error.response || error.message);

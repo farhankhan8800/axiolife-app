@@ -12,12 +12,9 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 const Onboarding = ({navigation}) => {
 
   const boardingclose = async ()=>{
-    navigation.navigate('SignIn')
+    navigation.navigate('Home')
     
   }
-
-
-
 
   return (
     <SafeAreaView className="flex-1 bg-white">
