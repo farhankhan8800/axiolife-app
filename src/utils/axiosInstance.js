@@ -1,6 +1,6 @@
 import axios from 'axios';
-import { API_URL, API_TOKEN } from '@env';
-import { getDeviceType } from './utils';
+import {API_URL, API_TOKEN} from '@env';
+import {getDeviceType} from './utils';
 
 const MakeRequest = async (
   end_point,
@@ -11,15 +11,12 @@ const MakeRequest = async (
   const api_url = API_URL + end_point;
   const deviceType = getDeviceType();
 
-
-  
   const defaultOptions = {
     timeout: 10000,
-    'x-api-key': API_TOKEN,  
+    // 'x-api-key': API_TOKEN,
     'Content-Type': 'application/json',
   };
 
-  
   const defaultData = {
     deviceType: deviceType,
   };
@@ -29,29 +26,24 @@ const MakeRequest = async (
 
   if (request_type === 'form-data') {
     mergedData = data;
-    mergedOptions = { ...options }; 
+    mergedOptions = {...options};
   } else if (request_type === 'application/json') {
-    mergedData = { ...defaultData, ...data };  
-    mergedOptions = { ...defaultOptions, ...options };
+    mergedData = {...defaultData, ...data};
+    mergedOptions = {...defaultOptions, ...options};
   }
 
-console.log("mergedOptions",mergedOptions,
-    mergedData
-)
-
-  
   try {
-    const res = await axios.post({
-      url: api_url,
-      data: mergedData, 
-      headers: mergedOptions, 
+    // Correct axios request syntax
+    const res = await axios.post(api_url, mergedData, {
+      headers: mergedOptions,
+      timeout: mergedOptions.timeout,
     });
 
-    console.log('Response data:', res.data);
+    console.log('Response status :', res.status); // its done now you can move @bablu
     return res;
   } catch (error) {
     console.error('Request error:', error.response || error.message);
-    throw error; 
+    throw error;
   }
 };
 

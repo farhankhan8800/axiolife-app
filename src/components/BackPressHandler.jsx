@@ -1,13 +1,12 @@
-import React, { useState, useCallback } from "react";
-import { BackHandler } from "react-native";
-import Toast from "react-native-toast-message";
-import { useFocusEffect, useNavigation } from "@react-navigation/native";
+import React, {useState, useCallback} from 'react';
+import {BackHandler} from 'react-native';
+import Toast from 'react-native-toast-message';
+import {useFocusEffect, useNavigation} from '@react-navigation/native';
 
-const BackPressHandler = ({ navigateTo }) => {
+const BackPressHandler = ({navigateTo}) => {
   const [exitApp, setExitApp] = useState(false);
   const navigation = useNavigation();
 
- 
   const backAction = useCallback(() => {
     if (navigateTo) {
       navigation.navigate(navigateTo);
@@ -18,9 +17,9 @@ const BackPressHandler = ({ navigateTo }) => {
       BackHandler.exitApp();
     } else {
       Toast.show({
-        type: "BasicToast",
-        text1: "Press back again to exit",
-        position: "bottom",
+        type: 'BasicToast',
+        text1: 'Press back again to exit',
+        position: 'bottom',
         visibilityTime: 2000,
       });
 
@@ -31,15 +30,18 @@ const BackPressHandler = ({ navigateTo }) => {
       }, 2000);
     }
     return true;
-  }, [exitApp, navigateTo, navigation]); 
+  }, [exitApp, navigateTo, navigation]);
   useFocusEffect(
     useCallback(() => {
-      const backHandler =  BackHandler.addEventListener("hardwareBackPress", backAction);
+      const backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        backAction,
+      );
 
       return () => {
-        backHandler.remove()
+        backHandler.remove();
       };
-    }, [backAction]) 
+    }, [backAction]),
   );
 
   return null;

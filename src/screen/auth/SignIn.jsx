@@ -1,30 +1,41 @@
-import { Pressable, SafeAreaView, Text, TextInput, View, Alert } from 'react-native';
-import React, { useState } from 'react';
-import { responsiveHeight } from 'react-native-responsive-dimensions';
+import {
+  Pressable,
+  SafeAreaView,
+  Text,
+  TextInput,
+  View,
+  Alert,
+} from 'react-native';
+import React, {useState} from 'react';
+import {responsiveHeight} from 'react-native-responsive-dimensions';
 import MakeRequest from '../../utils/axiosInstance';
-import { LOGIN_API } from '../../service/API';
+import {LOGIN_API} from '../../service/API';
 
-
-const SignIn = ({ navigation }) => {
+const SignIn = ({navigation}) => {
   const [phoneNumber, setPhoneNumber] = useState('');
 
-  const isValidPhoneNumber = (number) => {
-    const phoneRegex = /^[6-9]\d{9}$/; 
+  const isValidPhoneNumber = number => {
+    const phoneRegex = /^[6-9]\d{9}$/;
     return phoneRegex.test(number);
   };
 
   const verifyUser = async () => {
     if (!isValidPhoneNumber(phoneNumber)) {
-      Alert.alert('Invalid Number', 'Please enter a valid 10-digit mobile number.');
+      Alert.alert(
+        'Invalid Number',
+        'Please enter a valid 10-digit mobile number.',
+      );
       return;
     }
 
     try {
+      // Ensure LOGIN_API is a valid endpoint string
+      const {data} = await MakeRequest(LOGIN_API, {
+        phone: phoneNumber,
+        name: 'Farhan Khan',
+      });
 
-      const {data} = await MakeRequest(LOGIN_API, { 'phone': phoneNumber});
-
-      console.log('data ', data)
-
+      console.log('Response data:', data);
     } catch (error) {
       console.error('Verification failed:', error);
       Alert.alert('Error', 'Something went wrong. Please try again.');
@@ -42,7 +53,7 @@ const SignIn = ({ navigation }) => {
           </Text>
         </Pressable>
 
-        <View className="px-3 flex-1" style={{ marginTop: responsiveHeight(15) }}>
+        <View className="px-3 flex-1" style={{marginTop: responsiveHeight(15)}}>
           <Text className="text-light text-4xl font-mulish_bold">
             Mobile Number
           </Text>
