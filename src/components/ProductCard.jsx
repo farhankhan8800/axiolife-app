@@ -8,11 +8,10 @@ import {
 import Icon from 'react-native-vector-icons/AntDesign';
 import {TYPO} from '../assets/typo';
 
-
 const ProductCard = ({item, navigation}) => {
   return (
     <Pressable
-      className="bg-gray-100 w-[48%] relative rounded-sm shadow-white"
+      className="bg-gray-50 w-[48%] relative rounded-sm shadow-white"
       onPress={() => navigation.navigate('ProductDetail', {slug: item.slug})}>
       <View className="w-full relative justify-center items-center h-48  mb-0 ">
         <View className="justify-center items-center px-3 py-[1px] absolute z-10 left-1 bg-[rgba(0,0,0,0.3)] top-1 rounded-none">
