@@ -13,7 +13,7 @@ const Onboarding = ({navigation}) => {
 
   const boardingclose = async ()=>{
     navigation.navigate('Home')
-    
+    AsyncStorage.setItem("ON_BOARDING_HIDE", 'true');
   }
 
   return (
@@ -22,7 +22,7 @@ const Onboarding = ({navigation}) => {
       <View className="flex-1 bg-white p-4 pt-5 ">
         <View className="flex justify-start flex-row items-baseline">
           <Text className="text-dark_blue text-3xl font-mulish_exbold">
-            AXIO{' '}
+            AXIO
           </Text>
           <Text className="text-dark_blue text-lg font-mulish_medium">
             Life

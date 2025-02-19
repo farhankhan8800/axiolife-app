@@ -6,11 +6,9 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 
-import Icon from 'react-native-vector-icons/AntDesign';
-import {TYPO} from '../assets/typo';
 import FastImage from 'react-native-fast-image';
 export const CategoryCardHome = ({item, navigation}) => {
-  console.log('item', item);
+ 
   return (
     <Pressable
       className=" w-[130px]"

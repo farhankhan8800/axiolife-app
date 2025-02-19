@@ -27,7 +27,9 @@ import {CategoryCardHome} from '../components/CategoryCard';
 import BackPressHandler from '../components/BackPressHandler';
 import Swiper from 'react-native-swiper';
 import BestDeal from '../components/BestDeal';
-import Banner from '../components/Banner';
+import WithValidation from '../components/WithValidation';
+
+
 
 const HomeScreen = ({navigation}) => {
   return (
@@ -180,4 +182,5 @@ const HomeScreen = ({navigation}) => {
   );
 };
 
-export default HomeScreen;
+export default WithValidation(HomeScreen)
+

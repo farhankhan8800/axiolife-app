@@ -15,25 +15,6 @@ const Deawer = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const {user, token, isAuthenticated} = useSelector(state => state.auth);
   const navigation = useNavigation();
-  const [showLogout, setShowLogout] = useState(false)
-  
-
-  const dispatch = useDispatch()
-
-  const logoutuser = () => {
-    dispatch(logout());
-    Toast.show({
-      type: 'BasicToast',
-      text1: 'Logged out successfully!',
-      position: 'bottom',
-      visibilityTime: 3000,
-    });
-    navigation.navigate('SignIn');
-  };
-
-  const handleLogoutPress = () => {
-    setShowLogout(true)
-  };
 
   return (
     <>
@@ -146,16 +127,7 @@ const Deawer = () => {
             </View>
           </View>
           <View className="flex-row justify-between items-center pb-3">
-            {isAuthenticated && (
-              <Pressable
-                className=" px-4 flex-row justify-center gap-2 bg-pink-600 items-center"
-                onPress={handleLogoutPress}>
-                <LogOut width={responsiveWidth(6)} color="#d30c0c" />
-                <Text className="text-base text-[#d30c0c] uppercase font-mulish_bold">
-                  Logout
-                </Text>
-              </Pressable>
-            )}
+            {isAuthenticated && <LogoutScreen />}
 
             <Text className="text-[12px] text-white text-center  font-mulish_light">
               App version - V0.1
@@ -163,10 +135,6 @@ const Deawer = () => {
           </View>
         </View>
       </Modal>
-
-      {/* {
-        showLogout && <LogoutScreen />
-      } */}
     </>
   );
 };

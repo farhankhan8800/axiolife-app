@@ -39,7 +39,7 @@ const BackPressHandler = ({navigateTo}) => {
       );
 
       return () => {
-        backHandler.remove();
+        backHandler.remove()
       };
     }, [backAction]),
   );

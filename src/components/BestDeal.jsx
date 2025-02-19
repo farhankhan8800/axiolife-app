@@ -47,7 +47,7 @@ const BestDeal = ({navigation}) => {
       data={_store_data}
       onProgressChange={progress}
       renderItem={({index}) => {
-        console.log(index);
+       
         return (
           <View key={index} className="-my-7">
             <View className=" justify-center items-center">

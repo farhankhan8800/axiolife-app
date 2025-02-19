@@ -4,17 +4,16 @@ import {useSelector} from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Splash = ({navigation}) => {
-  let ON_BOARDING_HIDE = 'ON_BOARDING_HIDE';
+
 
   const {user, token, isAuthenticated} = useSelector(state => state.auth);
-  console.log(user, isAuthenticated, token);
+  // console.log(user, isAuthenticated, token);
 
   useEffect(() => {
     const checkAppState = async () => {
-      const ON_BOARDING_ = await AsyncStorage.getItem(ON_BOARDING_HIDE);
+      const ON_BOARDING_ = await AsyncStorage.getItem("ON_BOARDING_HIDE");
 
       if (ON_BOARDING_ === null) {
-        AsyncStorage.setItem(ON_BOARDING_HIDE, 'true');
         navigation.navigate('Onboarding');
       } else if(isAuthenticated == true) {
         if (user && user.name) {

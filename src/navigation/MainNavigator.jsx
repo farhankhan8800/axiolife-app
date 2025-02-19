@@ -16,8 +16,6 @@ import SignIn from '../screen/auth/SignIn';
 import EnterOTP from '../screen/auth/EnterOTP';
 import UserOrder from '../screen/user/Order';
 import UserFavorite from '../screen/user/UserFavorite';
-import NoInternet from '../screen/common/NoInternet';
-import NotFound from '../screen/common/NotFound';
 import AddAddress from '../screen/user/AddAddress';
 import OrderDetail from '../screen/user/OrderDetail';
 import EditProfile from '../screen/user/EditProfile';
@@ -64,7 +62,7 @@ useEffect(() => {
       <Stack.Screen name="Product" component={ProductScreen} />
       <Stack.Screen name="AllCategory" component={AllCategory} />
       <Stack.Screen name="CategoryDetail" component={CategoryDetail} />
-      <Stack.Screen name="NoInternet" component={NoInternet} />
+ 
       <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="SignIn" component={SignIn} />
       <Stack.Screen name="EnterOTP" component={EnterOTP} />
@@ -72,7 +70,7 @@ useEffect(() => {
       <Stack.Screen name="Address" component={UserAddress} />
       <Stack.Screen name="UserOrder" component={UserOrder} />
       <Stack.Screen name="UserFavorite" component={UserFavorite} />
-      <Stack.Screen name="NotFound" component={NotFound} />
+   
       <Stack.Screen name="AddAddress" component={AddAddress} />
       <Stack.Screen name="HelpDesk" component={HelpDesk} />
       <Stack.Screen name="ContactUs" component={ContactUs} />

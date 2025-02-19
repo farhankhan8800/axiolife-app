@@ -5,9 +5,6 @@ import {responsiveHeight} from 'react-native-responsive-dimensions';
 
 const NotFound = ({navigation}) => {
 
-  
-
-
   return (
     <SafeAreaView className="flex-1 bg-white">
       <View className="flex-1 justify-center items-center ">

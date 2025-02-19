@@ -1,11 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-
 const USER_KEY = "user";
 const TOKEN_KEY = "token";
 const AUTH_KEY = "isAuthenticated";
-
 
 export const loadAuthState = createAsyncThunk("auth/loadAuthState", async () => {
     try {
