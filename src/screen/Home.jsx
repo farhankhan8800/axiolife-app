@@ -29,8 +29,6 @@ import Swiper from 'react-native-swiper';
 import BestDeal from '../components/BestDeal';
 import WithValidation from '../components/WithValidation';
 
-
-
 const HomeScreen = ({navigation}) => {
   return (
     <SafeAreaView className="flex-1 bg-light">
@@ -140,7 +138,7 @@ const HomeScreen = ({navigation}) => {
               </Text>
             </Pressable>
           </View>
-          <View className="justify-start flex-row flex-wrap items-start w-full gap-y-5 gap-x-[4%] ">
+          <View className=" mx-1 justify-start flex-row flex-wrap items-start w-full gap-y-1 gap-x-1 ">
             {_product_data.map((item, i) => {
               return (
                 <ProductCard key={i} item={item} navigation={navigation} />
@@ -182,5 +180,4 @@ const HomeScreen = ({navigation}) => {
   );
 };
 
-export default WithValidation(HomeScreen)
-
+export default WithValidation(HomeScreen);

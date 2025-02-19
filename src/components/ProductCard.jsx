@@ -11,10 +11,10 @@ import {TYPO} from '../assets/typo';
 const ProductCard = ({item, navigation}) => {
   return (
     <Pressable
-      className="bg-gray-50 w-[48%] relative rounded-sm shadow-white"
+      className="bg-[##EAEEEF] w-[48%] h-76 relative rounded-sm shadow-white"
       onPress={() => navigation.navigate('ProductDetail', {slug: item.slug})}>
       <View className="w-full relative justify-center items-center h-48  mb-0 ">
-        <View className="justify-center items-center px-3 py-[1px] absolute z-10 left-1 bg-[rgba(0,0,0,0.3)] top-1 rounded-none">
+        <View className="justify-center items-center px-2 py-[1px] absolute z-10 left-1 bg-[rgba(0,0,0,0.3)] top-1 rounded-none">
           <Text className="text-sm text-dark_blue font-mulish_medium">New</Text>
         </View>
 
@@ -39,18 +39,18 @@ const ProductCard = ({item, navigation}) => {
           className="w-[90%] h-44"
         />
       </View>
-      <View className="w-full p-3 pt-1">
-        <View className="mb-1 flex-row justify-start items-center gap-3">
-          <Text className="-mt-2 ml-2 text-base text-dark font-mulish_medium line-through ">
-            {'\u20B9'} {item.price}
+      <View className="w-full  mt-4 p-3 pt-1">
+        <View className="mb-2 bg-white w-30 h-8 flex-row  justify-start items-center gap-3">
+          <Text className=" mx-1 text-sm text-red-500 font-mulish_semibold tracking-wide">
+            {'\u20B9'} {item.price}.00
           </Text>
-          <Text className="-mt-6 min-w-20 bg-white text-lg text-red-500 font-mulish_regular tracking-wide py-[2px] px-2 ">
-            {'\u20B9'} {item.price}
+          <Text className="text-xs text-dark font-mulish_exlight line-through ">
+            {'\u20B9'} {item.price}.00
           </Text>
         </View>
         <Text
-          numberOfLines={3}
-          className="text-lg uppercase text-dark_blue font-mulish_bold tracking-wide">
+          numberOfLines={2}
+          className="text-xs uppercase text-slate-900 font-mulish_exbold tracking-wide">
           {item.title}
         </Text>
       </View>
