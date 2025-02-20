@@ -33,7 +33,7 @@ const SignIn = ({navigation}) => {
 
     try {
       
-      const {data} = await MakeRequest(
+      const data = await MakeRequest(
         LOGIN_API,
         {
           phone: phoneNumber

@@ -43,6 +43,9 @@ const LogoutScreen = () => {
       <Modal
         style={{margin: 0}}
         avoidKeyboard={true}
+        onBackButtonPress={() => setIsLogoutVisible(false)}
+        useNativeDriver
+        hideModalContentWhileAnimating
         isVisible={isLogoutVisible}>
         <View className="flex-1 bg-[rgba(0,0,0,0.7)] p-3">
           <View

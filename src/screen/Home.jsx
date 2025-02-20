@@ -9,7 +9,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 
 import HomeHeader from '../components/HomeHeader';
 import BottomTab from '../components/BottomTab';
@@ -27,9 +27,55 @@ import {CategoryCardHome} from '../components/CategoryCard';
 import BackPressHandler from '../components/BackPressHandler';
 import Swiper from 'react-native-swiper';
 import BestDeal from '../components/BestDeal';
-import WithValidation from '../components/WithValidation';
+import WithValidation from '../components/WithValidation'
+import MakeRequest from '../utils/axiosInstance';
+import {HOME_API} from '../service/API';
+
 
 const HomeScreen = ({navigation}) => {
+  const [homeData, setHomeData] = useState({
+    banners: [],
+    categories: [],
+    best_deals: [],
+    products: [],
+    stores: [],
+  });
+  const [loading, setLoading] = useState(false);
+
+  const gethomedata = async () => {
+    setLoading(true);
+    try {
+      const data = await MakeRequest(HOME_API, {}, {}, 'application/json');
+
+  
+      if (data.status == 1) {
+        setHomeData({
+          banners: data.response.banners,
+          categories: data.response.categories,
+          best_deals: data.response.products,
+          products: data.response.products,
+          stores: data.response.brands,
+        });
+      }
+    } catch (error) {
+      console.error('Verification failed:', error);
+      Toast.show({
+        type: 'BasicToast',
+        text1: 'Something went wrong. Please try again.',
+        position: 'bottom',
+        visibilityTime: 5000,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    gethomedata();
+  }, []);
+
+ 
+
   return (
     <SafeAreaView className="flex-1 bg-light">
       <HomeHeader />
@@ -78,25 +124,26 @@ const HomeScreen = ({navigation}) => {
           showsHorizontalScrollIndicator={false}
           className="mt-7">
           <View className="px-2 flex-row">
-            {_store_data.map((item, i) => (
-              <Pressable
-                className="mx-1 rounded-full overflow-hidden"
-                key={item.id}
-                style={{backgroundColor: TYPO.colors.light_gray}}
-                onPress={() =>
-                  navigation.navigate('StoreDetail', {slug: 'adidas'})
-                }>
-                <Image
-                  source={{uri: item.image}}
-                  resizeMode="cover"
-                  style={{
-                    height: responsiveWidth(20),
-                    width: responsiveWidth(20),
-                  }}
-                  // className="h-20 w-20"
-                />
-              </Pressable>
-            ))}
+            {homeData.stores?.length > 0 && homeData.stores?.map((item, i) => {
+              return (
+                <Pressable
+                  className="mx-1 rounded-full overflow-hidden"
+                  key={i}
+                  onPress={() =>
+                    navigation.navigate('StoreDetail', {slug: item.slug})
+                  }>
+                  <Image
+                    source={{uri: item.image}}
+                    resizeMode="cover"
+                    style={{
+                      height: responsiveWidth(20),
+                      width: responsiveWidth(20),
+                    }}
+                    // className="h-20 w-20"
+                  />
+                </Pressable>
+              );
+            })}
           </View>
         </ScrollView>
         <Swiper
@@ -105,12 +152,12 @@ const HomeScreen = ({navigation}) => {
           showsPagination={false}
           containerStyle={{marginTop: responsiveHeight(2)}}
           style={{}}>
-          {_store_data.map((item, i) => {
+          {homeData.banners?.length > 0 && homeData.banners.map((item, i) => {
             return (
               <Pressable key={i} className="px-3">
                 <Image
                   source={{
-                    uri: 'https://t3.ftcdn.net/jpg/03/16/37/64/360_F_316376413_nYL2jpLONPQPOsy31DE86n7FPpSxPIi3.jpg',
+                    uri: item.image,
                   }}
                   resizeMode="cover"
                   className="w-full h-40 rounded-md"
@@ -122,7 +169,9 @@ const HomeScreen = ({navigation}) => {
 
         {/* <Banner navigation={navigation} /> */}
 
-        <BestDeal navigation={navigation} />
+        {homeData.best_deals?.length > 0 && (
+          <BestDeal navigation={navigation} products={homeData.best_deals} />
+        )}
 
         <View className="-my-8 mx-3">
           <View className="flex-row items-center justify-between mb-3">
@@ -138,8 +187,10 @@ const HomeScreen = ({navigation}) => {
               </Text>
             </Pressable>
           </View>
-          <View className=" mx-1 justify-start flex-row flex-wrap items-start w-full gap-y-1 gap-x-1 ">
-            {_product_data.map((item, i) => {
+
+          <View className="justify-start flex-row flex-wrap items-start w-full gap-y-5 gap-x-[4%] ">
+            {homeData.products?.length > 0 && homeData.products.map((item, i) => {
+
               return (
                 <ProductCard key={i} item={item} navigation={navigation} />
               );

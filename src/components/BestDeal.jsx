@@ -12,7 +12,10 @@ import Carousel from 'react-native-reanimated-carousel';
 import {width} from '../utils/dimension';
 import {useSharedValue} from 'react-native-reanimated';
 
-const BestDeal = ({navigation}) => {
+const BestDeal = ({navigation, products = []}) => {
+
+  // console.log(products)
+
   const ref = React.useRef(null);
   const progress = useSharedValue(0);
   const scaleAnim = useRef(new Animated.Value(1)).current;
@@ -24,16 +27,20 @@ const BestDeal = ({navigation}) => {
     }).start();
   };
 
-  const handlePressOut = () => {
+  const handlePressOut = (slug) => {
     Animated.spring(scaleAnim, {
       toValue: 1, // Reset scale
       friction: 4,
       useNativeDriver: true,
     }).start();
-    // navigation.navigate('ProductDetail', {
-    //   product_id: _product_data[index].id,
-    // });
+    navigation.navigate('ProductDetail', {
+      slug: slug,
+    });
   };
+
+  if (!products || !Array.isArray(products) || products.length === 0) {
+    return <Text style={{ textAlign: 'center', marginTop: 20 }}>No products available</Text>;
+  }
 
   return (
     <Carousel
@@ -44,16 +51,16 @@ const BestDeal = ({navigation}) => {
       loop={true}
       // autoPlay={true}
       autoPlayInterval={2000}
-      data={_store_data}
+      data={products || []}
       onProgressChange={progress}
-      renderItem={({index}) => {
-       
+      renderItem={({index, item}) => {
+      
         return (
           <View key={index} className="-my-7">
             <View className=" justify-center items-center">
               <Image
                 source={{
-                  uri: 'https://cdn.shopify.com/s/files/1/0788/3869/4173/products/jordan-air-jordan-1-low-golf-travis-scott_20550718_47602899_2048.jpg?v=1706721415 ',
+                  uri: item.image,
                 }}
                 resizeMode="cover"
                 style={{
@@ -67,16 +74,16 @@ const BestDeal = ({navigation}) => {
               <Text
                 className="text-xl text-dark_blue font-mulish_semibold "
                 numberOfLines={1}>
-                Yeezy Boost 350 V2 Beluga Reflective
+                {item.title}
               </Text>
               <Text className="text-lg text-dark_blue font-mulish_medium pt-2 ">
-                ₹ 11880
+                ₹ {item.offer_price}
               </Text>
             </View>
             <View className="pt-8">
               <Pressable
                 onPressIn={handlePressIn}
-                onPressOut={handlePressOut}
+                onPressOut={()=>handlePressOut(item.slug)}
                 className="px-10">
                 <Animated.View style={{transform: [{scale: scaleAnim}]}}>
                   <Image
@@ -93,6 +100,9 @@ const BestDeal = ({navigation}) => {
       }}
     />
   );
+
+
+ 
 };
 
 export default BestDeal;

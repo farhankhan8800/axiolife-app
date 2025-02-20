@@ -31,7 +31,7 @@ const EnterOTP = ({navigation, route}) => {
   const submitotp = async () => {
     if (otp.length == 4) {
       try {
-        const {data} = await MakeRequest(
+        const data = await MakeRequest(
           VERIFY_AUTH_API,
           {
             phone: number,

@@ -25,6 +25,9 @@ const Deawer = () => {
         style={{margin: 0}}
         animationIn="slideInLeft"
         animationOut="slideOutLeft"
+        onBackButtonPress={() => setModalVisible(false)}
+        useNativeDriver
+        hideModalContentWhileAnimating
         avoidKeyboard={true}
         isVisible={isModalVisible}>
         <View className="bg-[#040303] flex-1 max-w-[88%] px-2 py-4 pt-10">

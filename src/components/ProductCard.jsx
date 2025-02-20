@@ -44,8 +44,10 @@ const ProductCard = ({item, navigation}) => {
           <Text className="mx-1 text-sm text-red-500 font-mulish_semibold tracking-wide">
             {'\u20B9'} {item.price}.00
           </Text>
-          <Text className="text-xs text-dark font-mulish_exlight line-through ">
-            {'\u20B9'} {item.price}.00
+
+          <Text className="-mt-6 min-w-20 bg-white text-lg text-red-500 font-mulish_regular tracking-wide py-[2px] px-2 ">
+            {'\u20B9'} {item.offer_price}
+
           </Text>
         </View>
         <Text

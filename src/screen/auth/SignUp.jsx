@@ -41,7 +41,7 @@ const SignUp = ({navigation}) => {
     }
 
     try {
-      const {data} = await MakeRequest(
+      const data = await MakeRequest(
         UPDATE_PROFILE_API,
         {
           name: username,

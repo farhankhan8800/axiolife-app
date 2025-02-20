@@ -15,22 +15,28 @@ const BackPressHandler = ({navigateTo}) => {
 
     if (exitApp) {
       BackHandler.exitApp();
-    } else {
-      Toast.show({
-        type: 'BasicToast',
-        text1: 'Press back again to exit',
-        position: 'bottom',
-        visibilityTime: 2000,
-      });
+      return true;
+    } 
 
-      setExitApp(true);
+    Toast.show({
+      type: 'BasicToast',
+      text1: 'Press back again to exit',
+      position: 'bottom',
+      visibilityTime: 2000,
+    });
 
-      setTimeout(() => {
-        setExitApp(false);
-      }, 2000);
-    }
-    return true;
+    setExitApp(true);
+
+    const timer = setTimeout(() => {
+      setExitApp(false);
+    }, 2000);
+
+    return () => clearTimeout(timer)
+
   }, [exitApp, navigateTo, navigation]);
+
+
+
   useFocusEffect(
     useCallback(() => {
       const backHandler = BackHandler.addEventListener(
