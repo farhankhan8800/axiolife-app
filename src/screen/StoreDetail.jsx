@@ -10,19 +10,10 @@ import {
   View,
 } from 'react-native';
 import React, {useState} from 'react';
-import {TYPO} from '../assets/typo';
-import {
-  responsiveFontSize,
-  responsiveHeight,
-} from 'react-native-responsive-dimensions';
-
 import {_category_data, _product_data, _store_data} from '../utils/data_';
-import {gstyle} from '../assets/gstyle';
-import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import Octicons from 'react-native-vector-icons/Octicons';
 import ProductCard from '../components/ProductCard';
 import SmallHeader from '../components/SmallHeader';
-import CategoryCard from '../components/CategoryCard';
+
 
 const StoreDetail = ({
   navigation,

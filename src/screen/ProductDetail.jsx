@@ -27,35 +27,64 @@ import {PRODUCT_DETAIL_API} from '../service/API';
 import NotFound from '../components/NotFound';
 
 const ProductDetail = ({navigation, route}) => {
-  const [showImage, setShowImage] = useState(product_details.image[0]);
+  const [showImage, setShowImage] = useState(
+    'https://skala.or.id/wp-content/uploads/2024/01/dummy-post-square-1-1.jpg',
+  );
 
-  const [product_detail, setproduct_detail] = useState({});
-  const [loading, setLoading] = useState(false);
-
-  const slug = route.params.slug;
+  const {slug} = route.params;
+  const [loading, setLoading] = useState(true);
+  const [product_, setProductDetails] = useState({
+    main: {},
+    details: {},
+    variants: [],
+    images: [],
+  });
 
   const getProductdetails = async () => {
     setLoading(true);
     try {
       const data = await MakeRequest(
         PRODUCT_DETAIL_API,
-        {
-          product_slug: slug,
-        },
+        {product_slug: 'new-balance-new-striker-original-shoes'}, //slug
         {},
         'application/json',
       );
+
       if (data.status == 1) {
-        setproduct_detail(data.response.product);
+        if (data.response.product.variations.length > 0) {
+          const show_product = data.response.product.variations[0];
+
+          const updatedImages = [
+            show_product.image,
+            ...(data.response.product.more_images || []),
+          ];
+
+          setProductDetails({
+            main: data.response.product,
+            variants: data.response.product.variations,
+            images: updatedImages,
+            details: {
+              title: data.response.product.title,
+              id: data.response.product.id,
+              brand: data.response.product.brand,
+              ...show_product,
+            },
+          });
+        } else {
+          setProductDetails({
+            main: data.response.product,
+            variants: data.response.product.variations,
+            images: data.response.product.more_images,
+            details: {
+              title: data.response.product.title,
+              id: data.response.product.id,
+              brand: data.response.product.brand,
+            },
+          });
+        }
       }
     } catch (error) {
-      console.error('product details', error);
-      Toast.show({
-        type: 'BasicToast',
-        text1: 'Something went wrong. Please try again.',
-        position: 'bottom',
-        visibilityTime: 5000,
-      });
+      console.error('Error fetching product details:', error);
     } finally {
       setLoading(false);
     }
@@ -63,13 +92,37 @@ const ProductDetail = ({navigation, route}) => {
 
   useEffect(() => {
     getProductdetails();
-  }, [slug]);
+  }, []);
 
-  console.log(product_detail);
+  useEffect(() => {
+    if (product_.images?.length > 0) {
+      setShowImage(product_.images[0]);
+    }
+  }, [product_]);
 
-  if (product_detail == null) {
-    return <NotFound navigation={navigation} />;
-  }
+  const getOtherProduct = variation_id => {
+    const selectedVariant = product_.variants.find(
+      variant => variant.variation_id === variation_id,
+    );
+
+    if (selectedVariant) {
+      const updatedImages = [
+        selectedVariant.image,
+        ...(product_.main.more_images || []),
+      ];
+
+      setProductDetails(prevProduct => ({
+        ...prevProduct,
+        details: {
+          ...prevProduct.details,
+          ...selectedVariant,
+        },
+        images: updatedImages,
+      }));
+    } else {
+      console.warn('Variant not found for ID:', variation_id);
+    }
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-[#fff]">
@@ -94,7 +147,7 @@ const ProductDetail = ({navigation, route}) => {
           showsHorizontalScrollIndicator={false}
           className="mt-3">
           <View className="px-3 flex-row">
-            {product_details.image.map((item, i) => {
+            {product_.images.map((item, i) => {
               return (
                 <Pressable
                   onPress={() => setShowImage(item)}
@@ -124,7 +177,7 @@ const ProductDetail = ({navigation, route}) => {
             numberOfLines={2}
             style={{width: responsiveWidth(76)}}
             className="text-lg font-mulish_semibold">
-            {product_details.title}
+            {product_.details?.title}
           </Text>
           <Pressable className="">
             {product_details.like == 1 ? (
@@ -144,14 +197,14 @@ const ProductDetail = ({navigation, route}) => {
         </View>
         <View className="flex-row px-4 mt-7 justify-start items-baseline">
           <Text className="text-2xl font-mulish_bold text-dark_blue leading-tight pr-3">
-            ${product_details.discount_price}/-
+            ${product_.details?.offerPrice}/-
           </Text>
           <View className="relative">
             <View
               className="absolute bg-gray-500 top-3"
               style={{width: responsiveWidth(12), height: 2}}></View>
             <Text className="text-lg font-semibold text-dark leading-tight">
-              ${product_details.price}/-
+              ${product_.details?.price}/-
             </Text>
           </View>
         </View>
@@ -187,15 +240,23 @@ const ProductDetail = ({navigation, route}) => {
           </Text>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View className="flex-row px-4 gap-6 mt-5">
-              {product_details.color.map((item, i) => {
+              {product_.variants.map((item, i) => {
                 return (
                   <Pressable
+                    onPress={() => getOtherProduct(item.variation_id)}
                     key={i}
-                    style={{borderColor: item}}
-                    className="p-2 border-[1px] rounded-full">
-                    <View
-                      style={{backgroundColor: item}}
-                      className="h-4 w-4 rounded-full"></View>
+                    style={{
+                      borderColor:
+                        product_.details.variation_id == item.variation_id
+                          ? TYPO.colors.main
+                          : 'transparent',
+                    }}
+                    className="p-2 border-2  rounded-full">
+                    <Image
+                      src={item.image}
+                      resizeMode="cover"
+                      className="h-12 w-12 rounded-md"
+                    />
                   </Pressable>
                 );
               })}
@@ -216,14 +277,21 @@ const ProductDetail = ({navigation, route}) => {
           </View>
 
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            <View className="flex-row px-4 gap-3 mt-5">
-              {product_details.size.map((item, i) => {
+            <View className="flex-row px-4 gap-6 mt-5">
+              {product_.variants.map((item, i) => {
                 return (
                   <Pressable
+                    onPress={() => getOtherProduct(item.variation_id)}
                     key={i}
+                    style={{
+                      borderColor:
+                        product_.details.variation_id == item.variation_id
+                          ? TYPO.colors.main
+                          : TYPO.colors.light_gray,
+                    }}
                     className="w-14 h-14 justify-center items-center bg-gray-100 border-[1px] border-gray-500 rounded-full">
                     <Text className="text-lg text-dark_blue font-mulish_medium">
-                      {item}
+                      {item.size}
                     </Text>
                   </Pressable>
                 );

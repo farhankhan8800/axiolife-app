@@ -26,11 +26,44 @@ import ProductCard from '../components/ProductCard';
 import Modal from 'react-native-modal';
 import {AlignLeft, Menu, X} from 'react-native-feather';
 import Swiper from 'react-native-swiper';
+import MakeRequest from '../utils/axiosInstance';
+import { ALL_PRODUCTS_API } from '../service/API';
 
 const ProductScreen = ({navigation, route}) => {
   const {slug} = route.params || {};
 
   const [showFilter, setShowFilter] = useState(false);
+  const [allProducts, setAllProducts] = useState([]);
+
+
+
+  const getAllProducts = async ()=>{
+    try {
+      const data = await MakeRequest(
+        ALL_PRODUCTS_API,
+        {},
+        {},
+        'application/json',
+      );
+
+      console.log('data.response', data.response.products);
+      if (data.status == 1) {
+        setAllProducts(data.response.products)
+      }
+    } catch (error) {
+      console.error('Error fetching search results:', error);
+    } finally {
+      
+    }
+  }
+
+useEffect(()=>{
+  getAllProducts()
+},[])
+
+
+
+
 
   return (
     <SafeAreaView className="flex-1 bg-[#F6F6F6]">
@@ -73,7 +106,7 @@ const ProductScreen = ({navigation, route}) => {
           showsPagination={false}
           containerStyle={{marginTop: responsiveHeight(2)}}
           style={{}}>
-          {_product_data.map((item, i) => {
+          {allProducts?.map((item, i) => {
             return (
               <Pressable key={i} className="px-3 ">
                 <Image
@@ -89,7 +122,7 @@ const ProductScreen = ({navigation, route}) => {
         </Swiper>
 
         <View className="justify-start pt-5 px-3 flex-row flex-wrap items-start w-full gap-y-5 gap-x-[4%] pb-28">
-          {_product_data.map((item, i) => {
+          {allProducts.map((item, i) => {
             return <ProductCard key={i} item={item} navigation={navigation} />;
           })}
         </View>
