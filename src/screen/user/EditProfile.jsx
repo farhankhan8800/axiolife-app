@@ -11,17 +11,31 @@ import {
   Platform,
   TouchableWithoutFeedback,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import SmallHeader from '../../components/SmallHeader';
 import Toast from 'react-native-toast-message';
+import {useDispatch, useSelector} from 'react-redux';
+import MakeRequest from '../../utils/axiosInstance';
+import {UPDATE_PROFILE_API} from '../../service/API';
+import {login} from '../../reduxstore/slice/auth_slice';
 
 const EditProfile = ({navigation}) => {
+  const {user, token, isAuthenticated} = useSelector(state => state.auth);
   const [form, setForm] = useState({
     name: '',
     phone: '',
   });
 
+  const dispatch = useDispatch();
+
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    setForm({
+      name: user.name,
+      phone: user.phone,
+    });
+  }, [user]);
 
   const validate = () => {
     let valid = true;
@@ -41,8 +55,44 @@ const EditProfile = ({navigation}) => {
     setErrors({...errors, [key]: ''});
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (validate()) {
+      try {
+        const data = await MakeRequest(
+          UPDATE_PROFILE_API,
+          {
+            name: form.name,
+          },
+          {},
+          'application/json',
+        );
+
+        if (data.status == 1) {
+          console.log(data);
+          const userData = {
+            user: data.response.userinfo,
+            token: data.token,
+          };
+
+          dispatch(login(userData));
+
+          Toast.show({
+            type: 'GreenToast',
+            text1: data.message,
+            position: 'bottom',
+            visibilityTime: 5000,
+          });
+        }
+      } catch (error) {
+        console.log(error);
+        Toast.show({
+          type: 'ErrorToast',
+          text1: error.response.data.message,
+          position: 'bottom',
+          visibilityTime: 5000,
+        });
+      }
+
       Toast.show({
         type: 'GreenToast',
         text1: 'Update Profile successfully',

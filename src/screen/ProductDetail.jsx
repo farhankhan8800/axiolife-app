@@ -25,6 +25,9 @@ import {WebViewAutoAdjust} from '../components/WebViewAutoAdjust';
 import MakeRequest from '../utils/axiosInstance';
 import {PRODUCT_DETAIL_API} from '../service/API';
 import NotFound from '../components/NotFound';
+import Wshlist from '../components/Wshlist';
+import AddDetailAction from '../components/AddDetailAction';
+
 
 const ProductDetail = ({navigation, route}) => {
   const [showImage, setShowImage] = useState(
@@ -39,7 +42,7 @@ const ProductDetail = ({navigation, route}) => {
     variants: [],
     images: [],
   });
-
+  
   const getProductdetails = async () => {
     setLoading(true);
     try {
@@ -179,21 +182,7 @@ const ProductDetail = ({navigation, route}) => {
             className="text-lg font-mulish_semibold">
             {product_.details?.title}
           </Text>
-          <Pressable className="">
-            {product_details.like == 1 ? (
-              <Icon
-                name="heart"
-                color={TYPO.colors.main}
-                size={responsiveFontSize(2.2)}
-              />
-            ) : (
-              <Icon
-                name="hearto"
-                color={'gray'}
-                size={responsiveFontSize(2.2)}
-              />
-            )}
-          </Pressable>
+         <Wshlist product_={product_.details} />
         </View>
         <View className="flex-row px-4 mt-7 justify-start items-baseline">
           <Text className="text-2xl font-mulish_bold text-dark_blue leading-tight pr-3">
@@ -308,30 +297,7 @@ const ProductDetail = ({navigation, route}) => {
           <WebViewAutoAdjust description={product_details.details} />
         </View>
       </ScrollView>
-      <View className="flex-row justify-between items-center px-4 py-2 pt-1 ">
-        <Pressable className=" border-[1px] justify-center  items-center p-2 rounded-full border-main">
-          <Ionicons
-            name="chatbox-ellipses-outline"
-            color={TYPO.colors.main}
-            size={responsiveFontSize(2.4)}
-          />
-        </Pressable>
-        <Pressable className="flex-row gap-3 border-[1px] w-[40%] justify-center  items-center py-2 px-5 rounded-full border-main">
-          <FontAwesome5
-            name="shopping-basket"
-            color={TYPO.colors.main}
-            size={responsiveFontSize(2.2)}
-          />
-          <Text className="text-base font-semibold text-main ">
-            Add to Cart
-          </Text>
-        </Pressable>
-        <Pressable className="border-[1px] w-[45%] justify-center  items-center bg-main py-2 px-5 rounded-full border-main">
-          <Text className="text-base text-center font-semibold text-light ">
-            Buy Now
-          </Text>
-        </Pressable>
-      </View>
+      <AddDetailAction product_={product_} navigation={navigation} />
     </SafeAreaView>
   );
 };

@@ -9,7 +9,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import HomeHeader from '../components/HomeHeader';
 import BottomTab from '../components/BottomTab';
@@ -21,6 +21,8 @@ import {_product_data, _store_data, notification_data} from '../utils/data_';
 
 import SmallHeader from '../components/SmallHeader';
 import { formatFullReadableTime, getRandomColor } from '../utils/utils';
+import { NOTIFICATION_API } from '../service/API';
+import MakeRequest from '../utils/axiosInstance';
 
 const NotificationScreen = ({
   navigation,
@@ -28,6 +30,27 @@ const NotificationScreen = ({
  
 
 
+  const getNotification = async ()=>{
+    try {
+      const data = await MakeRequest(
+        NOTIFICATION_API,
+        {},
+        {},
+        'application/json',
+      );
+
+      console.log(data)
+      if (data.status == 1) {
+       
+      }
+    } catch (error) {
+      console.error('Error fetching Notification :', error);
+    } 
+  }
+
+  useEffect(()=>{
+    getNotification()
+  },[])
 
 
   return (

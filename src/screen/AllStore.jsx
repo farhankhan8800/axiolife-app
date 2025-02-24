@@ -9,7 +9,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {TYPO} from '../assets/typo';
 import {
   responsiveFontSize,
@@ -19,8 +19,35 @@ import {
 import {_category_data, _product_data, _store_data} from '../utils/data_';
 import SmallHeader from '../components/SmallHeader';
 import Swiper from 'react-native-swiper';
+import { GET_BRAND_API } from '../service/API';
 
 const AllStore = ({navigation}) => {
+
+  const getBrand = async ()=>{
+    try {
+      const data = await MakeRequest(
+        GET_BRAND_API,
+        {},
+        {},
+        'application/json',
+      );
+
+      if (data.status == 1) {
+       
+      }
+    } catch (error) {
+      console.error('Error fetching Brand :', error);
+    } 
+  }
+
+useEffect(()=>{
+  getBrand()
+},[])
+
+
+
+
+
   return (
     <SafeAreaView className="flex-1 bg-light">
       <SmallHeader name="All Store" />
