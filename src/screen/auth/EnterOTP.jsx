@@ -88,7 +88,7 @@ const EnterOTP = ({navigation, route}) => {
 
   const resend_otp = async () => {
     try {
-      const {data} = await MakeRequest(
+      const data = await MakeRequest(
         LOGIN_API,
         {
           phone: number
@@ -96,6 +96,8 @@ const EnterOTP = ({navigation, route}) => {
         {},
         'application/json',
       );
+
+      console.log("data=",data)
 
       if (data.status == 1) {
         Toast.show({
@@ -106,6 +108,8 @@ const EnterOTP = ({navigation, route}) => {
         });
       }
     } catch (error) {
+
+      console.log(error)
       Toast.show({
         type: 'ErrorToast',
         text1: 'Something went wrong. Please try again.',

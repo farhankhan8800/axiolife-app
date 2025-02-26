@@ -83,7 +83,9 @@ const UserAddress = ({navigation}) => {
         </View>
       </ScrollView>
       <View className="px-3 my-3">
-        <Pressable onPress={()=>navigation.navigate('AddAddress')} className=" bg-main py-3 rounded-xl border border-main  flex items-center">
+        <Pressable
+          onPress={() => navigation.navigate('AddAddress')}
+          className=" bg-main py-3 rounded-xl border border-main  flex items-center">
           <Text className="text-white text-lg font-mulish_semibold">
             Add New Address
           </Text>

@@ -7,8 +7,7 @@ import {responsiveWidth} from 'react-native-responsive-dimensions';
 import {useNavigation} from '@react-navigation/native';
 import {getFirstLetter, getRandomColor} from '../utils/utils';
 import {useDispatch, useSelector} from 'react-redux';
-import {logout} from '../reduxstore/slice/auth_slice';
-import Toast from 'react-native-toast-message';
+
 import LogoutScreen from './LogoutScreen';
 
 const Deawer = () => {
@@ -16,18 +15,21 @@ const Deawer = () => {
   const {user, token, isAuthenticated} = useSelector(state => state.auth);
   const navigation = useNavigation();
 
+
+
   return (
     <>
       <Pressable className="" onPress={() => setModalVisible(true)}>
         <AlignLeft color={TYPO.colors.dark_blue} />
       </Pressable>
+
       <Modal
         style={{margin: 0}}
         animationIn="slideInLeft"
         animationOut="slideOutLeft"
         onBackButtonPress={() => setModalVisible(false)}
-        useNativeDriver
-        hideModalContentWhileAnimating
+        onBackdropPress={()=>setModalVisible(false)}
+        useNativeDriver={true}
         avoidKeyboard={true}
         isVisible={isModalVisible}>
         <View className="bg-[#040303] flex-1 max-w-[88%] px-2 py-4 pt-10">
@@ -130,7 +132,7 @@ const Deawer = () => {
             </View>
           </View>
           <View className="flex-row justify-between items-center pb-3">
-            {isAuthenticated && <LogoutScreen />}
+            {isAuthenticated && <LogoutScreen setModalVisible={setModalVisible}/>}
 
             <Text className="text-[12px] text-white text-center  font-mulish_light">
               App version - V0.1

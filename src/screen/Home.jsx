@@ -80,7 +80,7 @@ const HomeScreen = ({navigation}) => {
     <SafeAreaView className="flex-1 bg-light">
       <HomeHeader />
       <BottomTab />
-      <BackPressHandler />
+      {/* <BackPressHandler /> */}
       <ScrollView className="flex-1">
         <View className="px-3 mt-3">
           <Pressable

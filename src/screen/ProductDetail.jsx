@@ -36,12 +36,7 @@ const ProductDetail = ({navigation, route}) => {
 
   const {slug} = route.params;
   const [loading, setLoading] = useState(true);
-  const [product_, setProductDetails] = useState({
-    main: {},
-    details: {},
-    variants: [],
-    images: [],
-  });
+  const [product_, setProductDetails] = useState({});
   
   const getProductdetails = async () => {
     setLoading(true);
@@ -54,37 +49,7 @@ const ProductDetail = ({navigation, route}) => {
       );
 
       if (data.status == 1) {
-        if (data.response.product.variations.length > 0) {
-          const show_product = data.response.product.variations[0];
-
-          const updatedImages = [
-            show_product.image,
-            ...(data.response.product.more_images || []),
-          ];
-
-          setProductDetails({
-            main: data.response.product,
-            variants: data.response.product.variations,
-            images: updatedImages,
-            details: {
-              title: data.response.product.title,
-              id: data.response.product.id,
-              brand: data.response.product.brand,
-              ...show_product,
-            },
-          });
-        } else {
-          setProductDetails({
-            main: data.response.product,
-            variants: data.response.product.variations,
-            images: data.response.product.more_images,
-            details: {
-              title: data.response.product.title,
-              id: data.response.product.id,
-              brand: data.response.product.brand,
-            },
-          });
-        }
+        setProductDetails(data.response.product);
       }
     } catch (error) {
       console.error('Error fetching product details:', error);
@@ -98,34 +63,32 @@ const ProductDetail = ({navigation, route}) => {
   }, []);
 
   useEffect(() => {
-    if (product_.images?.length > 0) {
-      setShowImage(product_.images[0]);
+    if (product_?.images?.length > 0) {
+      setShowImage(product_?.images[0]);
     }
   }, [product_]);
 
-  const getOtherProduct = variation_id => {
-    const selectedVariant = product_.variants.find(
-      variant => variant.variation_id === variation_id,
-    );
+  const getProductVariation = async (p_id, p_name) => {
+  
+    try {
+      const data = await MakeRequest(
+        PRODUCT_DETAIL_API,
+        {product_slug: 'new-balance-new-striker-original-shoes'}, 
+        {},
+        'application/json',
+      );
 
-    if (selectedVariant) {
-      const updatedImages = [
-        selectedVariant.image,
-        ...(product_.main.more_images || []),
-      ];
-
-      setProductDetails(prevProduct => ({
-        ...prevProduct,
-        details: {
-          ...prevProduct.details,
-          ...selectedVariant,
-        },
-        images: updatedImages,
-      }));
-    } else {
-      console.warn('Variant not found for ID:', variation_id);
+      if (data.status == 1) {
+        setProductDetails(data.response.product);
+      }
+    } catch (error) {
+      console.error('Error fetching product details:', error);
+    } finally {
+      setLoading(false);
     }
   };
+
+
 
   return (
     <SafeAreaView className="flex-1 bg-[#fff]">
@@ -180,32 +143,32 @@ const ProductDetail = ({navigation, route}) => {
             numberOfLines={2}
             style={{width: responsiveWidth(76)}}
             className="text-lg font-mulish_semibold">
-            {product_.details?.title}
+            {product_?.title}
           </Text>
-         <Wshlist product_={product_.details} />
+         <Wshlist product_={product_} />
         </View>
         <View className="flex-row px-4 mt-7 justify-start items-baseline">
           <Text className="text-2xl font-mulish_bold text-dark_blue leading-tight pr-3">
-            ${product_.details?.offerPrice}/-
+            ${product_?.offerPrice}/-
           </Text>
           <View className="relative">
             <View
               className="absolute bg-gray-500 top-3"
               style={{width: responsiveWidth(12), height: 2}}></View>
             <Text className="text-lg font-semibold text-dark leading-tight">
-              ${product_.details?.price}/-
+              ${product_?.price}/-
             </Text>
           </View>
         </View>
         <View className="flex-row px-4 mt-7 justify-start items-center gap-3">
           <View className="px-4 py-1 bg-gray-200 rounded-full">
             <Text className="text-base text-dark font-mulish_medium ">
-              Left {product_details.stock}
+              Left {product_.stock}
             </Text>
           </View>
           <View className="px-4 py-1 bg-gray-200 rounded-full">
             <Text className="text-base text-dark font-mulish_medium ">
-              Sold {product_details.sold_count}
+              Sold {product_.sold_count}
             </Text>
           </View>
           <View className="px-4 py-1 bg-gray-200 rounded-full">
@@ -217,7 +180,7 @@ const ProductDetail = ({navigation, route}) => {
               />{' '}
               {product_details.star}{' '}
               <Text className="text-sm text-gray-700">
-                ({product_details.reviews} Reviews)
+                ({product_.reviews} Reviews)
               </Text>
             </Text>
           </View>
@@ -229,14 +192,14 @@ const ProductDetail = ({navigation, route}) => {
           </Text>
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View className="flex-row px-4 gap-6 mt-5">
-              {product_.variants.map((item, i) => {
+              {product_?.colors?.map((item, i) => {
                 return (
                   <Pressable
-                    onPress={() => getOtherProduct(item.variation_id)}
+                    onPress={() => getProductVariation(item.pid, item.name)}
                     key={i}
                     style={{
                       borderColor:
-                        product_.details.variation_id == item.variation_id
+                        product_?.color_name == item.name
                           ? TYPO.colors.main
                           : 'transparent',
                     }}
@@ -267,17 +230,12 @@ const ProductDetail = ({navigation, route}) => {
 
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View className="flex-row px-4 gap-6 mt-5">
-              {product_.variants.map((item, i) => {
+              {product_?.size?.map((item, i) => {
                 return (
                   <Pressable
-                    onPress={() => getOtherProduct(item.variation_id)}
+                   
                     key={i}
-                    style={{
-                      borderColor:
-                        product_.details.variation_id == item.variation_id
-                          ? TYPO.colors.main
-                          : TYPO.colors.light_gray,
-                    }}
+                   
                     className="w-14 h-14 justify-center items-center bg-gray-100 border-[1px] border-gray-500 rounded-full">
                     <Text className="text-lg text-dark_blue font-mulish_medium">
                       {item.size}

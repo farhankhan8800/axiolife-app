@@ -27,11 +27,11 @@ const BackPressHandler = ({navigateTo}) => {
 
     setExitApp(true);
 
-    const timer = setTimeout(() => {
+    setTimeout(() => {
       setExitApp(false);
     }, 2000);
 
-    return () => clearTimeout(timer)
+    return true
 
   }, [exitApp, navigateTo, navigation]);
 
@@ -44,9 +44,7 @@ const BackPressHandler = ({navigateTo}) => {
         backAction,
       );
 
-      return () => {
-        backHandler.remove()
-      };
+      return () => backHandler.remove()
     }, [backAction]),
   );
 

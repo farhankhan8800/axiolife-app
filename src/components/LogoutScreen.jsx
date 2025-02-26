@@ -3,13 +3,13 @@ import React, {useState} from 'react';
 import {LogOut} from 'react-native-feather';
 import Modal from 'react-native-modal';
 import {responsiveWidth} from 'react-native-responsive-dimensions';
-import {useNavigation} from '@react-navigation/native';
+import {CommonActions, useNavigation} from '@react-navigation/native';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {logout} from '../reduxstore/slice/auth_slice';
 import Toast from 'react-native-toast-message';
 
-const LogoutScreen = () => {
+const LogoutScreen = ({setModalVisible}) => {
   const [isLogoutVisible, setIsLogoutVisible] = useState(false);
   const {user, token, isAuthenticated} = useSelector(state => state.auth);
   const navigation = useNavigation();
@@ -17,17 +17,28 @@ const LogoutScreen = () => {
   const dispatch = useDispatch();
 
   const logoutuser = () => {
+    setIsLogoutVisible(false)
+    setModalVisible(false)
+
+     dispatch(logout());
+
     setTimeout(() => {
-      dispatch(logout());
-      Toast.show({
-        type: 'BasicToast',
-        text1: 'Logged out successfully!',
-        position: 'bottom',
-        visibilityTime: 3000,
-      });
-      setIsLogoutVisible(false)
-      navigation.push('Home')
-    }, 1000);
+      
+      // Toast.show({
+      //   type: 'BasicToast',
+      //   text1: 'Logged out successfully!',
+      //   position: 'bottom',
+      //   visibilityTime: 3000,
+      // });
+      
+      navigation.dispatch(
+        CommonActions.reset({
+          index: 0,
+          routes: [{ name: 'Home' }], 
+        })
+      );
+    }, 500);
+   
   };
 
   return (
@@ -43,9 +54,8 @@ const LogoutScreen = () => {
       <Modal
         style={{margin: 0}}
         avoidKeyboard={true}
-        onBackButtonPress={() => setIsLogoutVisible(false)}
-        useNativeDriver
-        hideModalContentWhileAnimating
+        // onBackButtonPress={() => setIsLogoutVisible(false)}
+       
         isVisible={isLogoutVisible}>
         <View className="flex-1 bg-[rgba(0,0,0,0.7)] p-3">
           <View
