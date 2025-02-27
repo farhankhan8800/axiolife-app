@@ -29,7 +29,9 @@ import Swiper from 'react-native-swiper';
 import BestDeal from '../components/BestDeal';
 import WithValidation from '../components/WithValidation'
 import MakeRequest from '../utils/axiosInstance';
-import {HOME_API} from '../service/API';
+import {HOME_API, WISHLIST_GET_API} from '../service/API';
+import { useDispatch, useSelector } from 'react-redux';
+import { setWishlist } from '../reduxstore/slice/wishlist_slice';
 
 
 const HomeScreen = ({navigation}) => {
@@ -41,6 +43,9 @@ const HomeScreen = ({navigation}) => {
     stores: [],
   });
   const [loading, setLoading] = useState(false);
+  const {user, token, isAuthenticated} = useSelector(state => state.auth);
+  const dispatch = useDispatch()
+
 
   const gethomedata = async () => {
     setLoading(true);
@@ -73,6 +78,39 @@ const HomeScreen = ({navigation}) => {
   useEffect(() => {
     gethomedata();
   }, []);
+
+
+  const getWishlistdata = async () => {
+    
+    try {
+      const data = await MakeRequest(WISHLIST_GET_API, {}, {}, 'application/json');
+
+  
+      // console.log(data)
+      if (data.status == 1) {
+        dispatch(setWishlist(data.response.wishlist))
+      }
+    } catch (error) {
+      console.error('Verification failed:', error);
+      Toast.show({
+        type: 'BasicToast',
+        text1: 'Something went wrong. Please try again.',
+        position: 'bottom',
+        visibilityTime: 5000,
+      });
+    } 
+  };
+
+
+useEffect(()=>{
+  if(isAuthenticated){
+    setTimeout(()=>{
+      getWishlistdata()
+    },2000)
+  }
+},[isAuthenticated])
+
+
 
  
 

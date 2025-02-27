@@ -7,8 +7,16 @@ import {
 
 import Icon from 'react-native-vector-icons/AntDesign';
 import {TYPO} from '../assets/typo';
+import Wishlist from './Wshlist';
 
 const ProductCard = ({item, navigation}) => {
+
+
+
+
+
+
+
   return (
     <Pressable
       className="bg-[##EAEEEF] w-[48%] h-76 relative rounded-sm shadow-white"
@@ -18,21 +26,9 @@ const ProductCard = ({item, navigation}) => {
           <Text className="text-sm text-dark_blue font-mulish_medium">New</Text>
         </View>
 
-        <Pressable className="absolute top-3 right-3 z-10 p-[6px] left bg-light rounded-full">
-          {item.like == 1 ? (
-            <Icon
-              name="heart"
-              color={TYPO.colors.main}
-              size={responsiveFontSize(2.2)}
-            />
-          ) : (
-            <Icon
-              name="hearto"
-              color={TYPO.colors.dark_blue}
-              size={responsiveFontSize(2.2)}
-            />
-          )}
-        </Pressable>
+        <View className="absolute top-3 right-3 z-10 p-[6px] left bg-light rounded-full">
+           <Wishlist product_={item} />
+        </View>
         <Image
           source={{uri: item.image}}
           resizeMode="cover"

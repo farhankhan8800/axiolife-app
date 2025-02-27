@@ -1,45 +1,48 @@
-import React from 'react';
-import { Platform } from 'react-native';
+import React, { useState } from 'react';
+import {Platform} from 'react-native';
 import AutoHeightWebView from 'react-native-autoheight-webview';
 import {
-    responsiveHeight,
-    responsiveWidth,
+  responsiveHeight,
+  responsiveWidth,
 } from 'react-native-responsive-dimensions';
 
+export const WebViewAutoAdjust = ({description}) => {
+  // console.log('description', description);
+  const [height_, setHeight_]= useState(100)
 
+const description_ = `
+  <html>
+    <head>
+      <style>${webstyle}</style>
+    </head>
+    <body>${description}</body>
+  </html>
+`;
 
-
-export const WebViewAutoAdjust = ({ description }) => {
-    console.log('description', description);
-    return (
-        <AutoHeightWebView
-             
-            style={{
-                width: "100%",
-                backgroundColor: 'red',
-                borderWidth: 0,
-                height:'auto',
-                marginTop:responsiveHeight(2)
-               
-            }}
-          
-            // onSizeUpdated={size =>
-            //     console.log('size.height=>, size.height)
-            // }
-            source={{ html: description }}
-            viewportContent={'width=device-width, user-scalable=no'}
-            files={[
-                {
-                    href: 'cssfileaddress',
-                    type: 'text/css',
-                    rel: 'stylesheet',
-                },
-            ]}
-            scalesPageToFit={Platform.OS === 'android' ? true : false}
-            customStyle={webstyle}
-           
-        />
-    );
+  
+  return (
+    <AutoHeightWebView
+      style={{
+        width: '100%',
+        height: height_,
+        marginTop: responsiveHeight(2),
+      }}
+      onSizeUpdated={size => {
+        console.log('size.height:', size.height);
+        setHeight_(size.height + 20);
+      }}
+      source={{ html: description_ }}
+      viewportContent="width=device-width, user-scalable=no"
+      files={[
+        {
+          href: 'cssfileaddress',
+          type: 'text/css',
+          rel: 'stylesheet',
+        },
+      ]}
+    
+    />
+  );
 };
 
 const webstyle = `
@@ -61,9 +64,10 @@ const webstyle = `
     }
 
     p {
-      font-size: 14px;
+      font-size: 15px;
       font-weight: 400;
       color: #212121;
+      line-height: 24px;
       margin-bottom: 10px;
     }
 
@@ -97,7 +101,7 @@ const webstyle = `
      a {
       font-size: 14px;
       font-weight: 500;
-      color:#f27935;
+      color: #059C6A;
       margin: 5px 0;
       text-decoration: underline;
       display: inline-block;
