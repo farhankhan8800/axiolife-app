@@ -4,7 +4,7 @@ export const VERIFY_AUTH_API =  "auth/v1/verify-auth"
 export const UPDATE_PROFILE_API = 'user/v1/updateprofile'
 export const HOME_API = 'home/v1/homedata'
 export const PRODUCT_DETAIL_API = 'product/v1/product-detail'
-export const PRODUCT_DETAIL_VARIATION_API = 'product/v1/product-size-variation'
+
 export const SEARCH_API = 'search/v1/search-query'
 export const ALL_PRODUCTS_API = 'product/v1/all-products'
 export const WISHLIST_ADD_API= 'wishlist/v1/add-wishlist'

@@ -36,21 +36,35 @@ const ProductDetail = ({navigation, route}) => {
   const {slug} = route.params;
   const [loading, setLoading] = useState(true);
   const [product_, setProductDetails] = useState({});
+  const [addColor, setAddColor] = useState('')
+  const [addSize, setAddSize] = useState('')
+
+
+
 
   const getProductdetails = async () => {
     setLoading(true);
     try {
       const data = await MakeRequest(
         PRODUCT_DETAIL_API,
-        {product_slug: 'new-balance-new-striker-original-shoes'}, //slug
-        {},
+        {
+          product_slug: 'new-balance-new-striker-original-shoes',
+          color: addColor,
+          size: addSize,
+        },
+        {}, // Empty headers
         'application/json',
       );
-
-      // console.log(data)
-
+  
       if (data.status == 1) {
-        setProductDetails(data.response.product);
+        if (addColor === '' && addSize === '') {
+          setProductDetails(data.response);
+        } else {
+          setProductDetails((prev) => ({
+            ...prev,
+            ...data.response
+          }));
+        }
       }
     } catch (error) {
       console.error('Error fetching product details:', error);
@@ -61,7 +75,7 @@ const ProductDetail = ({navigation, route}) => {
 
   useEffect(() => {
     getProductdetails();
-  }, []);
+  }, [addColor, addSize]);
 
   useEffect(() => {
     if (product_?.more_images?.length > 0) {
@@ -69,24 +83,7 @@ const ProductDetail = ({navigation, route}) => {
     }
   }, [product_]);
 
-  const getProductVariation = async product_color => {
-    try {
-      const data = await MakeRequest(
-        PRODUCT_DETAIL_VARIATION_API,
-        {product_id: product_?.product_id, color: product_color},
-        {},
-        'application/json',
-      );
-
-      if (data.status == 1) {
-        setProductDetails(data.response.product);
-      }
-    } catch (error) {
-      console.error('Error fetching product details:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
+  
 
   return (
     <SafeAreaView className="flex-1 bg-[#fff]">
@@ -148,14 +145,14 @@ const ProductDetail = ({navigation, route}) => {
         </View>
         <View className="flex-row px-4 mt-7 justify-start items-baseline">
           <Text className="text-2xl font-mulish_bold text-dark_blue leading-tight pr-3">
-            ${product_?.top_variation?.offerPrice}/-
+            ${product_?.selected_variation?.offerPrice}/-
           </Text>
           <View className="relative">
             <View
               className="absolute bg-gray-500 top-3"
               style={{width: responsiveWidth(12), height: 2}}></View>
             <Text className="text-lg font-semibold text-dark leading-tight">
-              ${product_?.top_variation?.price}/-
+              ${product_?.selected_variation?.price}/-
             </Text>
           </View>
         </View>
@@ -167,12 +164,12 @@ const ProductDetail = ({navigation, route}) => {
           </View>
           <View className="px-4 py-1 bg-gray-200 rounded-full">
             <Text className="text-base text-dark font-mulish_medium ">
-              Left {product_?.top_variation?.stock}
+              Left {product_?.selected_variation?.stock}
             </Text>
           </View>
           <View className="px-4 py-1 bg-gray-200 rounded-full">
             <Text className="text-base text-dark font-mulish_medium ">
-              Sold {product_?.sold_count}
+              Sold {product_?.selected_variation?.sold_count}
             </Text>
           </View>
           <View className="px-4 py-1 bg-gray-200 rounded-full">
@@ -184,7 +181,7 @@ const ProductDetail = ({navigation, route}) => {
               />{' '}
               {/* {product_details.star}{' '} */}
               <Text className="text-sm text-gray-700">
-                ({product_?.top_variation?.reviews} Reviews)
+                ({product_?.selected_variation?.reviews} Reviews)
               </Text>
             </Text>
           </View>
@@ -200,11 +197,11 @@ const ProductDetail = ({navigation, route}) => {
                 product_.colors.map((item, i) => {
                   return (
                     <Pressable
-                      onPress={() => getProductVariation(item.color)}
+                      onPress={() => setAddColor(item.color)}
                       key={i}
                       style={{
                         borderColor:
-                          product_?.top_variation.color == item.color
+                          product_?.selected_variation.color == item.color
                             ? TYPO.colors.main
                             : 'transparent',
                       }}
@@ -235,19 +232,20 @@ const ProductDetail = ({navigation, route}) => {
 
           <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
             <View className="flex-row px-4 gap-6 mt-5">
-              {product_.hasOwnProperty('first_color_sizes') &&
-                product_.first_color_sizes.map((item, i) => {
+              {product_.hasOwnProperty('size_variations') &&
+                product_.size_variations.map((item, i) => {
                   return (
                     <Pressable
                       style={{}}
+                      onPress={ item.stock == 0 ?  null : () => setAddSize(item.size)}
                       key={i}
-                      className={`w-14 h-14 justify-center items-center bg-gray-100 border-[1px] ${
-                        item == product_?.top_variation.size
-                          ? 'border-gray-700'
-                          : 'border-gray-300'
-                      } rounded-full`}>
-                      <Text className="text-lg text-dark_blue font-mulish_medium">
-                        {item}
+                      className={`w-14 h-14 justify-center items-center  border-gray-700 border-[1px] ${
+                        item.size== product_?.selected_variation.size
+                          ? 'bg-gray-500 '
+                          : 'bg-gray-200'
+                      } rounded-full ${item.stock == 0 && 'opacity-20'}`}>
+                      <Text className={`text-lg ${item.size== product_?.selected_variation.size ? 'text-light text-xl':'text-dark_blue'} font-mulish_medium`}>
+                        {item.size}
                       </Text>
                     </Pressable>
                   );
