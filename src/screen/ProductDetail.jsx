@@ -85,6 +85,7 @@ const ProductDetail = ({navigation, route}) => {
 
   
 
+
   return (
     <SafeAreaView className="flex-1 bg-[#fff]">
       <ScrollView className="w-full">
@@ -197,7 +198,12 @@ const ProductDetail = ({navigation, route}) => {
                 product_.colors.map((item, i) => {
                   return (
                     <Pressable
-                      onPress={() => setAddColor(item.color)}
+                      onPress={() => 
+                      {
+                        setAddColor(item.color)
+                        setAddSize('')
+                      }
+                      }
                       key={i}
                       style={{
                         borderColor:

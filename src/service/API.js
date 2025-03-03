@@ -12,3 +12,7 @@ export const WISHLIST_REMOVE_API= 'wishlist/v1/remove-wishlist'
 export const WISHLIST_GET_API= 'wishlist/v1/get-wishlist'
 export const GET_BRAND_API= 'wishlist/v1/all-brand'
 export const NOTIFICATION_API = 'user/v1/notifications'
+export const ADD_CART_API = 'cart/v1/add-cart'
+export const GET_CART_API = 'cart/v1/get-cart'
+
+export const CART_ACTION_API = 'cart/v1/action-cart'

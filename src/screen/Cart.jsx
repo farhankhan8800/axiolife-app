@@ -10,7 +10,7 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import {
   _product_data,
@@ -23,10 +23,89 @@ import {ChevronDown, ChevronRight, MapPin, Search} from 'react-native-feather';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {TYPO} from '../assets/typo';
-import {responsiveFontSize, responsiveHeight} from 'react-native-responsive-dimensions';
+import {
+  responsiveFontSize,
+  responsiveHeight,
+} from 'react-native-responsive-dimensions';
+import Toast from 'react-native-toast-message';
+import {CART_ACTION_API, GET_CART_API} from '../service/API';
+import MakeRequest from '../utils/axiosInstance';
+import { addToCart, decreaseQuantity } from '../reduxstore/slice/cart_slice';
+import { useDispatch } from 'react-redux';
 
 const CartScreen = ({navigation}) => {
   const [showCoupponBox, setShowCoupponBox] = useState(false);
+  const [cartItem, setCartItem] = useState([]);
+  const [loading, setLoading] = useState(false);
+
+  const dispatch = useDispatch()
+
+
+
+  const getCartItem = async () => {
+    setLoading(true);
+    try {
+      const data = await MakeRequest(GET_CART_API, {}, {}, 'application/json');
+
+      if (data.status == 1) {
+        setCartItem(data.response.cartitems);
+      }
+    } catch (error) {
+      console.error('Verification failed:', error);
+      Toast.show({
+        type: 'BasicToast',
+        text1: 'Something went wrong. Please try again.',
+        position: 'bottom',
+        visibilityTime: 5000,
+      });
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
+  useEffect(() => {
+    getCartItem();
+  }, []);
+
+  const manage_product = async (item, action) => {
+    try {
+      const data = await MakeRequest(
+        CART_ACTION_API,
+        {
+          product_id: item.product_id,
+          product_variation_id: item.product_variation_id,
+          option: action,
+        },
+        {},
+        'application/json',
+      );
+
+
+      console.log(data)
+
+      if (data.status == 1) {
+        if(action == 'plus'){
+          dispatch(addToCart(item));
+        }
+        if(action == 'minus'){
+          dispatch(decreaseQuantity({ product_id: item.product_id, variation_id: item.product_variation_id }));
+        }
+        getCartItem();
+      }
+    } catch (error) {
+      console.error('Verification failed:', error);
+      Toast.show({
+        type: 'BasicToast',
+        text1: 'Something went wrong. Please try again.',
+        position: 'bottom',
+        visibilityTime: 5000,
+      });
+    }
+  };
+
+
+  // console.log(cartItem)
 
   return (
     <SafeAreaView className="flex-1 bg-[#fff]">
@@ -56,52 +135,59 @@ const CartScreen = ({navigation}) => {
           </View>
         </View>
         <View className="mt-7 px-3">
-          {_product_data.slice(0, 3).map((item, i) => {
-            return (
-              <View key={i} className="flex-row mb-5 gap-4">
-                <View className="w-[30%] p-3  bg-gray-100 rounded-2xl overflow-hidden justify-center items-center">
-                  <Image
-                    source={{uri: item.image}}
-                    resizeMode="contain"
-                    className="h-20 w-24"
-                  />
-                </View>
-                <View className="w-[65%] py-1 justify-between">
-                  <Text
-                    className="text-base font-mulish_medium text-dark_blue"
-                    numberOfLines={2}>
-                    {item.title}
-                  </Text>
-                  <View className="flex-row justify-between items-center">
-                    <Text className="text-xl font-mulish_bold text-dark_blue">
-                      ${item.price}
+          {cartItem.length > 0 &&
+            cartItem.map((item, i) => {
+              return (
+                <View key={i} className="flex-row mb-5 gap-4">
+                  <View className="w-[30%] p-3  bg-gray-100 rounded-2xl overflow-hidden justify-center items-center">
+                    <Image
+                      source={{uri: item.featured_image}}
+                      resizeMode="contain"
+                      className="h-20 w-24"
+                    />
+                  </View>
+                  <View className="w-[65%] py-1 justify-between">
+                    <Text
+                      className="text-base font-mulish_medium text-dark_blue"
+                      numberOfLines={2}>
+                      {item.title}
                     </Text>
-                    <View className="flex-row justify-between items-center bg-gray-100 rounded-full p-1">
-                      <Pressable className="rounded-full bg-light p-[1px]">
-                        <Entypo
-                          name="minus"
-                          color={TYPO.colors.main}
-                          size={responsiveFontSize(2.4)}
-                        />
-                      </Pressable>
-                      <Text className="text-base text-dark font-mulish_semibold w-8 text-center">
-                        1
+                    <View className="flex-row justify-between items-center">
+                      <Text className="text-xl font-mulish_bold text-dark_blue">
+                        ${item.price}
                       </Text>
-                      <Pressable className="rounded-full bg-main p-[1px]">
-                        <Entypo
-                          name="plus"
-                          color={TYPO.colors.light}
-                          size={responsiveFontSize(2.4)}
-                        />
-                      </Pressable>
+                      <View className="flex-row justify-between items-center bg-gray-100 rounded-full p-1">
+                        <Pressable
+                          onPress={() => manage_product(item, 'minus')}
+                          className="rounded-full bg-light p-[1px]">
+                          <Entypo
+                            name="minus"
+                            color={TYPO.colors.main}
+                            size={responsiveFontSize(2.4)}
+                          />
+                        </Pressable>
+                        <Text className="text-base text-dark font-mulish_semibold w-8 text-center">
+                          {item.quantity}
+                        </Text>
+                        <Pressable
+                          onPress={() => manage_product(item, 'plus')}
+                          className="rounded-full bg-main p-[1px]">
+                          <Entypo
+                            name="plus"
+                            color={TYPO.colors.light}
+                            size={responsiveFontSize(2.4)}
+                          />
+                        </Pressable>
+                      </View>
                     </View>
                   </View>
                 </View>
-              </View>
-            );
-          })}
+              );
+            })}
         </View>
-        <View className="mt-5 px-3" style={{marginBottom:showCoupponBox ? 0 : responsiveHeight(10)}}>
+        <View
+          className="mt-5 px-3"
+          style={{marginBottom: showCoupponBox ? 0 : responsiveHeight(10)}}>
           <View className="flex-row items-center ">
             <Text className="text-base font-mulish_medium mr-2 text-dark">
               Have a coupon code?
@@ -111,16 +197,18 @@ const CartScreen = ({navigation}) => {
               onPress={() => {
                 setShowCoupponBox(!showCoupponBox);
               }}>
-              <Text className='text-base font-mulish_medium text-blue-500'>All coupon</Text>
+              <Text className="text-base font-mulish_medium text-blue-500">
+                All coupon
+              </Text>
             </Pressable>
           </View>
           <View className=" relative mt-3">
-          <TextInput
-                placeholder="Enter coupon code"
-                placeholderTextColor="#6B7280"
-                className="pl-4 pr-36 rounded-xl w-full bg-gray-100 px-4 py-2 text-base h-10 border border-gray-200"
-              />
-              <View className='absolute right-3 top-1'>
+            <TextInput
+              placeholder="Enter coupon code"
+              placeholderTextColor="#6B7280"
+              className="pl-4 pr-36 rounded-xl w-full bg-gray-100 px-4 py-2 text-base h-10 border border-gray-200"
+            />
+            <View className="absolute right-3 top-1">
               {/* <Pressable
               className=""
               onPress={() => {
@@ -130,12 +218,17 @@ const CartScreen = ({navigation}) => {
                 Apply
               </Text>
             </Pressable> */}
-              <View className='flex-row justify-center items-center gap-1 pt-1'>
-                <FontAwesome5 name='check-circle' size={responsiveFontSize(1.6)} color={TYPO.colors.main} />
-                 <Text className='text-main text-base font-mulish_medium '>Available</Text>
+              <View className="flex-row justify-center items-center gap-1 pt-1">
+                <FontAwesome5
+                  name="check-circle"
+                  size={responsiveFontSize(1.6)}
+                  color={TYPO.colors.main}
+                />
+                <Text className="text-main text-base font-mulish_medium ">
+                  Available
+                </Text>
               </View>
-              </View>
-           
+            </View>
           </View>
           {showCoupponBox && (
             <View className="border-[1px] border-gray-200 rounded-md my-6 p-4">
