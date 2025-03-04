@@ -9,6 +9,9 @@ import {
 import React, {useState} from 'react';
 import SmallHeader from '../../components/SmallHeader';
 import {responsiveHeight} from 'react-native-responsive-dimensions';
+import Toast from 'react-native-toast-message';
+import MakeRequest from '../../utils/axiosInstance';
+import { CONTACT_FORM_API } from '../../service/API';
 
 const ContactUs = () => {
   const [form, setForm] = useState({
@@ -46,14 +49,45 @@ const ContactUs = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit =  async() => {
     if (validateForm()) {
-      console.log('Form Submitted', form);
-      alert('Your message has been sent!');
-      setForm({name: '', email: '', phone: '', subject: '', message: ''});
-      setErrors({});
+      try {
+        const data = await MakeRequest(
+          CONTACT_FORM_API,
+          {
+            email: form.email,
+            phone:form.phone,
+            message: form.message
+          },
+          {},
+          'application/json',
+        );
+
+        if (data.status == 1) {
+          console.log(data);
+          Toast.show({
+            type: 'GreenToast',
+            text1: 'Sent your message, contact soon!',
+            position: 'bottom',
+            visibilityTime: 5000,
+          });
+          setForm({name: '', email: '', phone: '', subject: '', message: ''});
+          setErrors({});
+        }
+      } catch (error) {
+        console.log(error);
+        Toast.show({
+          type: 'ErrorToast',
+          text1: error.response.data.message,
+          position: 'bottom',
+          visibilityTime: 5000,
+        });
+      }
+      
     }
   };
+
+
 
   const inputFields = [
     {key: 'name', placeholder: 'Name'},
@@ -71,7 +105,7 @@ const ContactUs = () => {
   return (
     <SafeAreaView className="flex-1 bg-[#F6F6F6]">
       <SmallHeader name="Contact Us" showSearch={false} />
-      <ScrollView className="flex-1 px-4 pt-5 mb-20">
+      <ScrollView className="flex-1 px-4 pt-5 ">
         <Text className="text-2xl pb-3 font-mulish_semibold">
           We’re here to help you with anything and everything on ViralPitch
         </Text>

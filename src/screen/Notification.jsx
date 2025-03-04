@@ -17,7 +17,6 @@ import {ChevronRight, MapPin, Search} from 'react-native-feather';
 import {TYPO} from '../assets/typo';
 import {responsiveFontSize} from 'react-native-responsive-dimensions';
 
-import {_product_data, _store_data, notification_data} from '../utils/data_';
 
 import SmallHeader from '../components/SmallHeader';
 import { formatFullReadableTime, getRandomColor } from '../utils/utils';
@@ -27,7 +26,7 @@ import MakeRequest from '../utils/axiosInstance';
 const NotificationScreen = ({
   navigation,
 }) => {
- 
+ const   [notification_data, setNotification_data]= useState([])
 
 
   const getNotification = async ()=>{
@@ -40,8 +39,9 @@ const NotificationScreen = ({
       );
 
       console.log(data)
+
       if (data.status == 1) {
-       
+       setNotification_data(data.response.notifications)
       }
     } catch (error) {
       console.error('Error fetching Notification :', error);
@@ -58,10 +58,10 @@ const NotificationScreen = ({
       <SmallHeader name="Notifications" />
       <ScrollView className="flex-1">
         <View className="px-3 pt-5">
-          {notification_data.map((item, i) => {
+          {notification_data && notification_data.length > 0 && notification_data.map((item, i) => {
             return (
               <Pressable
-               style={{opacity:item.read ? 0.5:1}}
+               style={{opacity:item.status == 'read' ? 0.5:1}}
                 key={i}
                 className="flex-row  items-start justify-start gap-3 py-1 mb-4  ">
                 <View
@@ -85,14 +85,24 @@ const NotificationScreen = ({
                       style={{backgroundColor: getRandomColor(6)}}
                       className="w-2 h-2 rounded-full"></View>{' '}
                     <Text className="text-sm font-mulish_regular ">
-                      {formatFullReadableTime(item.createdAt)}
+                      {formatFullReadableTime(item.created_at)}
                     </Text>
                   </View>
                 </View>
               </Pressable>
             );
           })}
+          
         </View>
+        {
+            notification_data.length == 0 && (
+              <View className="flex-1 justify-center items-center py-10">
+                <Text className="text-center text-lg text-dark_blue font-mulish_semibold ">
+                  No Notifications
+                </Text>
+              </View>
+            )
+          }
       </ScrollView>
     </SafeAreaView>
   );

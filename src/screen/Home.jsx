@@ -29,9 +29,10 @@ import Swiper from 'react-native-swiper';
 import BestDeal from '../components/BestDeal';
 import WithValidation from '../components/WithValidation'
 import MakeRequest from '../utils/axiosInstance';
-import {HOME_API, WISHLIST_GET_API} from '../service/API';
+import {GET_CART_API, HOME_API, WISHLIST_GET_API} from '../service/API';
 import { useDispatch, useSelector } from 'react-redux';
 import { setWishlist } from '../reduxstore/slice/wishlist_slice';
+import { setCart } from '../reduxstore/slice/cart_slice';
 
 
 const HomeScreen = ({navigation}) => {
@@ -84,8 +85,6 @@ const HomeScreen = ({navigation}) => {
     
     try {
       const data = await MakeRequest(WISHLIST_GET_API, {}, {}, 'application/json');
-
-  
       // console.log(data)
       if (data.status == 1) {
         dispatch(setWishlist(data.response.wishlist))
@@ -102,10 +101,24 @@ const HomeScreen = ({navigation}) => {
   };
 
 
+  const getCartItem = async () => {
+  
+    try {
+      const data = await MakeRequest(GET_CART_API, {}, {}, 'application/json');
+
+      if (data.status == 1) {
+        dispatch(setCart(data.response.cartitems.cartitems));
+      }
+    } catch (error) {
+      console.error('Verification failed:', error);
+    } 
+  };
+
 useEffect(()=>{
   if(isAuthenticated){
     setTimeout(()=>{
       getWishlistdata()
+      getCartItem()
     },2000)
   }
 },[isAuthenticated])
@@ -226,9 +239,8 @@ useEffect(()=>{
             </Pressable>
           </View>
 
-          <View className="justify-start flex-row flex-wrap items-start w-full gap-y-5 gap-x-[4%] ">
+          <View className="justify-start flex-row flex-wrap items-start w-full gap-y-2 gap-x-[2%] ">
             {homeData.products?.length > 0 && homeData.products.map((item, i) => {
-
               return (
                 <ProductCard key={i} item={item} navigation={navigation} />
               );

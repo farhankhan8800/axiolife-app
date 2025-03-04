@@ -12,6 +12,11 @@ const HomeHeader = () => {
   const navigation = useNavigation();
   const {user, token, isAuthenticated} = useSelector(state => state.auth);
 
+  const cart = useSelector(state => state.cart.cart); 
+
+
+
+
   return (
     <View className="px-3 pt-5 pb-2 flex-row  justify-between items-center">
       <Deawer />
@@ -28,9 +33,12 @@ const HomeHeader = () => {
         className="relative pr-3"
         onPress={() => navigation.navigate(isAuthenticated ? 'Cart': 'SignIn')}>
         <ShoppingBag color={TYPO.colors.dark_blue} />
-        {/* <View className="absolute -top-2 right-1 bg-green-300  justify-center items-center h-6 w-6 rounded-full">
-          <Text className="text-dark_blue text-sm">0</Text>
-        </View> */}
+        {
+          cart && cart.length > 0 && <View className="absolute -top-2 right-1 bg-green-300  justify-center items-center h-6 w-6 rounded-full">
+          <Text className="text-dark_blue text-sm">{cart.length}</Text>
+        </View>
+        }
+        
       </Pressable>
     </View>
   );

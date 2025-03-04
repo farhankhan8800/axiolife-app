@@ -15,7 +15,7 @@ const Wishlist = ({ product_ }) => {
   const dispatch = useDispatch();
 
 
-  // console.log(product_)
+  
 
   const { isAuthenticated } = useSelector(state => state.auth);
   const wishlistItems = useSelector(state => state.wishlist.items);

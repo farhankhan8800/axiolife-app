@@ -30,17 +30,16 @@ import {
 import Toast from 'react-native-toast-message';
 import {CART_ACTION_API, GET_CART_API} from '../service/API';
 import MakeRequest from '../utils/axiosInstance';
-import { addToCart, decreaseQuantity } from '../reduxstore/slice/cart_slice';
-import { useDispatch } from 'react-redux';
+import {addToCart, decreaseQuantity} from '../reduxstore/slice/cart_slice';
+import {useDispatch} from 'react-redux';
 
 const CartScreen = ({navigation}) => {
   const [showCoupponBox, setShowCoupponBox] = useState(false);
   const [cartItem, setCartItem] = useState([]);
+  const [cartSummary, setCartSummary] = useState({});
   const [loading, setLoading] = useState(false);
 
-  const dispatch = useDispatch()
-
-
+  const dispatch = useDispatch();
 
   const getCartItem = async () => {
     setLoading(true);
@@ -48,7 +47,8 @@ const CartScreen = ({navigation}) => {
       const data = await MakeRequest(GET_CART_API, {}, {}, 'application/json');
 
       if (data.status == 1) {
-        setCartItem(data.response.cartitems);
+        setCartItem(data.response.cartitems.cartitems);
+        setCartSummary(data.response.cartitems.cartSummary);
       }
     } catch (error) {
       console.error('Verification failed:', error);
@@ -62,7 +62,6 @@ const CartScreen = ({navigation}) => {
       setLoading(false);
     }
   };
-
 
   useEffect(() => {
     getCartItem();
@@ -81,15 +80,17 @@ const CartScreen = ({navigation}) => {
         'application/json',
       );
 
-
-      console.log(data)
-
       if (data.status == 1) {
-        if(action == 'plus'){
+        if (action == 'plus') {
           dispatch(addToCart(item));
         }
-        if(action == 'minus'){
-          dispatch(decreaseQuantity({ product_id: item.product_id, variation_id: item.product_variation_id }));
+        if (action == 'minus') {
+          dispatch(
+            decreaseQuantity({
+              product_id: item.product_id,
+              variation_id: item.product_variation_id,
+            }),
+          );
         }
         getCartItem();
       }
@@ -104,8 +105,7 @@ const CartScreen = ({navigation}) => {
     }
   };
 
-
-  // console.log(cartItem)
+  console.log(cartSummary);
 
   return (
     <SafeAreaView className="flex-1 bg-[#fff]">
@@ -258,23 +258,47 @@ const CartScreen = ({navigation}) => {
               Sub Total
             </Text>
             <Text className="text-base font-mulish_bold text-dark_blue">
-              $1200.00
+              {cartSummary?.total_price}
             </Text>
           </View>
           <View className="flex-row justify-between items-center mb-1">
             <Text className="text-base font-mulish_semibold text-dark_blue">
-              Delivery Fee
+              Total Item
             </Text>
             <Text className="text-base font-mulish_bold text-dark_blue">
-              $12.00
+              {cartSummary?.total_items}
             </Text>
           </View>
-          <View className="flex-row justify-between items-center mb-4">
+          <View className="flex-row justify-between items-center mb-1">
+            <Text className="text-base font-mulish_semibold text-dark_blue">
+              Platform Charge
+            </Text>
+            <Text className="text-base font-mulish_bold text-dark_blue">
+              {cartSummary?.platform_charge}
+            </Text>
+          </View>
+          <View className="flex-row justify-between items-center mb-1">
+            <Text className="text-base font-mulish_semibold text-dark_blue">
+              Service Fee
+            </Text>
+            <Text className="text-base font-mulish_bold text-dark_blue">
+              {cartSummary?.service_fee}
+            </Text>
+          </View>
+          <View className="flex-row justify-between items-center mb-1">
             <Text className="text-base font-mulish_semibold text-dark_blue">
               Discount
             </Text>
             <Text className="text-base font-mulish_bold text-green-500">
               - $200.00
+            </Text>
+          </View>
+          <View className="flex-row justify-between items-center mb-4">
+            <Text className="text-base font-mulish_semibold text-dark_blue">
+              Delivery Charge
+            </Text>
+            <Text className="text-base font-mulish_bold text-green-500">
+              {cartSummary?.delivery_charge}
             </Text>
           </View>
           <View className="w-full border-b-[1px] border-dashed opacity-60" />
@@ -283,7 +307,7 @@ const CartScreen = ({navigation}) => {
               Total
             </Text>
             <Text className="text-xl font-mulish_bold text-dark_blue">
-              $120.00
+              {cartSummary?.final_price}
             </Text>
           </View>
         </View>

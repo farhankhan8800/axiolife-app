@@ -16,3 +16,4 @@ export const ADD_CART_API = 'cart/v1/add-cart'
 export const GET_CART_API = 'cart/v1/get-cart'
 
 export const CART_ACTION_API = 'cart/v1/action-cart'
+export const CONTACT_FORM_API = 'user/v1/contact-us'
