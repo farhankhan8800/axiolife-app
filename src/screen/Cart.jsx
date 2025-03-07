@@ -290,7 +290,7 @@ const CartScreen = ({navigation}) => {
               Discount
             </Text>
             <Text className="text-base font-mulish_bold text-green-500">
-              - $200.00
+              -  $200.00
             </Text>
           </View>
           <View className="flex-row justify-between items-center mb-4">
