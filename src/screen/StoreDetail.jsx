@@ -35,7 +35,7 @@ const StoreDetail = ({
             className="w-28 h-28 rounded-full"
           />
         </View>
-        <View className="justify-start pt-7 flex-row flex-wrap px-3 items-start w-full gap-y-5 gap-x-[4%] mb-20">
+        <View className="justify-start pt-7 flex-row flex-wrap px-2 items-start w-full gap-y-1 gap-x-[1%] mb-20">
           {_product_data.map((item, i) => {
             return <ProductCard key={i} item={item} navigation={navigation} />;
           })}

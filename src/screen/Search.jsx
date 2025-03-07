@@ -93,12 +93,12 @@ const SearchScreen = ({navigation}) => {
           )}
 
           <View className='pt-6'>
-            {searchResults.products.length > 0 && (
+            {searchResults?.products?.length > 0 && (
               <View className='mt-4'>
                 <Text className="text-xl font-mulish_semibold text-dark_blue">
                   Products
                 </Text>
-                <View className="justify-start flex-row flex-wrap mt-3 items-start w-full gap-y-5 gap-x-[4%] ">
+                <View className="justify-start flex-row flex-wrap mt-3 items-start w-full gap-y-1 gap-x-[1%] ">
                   {searchResults.products.map((item, i) => {
                     return  <ProductCard key={i} item={item} navigation={navigation} />
                   })}
@@ -106,13 +106,13 @@ const SearchScreen = ({navigation}) => {
               </View>
             )}
 
-            {searchResults.brands.length > 0 && (
+            {searchResults?.brands?.length > 0 && (
               <View className='mt-8'>
                 <Text className="text-xl font-mulish_semibold text-dark_blue">
                   Brands
                 </Text>
                 <View className="flex-row flex-wrap flex-start gap-5 mt-5">
-                  {searchResults.brands.map((item, i) => {
+                  {searchResults?.brands?.map((item, i) => {
                     return  <Pressable
                     className="mx-1 bg-gray-100 "
                     key={item.id}
@@ -127,11 +127,6 @@ const SearchScreen = ({navigation}) => {
                 </View>
               </View>
             )}
-
-
-
-
-
           </View>
         </View>
       </ScrollView>

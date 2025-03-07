@@ -29,7 +29,7 @@ console.log(item)
            <Wishlist product_={item} />
         </View>
         <Image
-          source={{uri: item.image}}
+          source={{uri: item?.featured_image}}
           resizeMode="cover"
           className="w-[90%] h-44"
         />
