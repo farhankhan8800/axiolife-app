@@ -27,13 +27,12 @@ import {CategoryCardHome} from '../components/CategoryCard';
 import BackPressHandler from '../components/BackPressHandler';
 import Swiper from 'react-native-swiper';
 import BestDeal from '../components/BestDeal';
-import WithValidation from '../components/WithValidation'
+import WithValidation from '../components/WithValidation';
 import MakeRequest from '../utils/axiosInstance';
 import {GET_CART_API, HOME_API, WISHLIST_GET_API} from '../service/API';
-import { useDispatch, useSelector } from 'react-redux';
-import { setWishlist } from '../reduxstore/slice/wishlist_slice';
-import { setCart } from '../reduxstore/slice/cart_slice';
-
+import {useDispatch, useSelector} from 'react-redux';
+import {setWishlist} from '../reduxstore/slice/wishlist_slice';
+import {setCart} from '../reduxstore/slice/cart_slice';
 
 const HomeScreen = ({navigation}) => {
   const [homeData, setHomeData] = useState({
@@ -45,15 +44,13 @@ const HomeScreen = ({navigation}) => {
   });
   const [loading, setLoading] = useState(false);
   const {user, token, isAuthenticated} = useSelector(state => state.auth);
-  const dispatch = useDispatch()
-
+  const dispatch = useDispatch();
 
   const gethomedata = async () => {
     setLoading(true);
     try {
       const data = await MakeRequest(HOME_API, {}, {}, 'application/json');
 
-  
       if (data.status == 1) {
         setHomeData({
           banners: data.response.banners,
@@ -80,14 +77,17 @@ const HomeScreen = ({navigation}) => {
     gethomedata();
   }, []);
 
-
   const getWishlistdata = async () => {
-    
     try {
-      const data = await MakeRequest(WISHLIST_GET_API, {}, {}, 'application/json');
+      const data = await MakeRequest(
+        WISHLIST_GET_API,
+        {},
+        {},
+        'application/json',
+      );
       // console.log(data)
       if (data.status == 1) {
-        dispatch(setWishlist(data.response.wishlist))
+        dispatch(setWishlist(data.response.wishlist));
       }
     } catch (error) {
       console.error('Verification failed:', error);
@@ -97,12 +97,10 @@ const HomeScreen = ({navigation}) => {
         position: 'bottom',
         visibilityTime: 5000,
       });
-    } 
+    }
   };
 
-
   const getCartItem = async () => {
-  
     try {
       const data = await MakeRequest(GET_CART_API, {}, {}, 'application/json');
 
@@ -111,21 +109,17 @@ const HomeScreen = ({navigation}) => {
       }
     } catch (error) {
       console.error('Verification failed:', error);
-    } 
+    }
   };
 
-useEffect(()=>{
-  if(isAuthenticated){
-    setTimeout(()=>{
-      getWishlistdata()
-      getCartItem()
-    },2000)
-  }
-},[isAuthenticated])
-
-
-
- 
+  useEffect(() => {
+    if (isAuthenticated) {
+      setTimeout(() => {
+        getWishlistdata();
+        getCartItem();
+      }, 2000);
+    }
+  }, [isAuthenticated]);
 
   return (
     <SafeAreaView className="flex-1 bg-light">
@@ -175,26 +169,27 @@ useEffect(()=>{
           showsHorizontalScrollIndicator={false}
           className="mt-7">
           <View className="px-2 flex-row">
-            {homeData.stores?.length > 0 && homeData.stores?.map((item, i) => {
-              return (
-                <Pressable
-                  className="mx-1 rounded-full overflow-hidden"
-                  key={i}
-                  onPress={() =>
-                    navigation.navigate('StoreDetail', {slug: item.slug})
-                  }>
-                  <Image
-                    source={{uri: item.image}}
-                    resizeMode="cover"
-                    style={{
-                      height: responsiveWidth(20),
-                      width: responsiveWidth(20),
-                    }}
-                    // className="h-20 w-20"
-                  />
-                </Pressable>
-              );
-            })}
+            {homeData.stores?.length > 0 &&
+              homeData.stores?.map((item, i) => {
+                return (
+                  <Pressable
+                    className="mx-1 rounded-full overflow-hidden"
+                    key={i}
+                    onPress={() =>
+                      navigation.navigate('StoreDetail', {slug: item.slug})
+                    }>
+                    <Image
+                      source={{uri: item.image}}
+                      resizeMode="cover"
+                      style={{
+                        height: responsiveWidth(20),
+                        width: responsiveWidth(20),
+                      }}
+                      // className="h-20 w-20"
+                    />
+                  </Pressable>
+                );
+              })}
           </View>
         </ScrollView>
         <Swiper
@@ -203,19 +198,20 @@ useEffect(()=>{
           showsPagination={false}
           containerStyle={{marginTop: responsiveHeight(2)}}
           style={{}}>
-          {homeData.banners?.length > 0 && homeData.banners.map((item, i) => {
-            return (
-              <Pressable key={i} className="px-3">
-                <Image
-                  source={{
-                    uri: item.image,
-                  }}
-                  resizeMode="cover"
-                  className="w-full h-40 rounded-md"
-                />
-              </Pressable>
-            );
-          })}
+          {homeData.banners?.length > 0 &&
+            homeData.banners.map((item, i) => {
+              return (
+                <Pressable key={i} className="px-3">
+                  <Image
+                    source={{
+                      uri: item.image,
+                    }}
+                    resizeMode="cover"
+                    className="w-full h-40 rounded-md"
+                  />
+                </Pressable>
+              );
+            })}
         </Swiper>
 
         {/* <Banner navigation={navigation} /> */}
@@ -240,11 +236,12 @@ useEffect(()=>{
           </View>
 
           <View className="justify-start flex-row flex-wrap items-start w-full gap-y-2 gap-x-[2%] ">
-            {homeData.products?.length > 0 && homeData.products.map((item, i) => {
-              return (
-                <ProductCard key={i} item={item} navigation={navigation} />
-              );
-            })}
+            {homeData.products?.length > 0 &&
+              homeData.products.map((item, i) => {
+                return (
+                  <ProductCard key={i} item={item} navigation={navigation} />
+                );
+              })}
           </View>
         </View>
 
