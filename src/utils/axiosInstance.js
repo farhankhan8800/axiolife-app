@@ -26,8 +26,8 @@ const MakeRequest = async (
     request_type === 'application/json' ? {deviceType: getDeviceType()} : {};
   const requestData = {...defaultData, ...data};
 
-  console.log('Request Data:', requestData);
-  console.log('Request Headers:', defaultHeaders);
+  // console.log('Request Data:', requestData);
+  // console.log('Request Headers:', defaultHeaders);
 
   try {
     const res = await axios.post(api_url, requestData, {

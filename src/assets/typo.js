@@ -7,6 +7,7 @@ export const TYPO = {
     dark_blue: '#181C2E',
     error: '#FF0000',
     darkblack: '#000',
+    slate900: '#0f172a',
   },
   fontfamily: {
     mulish_bold: 'Mulish-Bold',

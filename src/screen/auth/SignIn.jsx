@@ -22,28 +22,30 @@ const SignIn = ({navigation}) => {
 
   const verifyUser = async () => {
     if (!isValidPhoneNumber(phoneNumber)) {
-        Toast.show({
-              type: 'ErrorToastIcon',
-              text1: 'Please enter a valid 10-digit mobile number.',
-              position: 'bottom',
-              visibilityTime: 5000,
-            });
+      Toast.show({
+        type: 'ErrorToastIcon',
+        text1: 'Please enter a valid 10-digit mobile number.',
+        position: 'bottom',
+        visibilityTime: 5000,
+      });
       return;
     }
 
     try {
-      
       const data = await MakeRequest(
         LOGIN_API,
         {
-          phone: phoneNumber
+          phone: phoneNumber,
         },
         {},
         'application/json',
       );
 
       console.log('Response data:', data);
-      if(data.response.userType=='banned' || data.response.userType=='deleted'){
+      if (
+        data.response.userType == 'banned' ||
+        data.response.userType == 'deleted'
+      ) {
         Toast.show({
           type: 'ErrorToast',
           text1: data.message,
@@ -52,17 +54,16 @@ const SignIn = ({navigation}) => {
         });
       }
 
-      if(data.status == 1){
+      if (data.status == 1) {
         Toast.show({
           type: 'GreenToast',
-          text1: data.message,
+          text1: data.message + data.response.otp,
           position: 'bottom',
           visibilityTime: 5000,
         });
-        navigation.navigate('EnterOTP',{number:phoneNumber});
-        setPhoneNumber('')
+        navigation.navigate('EnterOTP', {number: phoneNumber});
+        setPhoneNumber('');
       }
-
     } catch (error) {
       console.error('Verification failed:', error);
       Toast.show({
@@ -71,13 +72,12 @@ const SignIn = ({navigation}) => {
         position: 'bottom',
         visibilityTime: 5000,
       });
-   
     }
   };
 
   return (
     <SafeAreaView className="flex-1">
-      <View className="flex-1 bg-[#0D1318] relative">
+      <View className="flex-1 bg-black relative">
         <Pressable
           className="absolute top-3 right-3 p-1"
           onPress={() => navigation.goBack()}>
@@ -107,8 +107,8 @@ const SignIn = ({navigation}) => {
         <View className="p-3">
           <Pressable
             onPress={verifyUser}
-            className="bg-main p-3 rounded-xl border border-main flex items-center">
-            <Text className="text-white text-lg font-mulish_semibold">
+            className="bg-white p-3 rounded-xl border border-white flex items-center">
+            <Text className="text-black text-lg font-mulish_semibold">
               Continue
             </Text>
           </Pressable>

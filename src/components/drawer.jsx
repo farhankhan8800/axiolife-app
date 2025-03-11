@@ -15,12 +15,10 @@ const Deawer = () => {
   const {user, token, isAuthenticated} = useSelector(state => state.auth);
   const navigation = useNavigation();
 
-
-
   return (
     <>
       <Pressable className="" onPress={() => setModalVisible(true)}>
-        <AlignLeft color={TYPO.colors.dark_blue} />
+        <AlignLeft color={TYPO.colors.slate900} />
       </Pressable>
 
       <Modal
@@ -28,7 +26,7 @@ const Deawer = () => {
         animationIn="slideInLeft"
         animationOut="slideOutLeft"
         onBackButtonPress={() => setModalVisible(false)}
-        onBackdropPress={()=>setModalVisible(false)}
+        onBackdropPress={() => setModalVisible(false)}
         useNativeDriver={true}
         avoidKeyboard={true}
         isVisible={isModalVisible}>
@@ -132,7 +130,9 @@ const Deawer = () => {
             </View>
           </View>
           <View className="flex-row justify-between items-center pb-3">
-            {isAuthenticated && <LogoutScreen setModalVisible={setModalVisible}/>}
+            {isAuthenticated && (
+              <LogoutScreen setModalVisible={setModalVisible} />
+            )}
 
             <Text className="text-[12px] text-white text-center  font-mulish_light">
               App version - V0.1

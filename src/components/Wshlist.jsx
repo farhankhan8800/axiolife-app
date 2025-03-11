@@ -1,27 +1,29 @@
-import { Pressable } from 'react-native';
+import {Pressable} from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/AntDesign';
-import { TYPO } from '../assets/typo';
-import { responsiveFontSize } from 'react-native-responsive-dimensions';
-import { WISHLIST_ADD_API, WISHLIST_REMOVE_API } from '../service/API';
+import {TYPO} from '../assets/typo';
+import {responsiveFontSize} from 'react-native-responsive-dimensions';
+import {WISHLIST_ADD_API, WISHLIST_REMOVE_API} from '../service/API';
 import MakeRequest from '../utils/axiosInstance';
-import { useSelector, useDispatch } from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import Toast from 'react-native-toast-message';
 
-import { useNavigation } from '@react-navigation/native';
-import { addToWishlist, removeFromWishlist } from '../reduxstore/slice/wishlist_slice';
+import {useNavigation} from '@react-navigation/native';
+import {
+  addToWishlist,
+  removeFromWishlist,
+} from '../reduxstore/slice/wishlist_slice';
 
-const Wishlist = ({ product_ }) => {
+const Wishlist = ({product_}) => {
   const dispatch = useDispatch();
 
-
-  
-
-  const { isAuthenticated } = useSelector(state => state.auth);
+  const {isAuthenticated} = useSelector(state => state.auth);
   const wishlistItems = useSelector(state => state.wishlist.items);
-  
+
   // Check if product is in wishlist
-  const isLiked = wishlistItems.some(item => item.product_id === product_.product_id);
+  const isLiked = wishlistItems.some(
+    item => item.product_id === product_.product_id,
+  );
 
   const toggle_wishlist = async () => {
     if (!isAuthenticated) {
@@ -31,9 +33,8 @@ const Wishlist = ({ product_ }) => {
         position: 'bottom',
         visibilityTime: 2000,
       });
-      
-      return
-     
+
+      return;
     }
 
     const API_URL = isLiked ? WISHLIST_REMOVE_API : WISHLIST_ADD_API;
@@ -41,7 +42,7 @@ const Wishlist = ({ product_ }) => {
     try {
       const data = await MakeRequest(
         API_URL,
-        { product_id: product_.product_id },
+        {product_id: product_.product_id},
         {},
         'application/json',
       );
@@ -54,7 +55,10 @@ const Wishlist = ({ product_ }) => {
         }
       }
     } catch (error) {
-      console.error(`Error in ${isLiked ? 'removing' : 'adding'} wishlist:`, error);
+      console.error(
+        `Error in ${isLiked ? 'removing' : 'adding'} wishlist:`,
+        error,
+      );
     }
   };
 
@@ -62,7 +66,7 @@ const Wishlist = ({ product_ }) => {
     <Pressable onPress={toggle_wishlist}>
       <Icon
         name={isLiked ? 'heart' : 'hearto'}
-        color={isLiked ? TYPO.colors.main : 'gray'}
+        color={isLiked ? TYPO.colors.slate900 : 'gray'}
         size={responsiveFontSize(2.2)}
       />
     </Pressable>

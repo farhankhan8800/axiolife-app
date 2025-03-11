@@ -52,6 +52,7 @@ const HomeScreen = ({navigation}) => {
       const data = await MakeRequest(HOME_API, {}, {}, 'application/json');
 
       if (data.status == 1) {
+        // console.log('data.response', data.response);
         setHomeData({
           banners: data.response.banners,
           categories: data.response.categories,
@@ -144,7 +145,10 @@ const HomeScreen = ({navigation}) => {
         <View className="px-5 mt-2">
           <View className="flex-row justify-between items-center py-2">
             <View className="flex-row items-center ">
-              <MapPin width={responsiveFontSize(2)} color={TYPO.colors.main} />
+              <MapPin
+                width={responsiveFontSize(2)}
+                color={TYPO.colors.slate900}
+              />
               <View className="flex-row items-center">
                 <Text className="text-base text-dark font-mulish_medium ml-2 ">
                   Ship top
@@ -204,7 +208,7 @@ const HomeScreen = ({navigation}) => {
                 <Pressable key={i} className="px-3">
                   <Image
                     source={{
-                      uri: item.image,
+                      uri: item.mobileImage,
                     }}
                     resizeMode="cover"
                     className="w-full h-40 rounded-md"
@@ -229,8 +233,8 @@ const HomeScreen = ({navigation}) => {
               onPress={() =>
                 navigation.navigate('Product', {slug: 'Featured Products'})
               }>
-              <Text className="text-sm font-mulish_medium text-main">
-                See all
+              <Text className="text-sm font-mulish_semibold text-slate-900">
+                See All
               </Text>
             </Pressable>
           </View>
@@ -251,8 +255,8 @@ const HomeScreen = ({navigation}) => {
               Category
             </Text>
             <Pressable onPress={() => navigation.navigate('AllCategory')}>
-              <Text className="text-sm font-mulish_medium text-main">
-                See all
+              <Text className="text-sm font-mulish_semibold text-slate-900">
+                See All
               </Text>
             </Pressable>
           </View>

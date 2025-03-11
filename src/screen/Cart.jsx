@@ -114,7 +114,10 @@ const CartScreen = ({navigation}) => {
         <View className="px-5 mt-2">
           <View className="flex-row justify-between items-center py-2">
             <View className="flex-row items-center ">
-              <MapPin width={responsiveFontSize(2)} color={TYPO.colors.main} />
+              <MapPin
+                width={responsiveFontSize(2)}
+                color={TYPO.colors.slate900}
+              />
               <View className="flex-row items-center">
                 <Text className="text-base text-dark font-mulish_medium ml-2 ">
                   Ship to{' '}
@@ -162,7 +165,7 @@ const CartScreen = ({navigation}) => {
                           className="rounded-full bg-light p-[1px]">
                           <Entypo
                             name="minus"
-                            color={TYPO.colors.main}
+                            color={TYPO.colors.slate900}
                             size={responsiveFontSize(2.4)}
                           />
                         </Pressable>
@@ -171,7 +174,7 @@ const CartScreen = ({navigation}) => {
                         </Text>
                         <Pressable
                           onPress={() => manage_product(item, 'plus')}
-                          className="rounded-full bg-main p-[1px]">
+                          className="rounded-full bg-slate-900 p-[1px]">
                           <Entypo
                             name="plus"
                             color={TYPO.colors.light}
@@ -209,22 +212,18 @@ const CartScreen = ({navigation}) => {
               className="pl-4 pr-36 rounded-xl w-full bg-gray-100 px-4 py-2 text-base h-10 border border-gray-200"
             />
             <View className="absolute right-3 top-1">
-              {/* <Pressable
-              className=""
-              onPress={() => {
-               
-              }}>
-              <Text className="text-blue-500 text-lg font-mulish_semibold  ">
-                Apply
-              </Text>
-            </Pressable> */}
+              {/* <Pressable className="" onPress={() => {}}>
+                <Text className="text-blue-500 text-lg font-mulish_semibold  ">
+                  Apply
+                </Text>
+              </Pressable> */}
               <View className="flex-row justify-center items-center gap-1 pt-1">
                 <FontAwesome5
                   name="check-circle"
                   size={responsiveFontSize(1.6)}
-                  color={TYPO.colors.main}
+                  color={TYPO.colors.slate900}
                 />
-                <Text className="text-main text-base font-mulish_medium ">
+                <Text className="text-slate-900 text-base font-mulish_medium ">
                   Available
                 </Text>
               </View>
@@ -289,15 +288,15 @@ const CartScreen = ({navigation}) => {
             <Text className="text-base font-mulish_semibold text-dark_blue">
               Discount
             </Text>
-            <Text className="text-base font-mulish_bold text-green-500">
-              -  $200.00
+            <Text className="text-base font-mulish_bold text-slate-900">
+              - $200.00
             </Text>
           </View>
           <View className="flex-row justify-between items-center mb-4">
             <Text className="text-base font-mulish_semibold text-dark_blue">
               Delivery Charge
             </Text>
-            <Text className="text-base font-mulish_bold text-green-500">
+            <Text className="text-base font-mulish_bold text-slate-900">
               {cartSummary?.delivery_charge}
             </Text>
           </View>
@@ -313,7 +312,7 @@ const CartScreen = ({navigation}) => {
         </View>
       </ScrollView>
       <View className="px-4 py-2 pt-1 ">
-        <Pressable className="border-[1px]  justify-center  items-center bg-main py-2 px-5 rounded-full border-main">
+        <Pressable className="border-[1px]  justify-center  items-center bg-black py-2 px-5 rounded-full border-black">
           <Text className="text-base text-center font-semibold text-light ">
             Checkout
           </Text>

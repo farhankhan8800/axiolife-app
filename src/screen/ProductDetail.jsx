@@ -36,11 +36,8 @@ const ProductDetail = ({navigation, route}) => {
   const {slug} = route.params;
   const [loading, setLoading] = useState(true);
   const [product_, setProductDetails] = useState({});
-  const [addColor, setAddColor] = useState('')
-  const [addSize, setAddSize] = useState('')
-
-
-
+  const [addColor, setAddColor] = useState('');
+  const [addSize, setAddSize] = useState('');
 
   const getProductdetails = async () => {
     setLoading(true);
@@ -55,14 +52,14 @@ const ProductDetail = ({navigation, route}) => {
         {}, // Empty headers
         'application/json',
       );
-  
+
       if (data.status == 1) {
         if (addColor === '' && addSize === '') {
           setProductDetails(data.response);
         } else {
-          setProductDetails((prev) => ({
+          setProductDetails(prev => ({
             ...prev,
-            ...data.response
+            ...data.response,
           }));
         }
       }
@@ -83,189 +80,197 @@ const ProductDetail = ({navigation, route}) => {
     }
   }, [product_]);
 
-  
-
-
   return (
     <SafeAreaView className="flex-1 bg-[#fff]">
       <ScrollView className="w-full">
-        <View className="p-3">
-          <View
-            style={{height: responsiveHeight(50)}}
-            className="flex-1 overflow-hidden bg-gray-200 pt-3 rounded-[30px]">
-            <SmallHeader name="Sneakers Detail" />
-            <View className="w-full h-auto p-5 overflow-hidden ">
-              <Image
-                source={{uri: showImage}}
-                style={{width: '100%', height: responsiveHeight(37)}}
-                resizeMode="contain"
-              />
-            </View>
+        <View
+          style={{height: responsiveHeight(50)}}
+          className="flex-1 overflow-hidden bg-slate-200 pt-3">
+          <SmallHeader name="Sneakers Detail" />
+          <View className="w-full h-auto p-5 overflow-hidden ">
+            <Image
+              source={{uri: showImage}}
+              style={{width: '100%', height: responsiveHeight(37)}}
+              resizeMode="contain"
+            />
           </View>
         </View>
-
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          className="mt-3">
-          <View className="px-3 flex-row">
-            {product_.hasOwnProperty('more_images') &&
-              product_.more_images.map((item, i) => {
-                return (
-                  <Pressable
-                    onPress={() => setShowImage(item)}
-                    style={{
-                      borderWidth: 2,
-                      borderColor:
-                        showImage === item ? TYPO.colors.main : 'transparent',
-                    }}
-                    className={`p-1 border-2  bg-gray-200 mx-2 overflow-hidden rounded-2xl`}
-                    key={i}>
-                    <Image
-                      source={{uri: item}}
-                      style={{
-                        height: responsiveWidth(16),
-                        width: responsiveWidth(16),
-                      }}
-                      resizeMode="contain"
-                    />
-                  </Pressable>
-                );
-              })}
-          </View>
-        </ScrollView>
-
-        <View className="flex-row px-4 mt-5 justify-between items-start">
-          <Text
-            numberOfLines={2}
-            style={{width: responsiveWidth(76)}}
-            className="text-lg font-mulish_semibold">
-            {product_?.title}
-          </Text>
-          <Wshlist product_={product_} />
-        </View>
-        <View className="flex-row px-4 mt-7 justify-start items-baseline">
-          <Text className="text-2xl font-mulish_bold text-dark_blue leading-tight pr-3">
-            ${product_?.selected_variation?.offerPrice}/-
-          </Text>
-          <View className="relative">
-            <View
-              className="absolute bg-gray-500 top-3"
-              style={{width: responsiveWidth(12), height: 2}}></View>
-            <Text className="text-lg font-semibold text-dark leading-tight">
-              ${product_?.selected_variation?.price}/-
-            </Text>
-          </View>
-        </View>
-        <View className="flex-row px-4 mt-7 justify-start items-center gap-3 flex-wrap">
-          <View className="px-4 py-1 bg-gray-200 rounded-full">
-            <Text className="text-base text-dark font-mulish_medium ">
-              Brand: {product_?.brand}
-            </Text>
-          </View>
-          <View className="px-4 py-1 bg-gray-200 rounded-full">
-            <Text className="text-base text-dark font-mulish_medium ">
-              Left {product_?.selected_variation?.stock}
-            </Text>
-          </View>
-          <View className="px-4 py-1 bg-gray-200 rounded-full">
-            <Text className="text-base text-dark font-mulish_medium ">
-              Sold {product_?.selected_variation?.sold_count}
-            </Text>
-          </View>
-          <View className="px-4 py-1 bg-gray-200 rounded-full">
-            <Text className="text-base text-dark font-mulish_medium ">
-              <Icon
-                name="star"
-                color={'#ffde21'}
-                size={responsiveFontSize(1.6)}
-              />{' '}
-              {/* {product_details.star}{' '} */}
-              <Text className="text-sm text-gray-700">
-                ({product_?.selected_variation?.reviews} Reviews)
-              </Text>
-            </Text>
-          </View>
-        </View>
-
-        <View className=" mt-7">
-          <Text className="text-xl px-4 font-mulish_semibold text-dark_blue">
-            Color
-          </Text>
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            <View className="flex-row px-4 gap-6 mt-5">
-              {product_.hasOwnProperty('colors') &&
-                product_.colors.map((item, i) => {
+        {/* </View> */}
+        <View className="pt-3 rounded-[30px] bg-white bottom-8">
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            className="mt-3">
+            <View className="px-3 flex-row">
+              {product_.hasOwnProperty('more_images') &&
+                product_.more_images.map((item, i) => {
                   return (
                     <Pressable
-                      onPress={() => 
-                      {
-                        setAddColor(item.color)
-                        setAddSize('')
-                      }
-                      }
-                      key={i}
+                      onPress={() => setShowImage(item)}
                       style={{
+                        borderWidth: 2,
                         borderColor:
-                          product_?.selected_variation.color == item.color
-                            ? TYPO.colors.main
+                          showImage === item
+                            ? TYPO.colors.slate900
                             : 'transparent',
                       }}
-                      className="p-2 border-2  rounded-full">
+                      className={`p-1 border-2  bg-gray-200 mx-2 overflow-hidden rounded-2xl`}
+                      key={i}>
                       <Image
-                        src={item.image_url}
-                        resizeMode="cover"
-                        className="h-12 w-12 rounded-md"
+                        source={{uri: item}}
+                        style={{
+                          height: responsiveWidth(16),
+                          width: responsiveWidth(16),
+                        }}
+                        resizeMode="contain"
                       />
                     </Pressable>
                   );
                 })}
             </View>
           </ScrollView>
-        </View>
 
-        <View className=" mt-7 ">
-          <View className="px-4 flex-row justify-between items-center">
-            <Text className="text-xl  font-mulish_semibold text-dark_blue">
-              Select Size
+          <View className="flex-row px-4 mt-5 justify-between items-start">
+            <Text
+              numberOfLines={2}
+              style={{width: responsiveWidth(76)}}
+              className="text-lg font-mulish_semibold">
+              {product_?.title}
             </Text>
-            {/* <Pressable>
-              <Text className="text-blue-400 text-sm font-mulish_medium">
-                Size Chart
+            <Wshlist product_={product_} />
+          </View>
+          <View className="flex-row px-4 mt-7 justify-start items-baseline">
+            <Text className="text-2xl font-mulish_bold text-dark_blue leading-tight pr-3">
+              ${product_?.selected_variation?.offerPrice}/-
+            </Text>
+            <View className="relative">
+              <View
+                className="absolute bg-gray-500 top-3"
+                style={{width: responsiveWidth(12), height: 2}}></View>
+              <Text className="text-lg font-semibold text-dark leading-tight">
+                ${product_?.selected_variation?.price}/-
               </Text>
-            </Pressable> */}
+            </View>
+          </View>
+          <View className="flex-row px-4 mt-7 justify-start items-center gap-3 flex-wrap">
+            <View className="px-4 py-1 bg-gray-200 rounded-full">
+              <Text className="text-base text-dark font-mulish_medium ">
+                Brand: {product_?.brand}
+              </Text>
+            </View>
+            <View className="px-4 py-1 bg-gray-200 rounded-full">
+              <Text className="text-base text-dark font-mulish_medium ">
+                Left {product_?.selected_variation?.stock}
+              </Text>
+            </View>
+            <View className="px-4 py-1 bg-gray-200 rounded-full">
+              <Text className="text-base text-dark font-mulish_medium ">
+                Sold {product_?.selected_variation?.sold_count}
+              </Text>
+            </View>
+            <View className="px-4 py-1 bg-gray-200 rounded-full">
+              <Text className="text-base text-dark font-mulish_medium ">
+                <Icon
+                  name="star"
+                  color={'#ffde21'}
+                  size={responsiveFontSize(1.6)}
+                />{' '}
+                {/* {product_details.star}{' '} */}
+                <Text className="text-sm text-gray-700">
+                  ({product_?.selected_variation?.reviews} Reviews)
+                </Text>
+              </Text>
+            </View>
           </View>
 
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            <View className="flex-row px-4 gap-6 mt-5">
-              {product_.hasOwnProperty('size_variations') &&
-                product_.size_variations.map((item, i) => {
-                  return (
-                    <Pressable
-                      style={{}}
-                      onPress={ item.stock == 0 ?  null : () => setAddSize(item.size)}
-                      key={i}
-                      className={`w-14 h-14 justify-center items-center  border-gray-700 border-[1px] ${
-                        item.size== product_?.selected_variation.size
-                          ? 'bg-gray-500 '
-                          : 'bg-gray-200'
-                      } rounded-full ${item.stock == 0 && 'opacity-20'}`}>
-                      <Text className={`text-lg ${item.size== product_?.selected_variation.size ? 'text-light text-xl':'text-dark_blue'} font-mulish_medium`}>
-                        {item.size}
-                      </Text>
-                    </Pressable>
-                  );
-                })}
+          <View className=" mt-7">
+            <Text className="text-xl px-4 font-mulish_semibold text-dark_blue">
+              Color
+            </Text>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}>
+              <View className="flex-row px-4 gap-6 mt-5">
+                {product_.hasOwnProperty('colors') &&
+                  product_.colors.map((item, i) => {
+                    return (
+                      <Pressable
+                        onPress={() => {
+                          setAddColor(item.color);
+                          setAddSize('');
+                        }}
+                        key={i}
+                        style={{
+                          borderColor:
+                            product_?.selected_variation.color == item.color
+                              ? TYPO.colors.slate900
+                              : 'transparent',
+                        }}
+                        className="p-2 border-2  rounded-full">
+                        <Image
+                          src={item.image_url}
+                          resizeMode="cover"
+                          className="h-12 w-12 rounded-md"
+                        />
+                      </Pressable>
+                    );
+                  })}
+              </View>
+            </ScrollView>
+          </View>
+
+          <View className=" mt-7 ">
+            <View className="px-4 flex-row justify-between items-center">
+              <Text className="text-xl  font-mulish_semibold text-dark_blue">
+                Select Size
+              </Text>
+              <Pressable>
+                <Text className="text-blue-400 text-sm font-mulish_medium">
+                  Size Chart
+                </Text>
+              </Pressable>
             </View>
-          </ScrollView>
-        </View>
-        <View
-          style={{marginBottom: responsiveHeight(8)}}
-          className=" mt-7 px-4">
-          <Text className="text-xl  font-mulish_semibold text-dark_blue">
-            More Deatil
-          </Text>
-          <WebViewAutoAdjust description={product_.description} />
+
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}>
+              <View className="flex-row px-4 gap-6 mt-5">
+                {product_.hasOwnProperty('size_variations') &&
+                  product_.size_variations.map((item, i) => {
+                    return (
+                      <Pressable
+                        style={{}}
+                        onPress={
+                          item.stock == 0 ? null : () => setAddSize(item.size)
+                        }
+                        key={i}
+                        className={`w-14 h-14 justify-center items-center  border-gray-700 border-[1px] ${
+                          item.size == product_?.selected_variation.size
+                            ? 'bg-gray-500 '
+                            : 'bg-gray-200'
+                        } rounded-full ${item.stock == 0 && 'opacity-20'}`}>
+                        <Text
+                          className={`text-lg ${
+                            item.size == product_?.selected_variation.size
+                              ? 'text-light text-xl'
+                              : 'text-dark_blue'
+                          } font-mulish_medium`}>
+                          {item.size}
+                        </Text>
+                      </Pressable>
+                    );
+                  })}
+              </View>
+            </ScrollView>
+          </View>
+          <View
+            style={{marginBottom: responsiveHeight(8)}}
+            className=" mt-7 px-4">
+            <Text className="text-xl  font-mulish_semibold text-dark_blue">
+              More Deatil
+            </Text>
+            <WebViewAutoAdjust description={product_.description} />
+          </View>
         </View>
       </ScrollView>
       <AddDetailAction product_={product_} navigation={navigation} />
