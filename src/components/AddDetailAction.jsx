@@ -14,7 +14,6 @@ import MakeRequest from '../utils/axiosInstance';
 import {ADD_CART_API, CART_ACTION_API} from '../service/API';
 
 const AddDetailAction = ({product_, navigation}) => {
-  console.log('product_', product_);
   const dispatch = useDispatch();
   const cart = useSelector(state => state.cart.cart);
   const isInCart = cart.some(

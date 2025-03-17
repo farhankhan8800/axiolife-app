@@ -51,7 +51,7 @@ const BestDeal = ({navigation, products = []}) => {
         onProgressChange={progress}
         renderItem={({index, item}) => {
           return (
-            <View key={index} className="-my-8">
+            <View key={index} className="">
               <View className=" justify-center items-center">
                 <Image
                   source={{

@@ -52,7 +52,7 @@ const ProductDetail = ({navigation, route}) => {
         {}, // Empty headers
         'application/json',
       );
-
+      console.log('dataColor', data.response);
       if (data.status == 1) {
         if (addColor === '' && addSize === '') {
           setProductDetails(data.response);
@@ -85,7 +85,7 @@ const ProductDetail = ({navigation, route}) => {
       <ScrollView className="w-full">
         <View
           style={{height: responsiveHeight(50)}}
-          className="flex-1 overflow-hidden bg-slate-200 pt-3">
+          className="flex-1 overflow-hidden bg-[#EAEEEF] pt-3">
           <SmallHeader name="Sneakers Detail" />
           <View className="w-full h-auto p-5 overflow-hidden ">
             <Image
@@ -141,44 +141,31 @@ const ProductDetail = ({navigation, route}) => {
           </View>
           <View className="flex-row px-4 mt-7 justify-start items-baseline">
             <Text className="text-2xl font-mulish_bold text-dark_blue leading-tight pr-3">
-              ${product_?.selected_variation?.offerPrice}/-
+              ₹{product_?.selected_variation?.price}
             </Text>
             <View className="relative">
               <View
                 className="absolute bg-gray-500 top-3"
                 style={{width: responsiveWidth(12), height: 2}}></View>
               <Text className="text-lg font-semibold text-dark leading-tight">
-                ${product_?.selected_variation?.price}/-
+                ₹{product_?.selected_variation?.price}
               </Text>
             </View>
           </View>
           <View className="flex-row px-4 mt-7 justify-start items-center gap-3 flex-wrap">
             <View className="px-4 py-1 bg-gray-200 rounded-full">
-              <Text className="text-base text-dark font-mulish_medium ">
+              <Text className="text-xs text-black font-mulish_italic ">
                 Brand: {product_?.brand}
               </Text>
             </View>
             <View className="px-4 py-1 bg-gray-200 rounded-full">
-              <Text className="text-base text-dark font-mulish_medium ">
+              <Text className="text-xs text-dark font-mulish_italic ">
                 Left {product_?.selected_variation?.stock}
               </Text>
             </View>
             <View className="px-4 py-1 bg-gray-200 rounded-full">
-              <Text className="text-base text-dark font-mulish_medium ">
+              <Text className="text-xs text-dark font-mulish_italic ">
                 Sold {product_?.selected_variation?.sold_count}
-              </Text>
-            </View>
-            <View className="px-4 py-1 bg-gray-200 rounded-full">
-              <Text className="text-base text-dark font-mulish_medium ">
-                <Icon
-                  name="star"
-                  color={'#ffde21'}
-                  size={responsiveFontSize(1.6)}
-                />{' '}
-                {/* {product_details.star}{' '} */}
-                <Text className="text-sm text-gray-700">
-                  ({product_?.selected_variation?.reviews} Reviews)
-                </Text>
               </Text>
             </View>
           </View>
@@ -208,8 +195,9 @@ const ProductDetail = ({navigation, route}) => {
                         }}
                         className="p-2 border-2  rounded-full">
                         <Image
+                          style={{aspectRatio: 1}}
                           src={item.image_url}
-                          resizeMode="cover"
+                          resizeMode="contain"
                           className="h-12 w-12 rounded-md"
                         />
                       </Pressable>
@@ -246,14 +234,14 @@ const ProductDetail = ({navigation, route}) => {
                         key={i}
                         className={`w-14 h-14 justify-center items-center  border-gray-700 border-[1px] ${
                           item.size == product_?.selected_variation.size
-                            ? 'bg-gray-500 '
-                            : 'bg-gray-200'
+                            ? 'bg-black '
+                            : 'bg-white'
                         } rounded-full ${item.stock == 0 && 'opacity-20'}`}>
                         <Text
                           className={`text-lg ${
                             item.size == product_?.selected_variation.size
                               ? 'text-light text-xl'
-                              : 'text-dark_blue'
+                              : 'text-black'
                           } font-mulish_medium`}>
                           {item.size}
                         </Text>

@@ -2,7 +2,7 @@ import {View, Text, Pressable, Image} from 'react-native';
 import React from 'react';
 import {AlignLeft, ShoppingBag} from 'react-native-feather';
 import {TYPO} from '../assets/typo';
-import Deawer from './drawer';
+import Drawer from './Drawer';
 import {NavigationProp, useNavigation} from '@react-navigation/native';
 
 import {responsiveFontSize} from 'react-native-responsive-dimensions';
@@ -16,7 +16,7 @@ const HomeHeader = () => {
 
   return (
     <View className="relative px-3 pt-5 pb-2 flex-row  justify-between items-center">
-      <Deawer />
+      <Drawer />
       <View className="flex justify-center flex-row">
         <Image
           source={{

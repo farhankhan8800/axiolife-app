@@ -17,28 +17,26 @@ const LogoutScreen = ({setModalVisible}) => {
   const dispatch = useDispatch();
 
   const logoutuser = () => {
-    setIsLogoutVisible(false)
-    setModalVisible(false)
+    setIsLogoutVisible(false);
+    setModalVisible(false);
 
-     dispatch(logout());
+    dispatch(logout());
 
     setTimeout(() => {
-      
       // Toast.show({
       //   type: 'BasicToast',
       //   text1: 'Logged out successfully!',
       //   position: 'bottom',
       //   visibilityTime: 3000,
       // });
-      
+
       navigation.dispatch(
         CommonActions.reset({
           index: 0,
-          routes: [{ name: 'Home' }], 
-        })
+          routes: [{name: 'Home'}],
+        }),
       );
     }, 500);
-   
   };
 
   return (
@@ -46,8 +44,8 @@ const LogoutScreen = ({setModalVisible}) => {
       <Pressable
         className=" px-4 flex-row justify-center gap-2  items-center"
         onPress={() => setIsLogoutVisible(true)}>
-        <LogOut width={responsiveWidth(6)} color="#d30c0ccc" />
-        <Text className="text-base text-[#d30c0ccc] uppercase font-mulish_bold">
+        <LogOut width={responsiveWidth(6)} color="#fff" />
+        <Text className="text-base text-white uppercase font-mulish_bold">
           Logout
         </Text>
       </Pressable>
@@ -55,7 +53,7 @@ const LogoutScreen = ({setModalVisible}) => {
         style={{margin: 0}}
         avoidKeyboard={true}
         // onBackButtonPress={() => setIsLogoutVisible(false)}
-       
+
         isVisible={isLogoutVisible}>
         <View className="flex-1 bg-[rgba(0,0,0,0.7)] p-3">
           <View

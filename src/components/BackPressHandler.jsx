@@ -16,7 +16,7 @@ const BackPressHandler = ({navigateTo}) => {
     if (exitApp) {
       BackHandler.exitApp();
       return true;
-    } 
+    }
 
     Toast.show({
       type: 'BasicToast',
@@ -31,20 +31,21 @@ const BackPressHandler = ({navigateTo}) => {
       setExitApp(false);
     }, 2000);
 
-    return true
-
+    return true;
   }, [exitApp, navigateTo, navigation]);
-
-
 
   useFocusEffect(
     useCallback(() => {
-      const backHandler = BackHandler.addEventListener(
+      // ✅ Correct way to add listener in RN 0.71+
+      const subscription = BackHandler.addEventListener(
         'hardwareBackPress',
         backAction,
       );
 
-      return () => backHandler.remove()
+      return () => {
+        // ✅ Correct way to remove listener
+        subscription.remove();
+      };
     }, [backAction]),
   );
 

@@ -12,7 +12,7 @@ const Banner = ({navigation}) => {
             uri: 'https://t3.ftcdn.net/jpg/03/16/37/64/360_F_316376413_nYL2jpLONPQPOsy31DE86n7FPpSxPIi3.jpg',
           }}
           resizeMode="cover"
-          className="w-full h-36 rounded-2xl"
+          className="w-full h-40 rounded-2xl"
         />
       </Pressable>
     </View>

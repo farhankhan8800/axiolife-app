@@ -177,20 +177,21 @@ const HomeScreen = ({navigation}) => {
               homeData.stores?.map((item, i) => {
                 return (
                   <Pressable
-                    className="mx-1 rounded-full overflow-hidden"
                     key={i}
                     onPress={() =>
                       navigation.navigate('StoreDetail', {slug: item.slug})
                     }>
-                    <Image
-                      source={{uri: item.image}}
-                      resizeMode="cover"
-                      style={{
-                        height: responsiveWidth(20),
-                        width: responsiveWidth(20),
-                      }}
-                      // className="h-20 w-20"
-                    />
+                    <View className="mx-1 bg-slate-500 rounded-full ">
+                      <Image
+                        source={{uri: item.image}}
+                        resizeMode="contain"
+                        style={{
+                          height: responsiveWidth(20),
+                          width: responsiveWidth(20),
+                        }}
+                        // className="h-20 w-20"
+                      />
+                    </View>
                   </Pressable>
                 );
               })}
@@ -198,7 +199,7 @@ const HomeScreen = ({navigation}) => {
         </ScrollView>
         <Swiper
           autoplay={true}
-          height={responsiveHeight(18)}
+          height={responsiveHeight(24)}
           showsPagination={false}
           containerStyle={{marginTop: responsiveHeight(2)}}
           style={{}}>
@@ -211,7 +212,7 @@ const HomeScreen = ({navigation}) => {
                       uri: item.mobileImage,
                     }}
                     resizeMode="cover"
-                    className="w-full h-40 rounded-md"
+                    className="w-full h-56 mt-[1] rounded-xl"
                   />
                 </Pressable>
               );
@@ -224,7 +225,7 @@ const HomeScreen = ({navigation}) => {
           <BestDeal navigation={navigation} products={homeData.best_deals} />
         )}
 
-        <View className="-my-8 mx-3">
+        <View className="mx-3">
           <View className="flex-row items-center justify-between mb-3">
             <Text className="text-xl font-mulish_semibold text-dark_blue">
               Featured Products

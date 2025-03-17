@@ -12,11 +12,11 @@ import Wishlist from './Wshlist';
 const ProductCard = ({item, navigation}) => {
   return (
     <Pressable
-      className="bg-[#EAEEEF] w-[49%] h-80 relative rounded-sm shadow-white"
+      className="bg-[#f5f7f8fc] w-[49%] h-80 relative rounded-sm shadow-white"
       onPress={() => navigation.navigate('ProductDetail', {slug: item.slug})}>
       <View className="w-full relative justify-center items-center h-48  mb-0 ">
-        <View className="justify-center items-center px-4 py-[2px]  absolute z-10 left-1 bg-slate-900 top-1 rounded-md">
-          <Text className="text-sm text-white font-mulish_medium">
+        <View className="justify-center items-center px-4 py-[2px]  absolute z-10 left-1 bg-white top-1 rounded-md">
+          <Text className="text-sm text-black font-mulish_italic">
             Trending
           </Text>
         </View>
@@ -29,12 +29,12 @@ const ProductCard = ({item, navigation}) => {
           className="w-[90%] h-44"
         />
       </View>
-      <View className="w-full   p-3 pt-0">
+      <View className="w-full p-3 pt-0">
         <View className="mb-2 flex flex-col gap-1 items-start ">
-          <Text className="min-w-20 -mt-5 bg-white text-lg text-red-500 font-mulish_regular tracking-wider py-[2px] px-2 ">
+          <Text className="min-w-20 -mt-5 bg-white text-lg  text-black font-mulish_semibold tracking-wider py-[2px] px-2 ">
             {'\u20B9'} {item.offer_price}
           </Text>
-          <Text className="px-2 line-through text-base bg-white text-black font-mulish_semibold tracking-wider">
+          <Text className="px-2 line-through text-base bg-white text-slate-600 font-mulish_thin tracking-wider">
             {'\u20B9'} {item.price}.00
           </Text>
         </View>

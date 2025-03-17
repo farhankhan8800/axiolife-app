@@ -40,7 +40,7 @@ const EnterOTP = ({navigation, route}) => {
           {},
           'application/json',
         );
-
+        console.log('data', data);
         if (data.status == 1) {
           const userData = {
             user: data.response.userinfo,
@@ -85,19 +85,18 @@ const EnterOTP = ({navigation, route}) => {
     }
   };
 
-
   const resend_otp = async () => {
     try {
       const data = await MakeRequest(
         LOGIN_API,
         {
-          phone: number
+          phone: number,
         },
         {},
         'application/json',
       );
 
-      console.log("data=",data)
+      console.log('data=', data);
 
       if (data.status == 1) {
         Toast.show({
@@ -108,8 +107,7 @@ const EnterOTP = ({navigation, route}) => {
         });
       }
     } catch (error) {
-
-      console.log(error)
+      console.log(error);
       Toast.show({
         type: 'ErrorToast',
         text1: 'Something went wrong. Please try again.',
@@ -122,22 +120,22 @@ const EnterOTP = ({navigation, route}) => {
   return (
     <SafeAreaView className="flex-1">
       <BackPressHandler />
-      <View className="flex-1 bg-[#0D1318]">
+      <View className="flex-1 bg-[#fdfafa]">
         <View className="px-3 flex-1" style={{marginTop: responsiveHeight(15)}}>
-          <Text className="text-light text-4xl font-mulish_bold">
+          <Text className="text-black text-4xl font-mulish_bold">
             Verification
           </Text>
-          <Text className="text-white text-base font-mulish_medium mt-8">
+          <Text className="text-black text-lg font-mulish_medium mt-8">
             Enter the 4 digits code that you recived on your mobile number +91
             ******{number.slice(-4)}
           </Text>
           <View className="mt-16 px-10">
             <OtpInput
               numberOfDigits={4}
-              focusColor="green"
+              focusColor="black"
               autoFocus={false}
               hideStick={true}
-              placeholder="0000"
+              placeholder="000"
               blurOnFilled={true}
               disabled={false}
               type="numeric"
@@ -159,12 +157,12 @@ const EnterOTP = ({navigation, route}) => {
             />
           </View>
           <View className="flex-row justify-center items-center  gap-1 pt-10">
-            <Text className="text-base text-light font-mulish_semibold">
-              Didn't recive the OTP?
+            <Text className="text-lg text-black font-mulish_semibold">
+              Didn't recieve the OTP?
             </Text>
             <Pressable onPress={resend_otp}>
-              <Text className="text-base underline text-main font-mulish_semibold">
-                Reseand OTP
+              <Text className="text-base underline text-slate-800 font-mulish_semibold">
+                Resend OTP
               </Text>
             </Pressable>
           </View>
@@ -173,7 +171,7 @@ const EnterOTP = ({navigation, route}) => {
         <View className="px-3 mb-10" style={{marginTop: responsiveHeight(10)}}>
           <Pressable
             onPress={submitotp}
-            className="mt-6 bg-main py-3 rounded-xl border border-main  flex items-center">
+            className="mt-6 bg-black py-3 rounded-xl border border-main  flex items-center">
             <Text className="text-white text-lg font-mulish_semibold">
               Submit
             </Text>
@@ -194,12 +192,12 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#1C242A',
     borderRadius: 12,
-    backgroundColor: '#1C242A',
+    backgroundColor: '#fdfafa',
   },
   pinCodeText: {
     fontSize: 16,
     fontFamily: TYPO.fontfamily.mulish_medium,
-    color: TYPO.colors.light,
+    color: TYPO.colors.slate900,
   },
   placeholderText: {
     fontSize: 16,

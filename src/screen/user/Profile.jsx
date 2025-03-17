@@ -1,160 +1,168 @@
 import {
-  Button,
-  FlatList,
   Image,
   Pressable,
   SafeAreaView,
   ScrollView,
-  StyleSheet,
   Text,
   View,
 } from 'react-native';
 import React from 'react';
-
-import HomeHeader from '../../components/HomeHeader';
-import BottomTab from '../../components/BottomTab';
-import {gstyle} from '../../assets/gstyle';
-import {responsiveFontSize} from 'react-native-responsive-dimensions';
-import {TYPO} from '../../assets/typo';
-import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {getFirstLetter, getRandomColor} from '../../utils/utils';
 import {useSelector} from 'react-redux';
+import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {getFirstLetter} from '../../utils/utils';
 
-let link_ = [
+// Profile menu items
+const menuItems = [
   {
     id: 1,
-    name: 'Address',
-    icon: 'source-commit-next-local',
-    route: 'Address',
+    name: 'Account information',
+    icon: 'person-outline',
+    iconType: 'Ionicons',
+    route: 'EditProfile',
   },
   {
     id: 2,
-    name: 'My Favourites',
-    icon: 'heart-outline',
-    route: 'UserFavorite',
+    name: 'Registered passenger',
+    icon: 'account-group-outline',
+    iconType: 'MaterialCommunityIcons',
+    route: 'RegisteredPassenger',
   },
   {
     id: 3,
-    name: 'Notification',
-    icon: 'message-badge-outline',
-    route: 'Notification',
+    name: 'Login activity',
+    icon: 'login',
+    iconType: 'MaterialCommunityIcons',
+    route: 'LoginActivity',
   },
   {
     id: 4,
-    name: 'My Orders',
-    icon: 'alpha-o-circle-outline',
-    route: 'UserOrder',
+    name: 'Application settings',
+    icon: 'cog-outline',
+    iconType: 'MaterialCommunityIcons',
+    route: 'Settings',
+  },
+  {
+    id: 5,
+    name: 'Support center',
+    icon: 'headset',
+    iconType: 'MaterialCommunityIcons',
+    route: 'Support',
+  },
+  {
+    id: 6,
+    name: 'Terms and conditions',
+    icon: 'file-document-outline',
+    iconType: 'MaterialCommunityIcons',
+    route: 'Terms',
+  },
+  {
+    id: 7,
+    name: 'Privacy and policy',
+    icon: 'shield-check-outline',
+    iconType: 'MaterialCommunityIcons',
+    route: 'Privacy',
   },
 ];
 
 const Profile = ({navigation}) => {
+  const {user, isAuthenticated} = useSelector(state => state.auth);
 
+  const renderIcon = item => {
+    const iconStyle = {
+      backgroundColor: '#f2f2f2',
+      width: 32,
+      height: 32,
+      borderRadius: 8,
+      justifyContent: 'center',
+      alignItems: 'center',
+    };
 
-  const {user, token, isAuthenticated} = useSelector(state => state.auth);
-
-  return (
-    <SafeAreaView className="flex-1 bg-[#F6F6F6]">
-      <View className="px-3 pt-4 pb-2 flex-row  justify-between items-center">
-        <Pressable
-          style={gstyle.shadow_s}
-          onPress={() => navigation.goBack()}
-          className="p-2 bg-gray-200 rounded-full">
-          <FontAwesome6
-            name={'arrow-left-long'}
-            color={TYPO.colors.dark}
-            size={responsiveFontSize(2.2)}
-          />
-        </Pressable>
-        <Text
-          style={{paddingLeft: 15}}
-          className="text-dark_blue text-lg capitalize font-medium max-w-64 "
-          numberOfLines={1}>
-          My Profile
-        </Text>
-        {isAuthenticated ? (
-          <Pressable
-            onPress={() => navigation.navigate('EditProfile')}
-            style={gstyle.shadow_s}
-            className="">
-            <Text className="text-dark_blue text-base capitalize font-mulish_regular underline max-w-64">
-              Edit
-            </Text>
-          </Pressable>
+    return (
+      <View style={iconStyle}>
+        {item.iconType === 'Ionicons' ? (
+          <Ionicons name={item.icon} size={18} color="#333" />
         ) : (
-          <View className='w-16'></View>
+          <MaterialCommunityIcons name={item.icon} size={18} color="#333" />
         )}
       </View>
-      <ScrollView className="flex-1">
-        <View className="px-3 pt-7">
-          <View className="px-3 flex-row justify-start items-center gap-3">
-            <View
-              style={{backgroundColor: getRandomColor(9)}}
-              className="h-14 w-14 rounded-full justify-center items-center">
-              <Text className="text-light uppercase text-3xl font-mulish_bold">
-                {
-                  isAuthenticated ? <>{getFirstLetter(user.name || user.phone)}</> :"G"
-                }
-                
-              </Text>
-            </View>
-            <View>
-              <Text className="text-xl text-dark_blue upp font-bold mb-2">
-                Welcome {
-                  isAuthenticated? (
-                    user?.name || user.phone
-                  ) : 'Guest'
-                } 
-              </Text>
+    );
+  };
 
-              <Pressable
-                onPress={() => {
-                  !isAuthenticated && navigation.navigate('SignIn');
-                }}
-                className="py-2 px-4 rounded-xl bg-gray-200">
-                <Text className="text-[14px] text-gray-600 text-center uppercase font-mulish_bold">
-                  {isAuthenticated ? user.phone : 'Login/Sign UP'}
+  return (
+    <SafeAreaView className="flex-1 bg-white">
+      <ScrollView className="flex-1 bg-white">
+        {/* Profile Header */}
+        <View className="items-center pt-8 pb-4 px-5">
+          <View className="relative mb-3">
+            {isAuthenticated && user?.profileImage ? (
+              <Image
+                source={{uri: user.profileImage}}
+                className="w-16 h-16 rounded-full border border-gray-200"
+              />
+            ) : (
+              <View className="w-16 h-16 rounded-full bg-gray-100 justify-center items-center border border-gray-200">
+                <Text className="text-gray-500 text-2xl font-bold">
+                  {isAuthenticated
+                    ? getFirstLetter(user?.name || user?.email || 'U')
+                    : 'G'}
                 </Text>
-              </Pressable>
-            </View>
+              </View>
+            )}
+            <Pressable
+              className="absolute right-0 bottom-0 bg-black rounded-full w-6 h-6 justify-center items-center border border-white"
+              onPress={() => navigation.navigate('EditProfile')}>
+              <FontAwesome6 name="pen" size={10} color="#fff" />
+            </Pressable>
           </View>
-          <View className="mt-7 px-1">
-            {link_.map((item, i) => {
-              return (
-                <Pressable
-                  key={item.id}
-                  onPress={() =>
-                    navigation.navigate(
-                      isAuthenticated
-                        ? {
-                            name: item.route,
-                          }
-                        : 'SignIn',
-                    )
-                  }
-                  style={{opacity:isAuthenticated ? 1:.5} }
-                  className={`py-4 px-1 border-b-[1px]  border-gray-200 flex-row justify-between items-center mb-1`}>
-                  <View className="flex-row justify-start items-center gap-3">
-                    <MaterialCommunityIcons
-                      name={item.icon}
-                      color={TYPO.colors.dark}
-                      size={responsiveFontSize(2.1)}
-                    />
-                    <Text className="text-base text-dark_blue font-mulish_semibold">
-                      {item.name}
-                    </Text>
-                  </View>
-                  <View>
-                    <FontAwesome6
-                      name={'angle-right'}
-                      color={TYPO.colors.light_gray}
-                      size={responsiveFontSize(1.6)}
-                    />
-                  </View>
-                </Pressable>
-              );
-            })}
-          </View>
+          <Text className="text-lg font-bold text-gray-800 mb-1">
+            {isAuthenticated ? user?.name || 'User Name' : 'Guest User'}
+          </Text>
+          {isAuthenticated ? (
+            <Text className="text-xs text-gray-500">
+              {user?.email || 'example@email.com'}
+            </Text>
+          ) : (
+            <Pressable
+              className="bg-gray-100 py-2 px-4 rounded-xl mt-2"
+              onPress={() => navigation.navigate('SignIn')}>
+              <Text className="text-gray-800 text-sm font-medium">
+                Login / Sign up
+              </Text>
+            </Pressable>
+          )}
+        </View>
+
+        {/* Menu Items */}
+        <View className="px-5 pt-2 pb-20">
+          {menuItems.map((item, index) => (
+            <Pressable
+              key={item.id}
+              className={`flex-row justify-between items-center py-3.5 ${
+                index < menuItems.length - 1 ? 'border-b border-gray-100' : ''
+              }`}
+              onPress={() => navigation.navigate(item.route)}>
+              <View className="flex-row items-center">
+                {renderIcon(item)}
+                <Text className="text-sm text-gray-700 ml-3">{item.name}</Text>
+              </View>
+              <FontAwesome6 name="chevron-right" size={12} color="#ccc" />
+            </Pressable>
+          ))}
+
+          {isAuthenticated && (
+            <Pressable
+              className="flex-row items-center mt-8 py-3.5 border-t border-gray-100"
+              onPress={() => console.log('Logout')}>
+              <View className="bg-gray-100 w-8 h-8 rounded-lg justify-center items-center">
+                <Ionicons name="log-out-outline" size={18} color="#333" />
+              </View>
+              <Text className="text-gray-700 ml-3 text-sm font-medium">
+                Log out account
+              </Text>
+            </Pressable>
+          )}
         </View>
       </ScrollView>
     </SafeAreaView>

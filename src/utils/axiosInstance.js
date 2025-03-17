@@ -37,10 +37,16 @@ const MakeRequest = async (
   } catch (error) {
     console.error('Request error:', error?.response?.data || error.message);
 
-    if (error?.response?.status === 403) {
+    if (error?.response?.status === 401) {
       DeviceEventEmitter.emit('unauthorizedEvent', {
         message: 'User is unauthorized',
       });
+    } else if (error?.response?.status === 429) {
+      return {
+        status: 0,
+        message: 'Rate limit exceeded. Please try again later.',
+        error: 'TOO_MANY_REQUESTS',
+      };
     }
 
     throw error;

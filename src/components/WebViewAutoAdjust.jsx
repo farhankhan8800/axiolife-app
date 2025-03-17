@@ -77,7 +77,7 @@ export const WebViewAutoAdjust = ({description}) => {
         marginTop: responsiveHeight(2),
       }}
       onSizeUpdated={size => {
-        console.log('size.height:', size.height);
+        // console.log('size.height:', size.height);
         setHeight_(size.height + 20);
       }}
       source={{html: description_}}
