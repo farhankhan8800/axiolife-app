@@ -28,16 +28,23 @@ import {
   responsiveHeight,
 } from 'react-native-responsive-dimensions';
 import Toast from 'react-native-toast-message';
-import {CART_ACTION_API, GET_CART_API} from '../service/API';
+import {CART_ACTION_API, GET_ADDRESS_API, GET_CART_API} from '../service/API';
 import MakeRequest from '../utils/axiosInstance';
 import {addToCart, decreaseQuantity} from '../reduxstore/slice/cart_slice';
 import {useDispatch} from 'react-redux';
+import OrderProcessModal from '../components/OrderProcess';
 
 const CartScreen = ({navigation}) => {
   const [showCoupponBox, setShowCoupponBox] = useState(false);
   const [cartItem, setCartItem] = useState([]);
   const [cartSummary, setCartSummary] = useState({});
   const [loading, setLoading] = useState(false);
+  const [primaryAddress, setPrimaryAddress] = useState(null);
+
+
+
+
+
 
   const dispatch = useDispatch();
 
@@ -63,9 +70,51 @@ const CartScreen = ({navigation}) => {
     }
   };
 
+  const get_primary_address = async () => {
+    try {
+      const data = await MakeRequest(
+        GET_ADDRESS_API,
+        {},
+        {},
+        'application/json',
+      );
+
+      if (data.status == 1) {
+        const primaryAddr = data.response.addresses.find(
+          (address) => address.primary_address == 1
+        );
+  
+        if (primaryAddr) {
+          setPrimaryAddress(primaryAddr);
+        }
+      }
+    } catch (error) {
+      console.error('address get failed:', error);
+      Toast.show({
+        type: 'BasicToast',
+        text1: 'Something went wrong. Please try again.',
+        position: 'bottom',
+        visibilityTime: 5000,
+      });
+    }
+  };
+
+
+
+
+
   useEffect(() => {
     getCartItem();
+    get_primary_address()
   }, []);
+
+  
+
+
+
+
+
+
 
   const manage_product = async (item, action) => {
     try {
@@ -105,7 +154,7 @@ const CartScreen = ({navigation}) => {
     }
   };
 
-  console.log(cartSummary);
+  // console.log(cartSummary);
 
   return (
     <SafeAreaView className="flex-1 bg-[#fff]">
@@ -119,17 +168,19 @@ const CartScreen = ({navigation}) => {
                 color={TYPO.colors.slate900}
               />
               <View className="flex-row items-center">
-                <Text className="text-base text-dark font-mulish_medium ml-2 ">
-                  Ship to{' '}
-                </Text>{' '}
+                <Text className="text-base text-dark font-mulish_medium mx-2 ">
+                  Ship to:
+                </Text>
                 <Text
                   numberOfLines={1}
                   className="text-base text-dark font-mulish_semibold max-w-64">
-                  JiMalioboro. Block z no.18 oboro. Block z no.18
+                  {
+                    primaryAddress ? <>{ primaryAddress.address_line1 } {primaryAddress.address_line2 } {primaryAddress.city } {primaryAddress.postal_code }</>:' Add and set your primary address'
+                  }
                 </Text>
               </View>
             </View>
-            <Pressable>
+            <Pressable onPress={() => navigation.navigate('Address')}>
               <ChevronDown
                 width={responsiveFontSize(2.3)}
                 color={TYPO.colors.dark}
@@ -312,11 +363,7 @@ const CartScreen = ({navigation}) => {
         </View>
       </ScrollView>
       <View className="px-4 py-2 pt-1 ">
-        <Pressable className="border-[1px]  justify-center  items-center bg-black py-2 px-5 rounded-full border-black">
-          <Text className="text-base text-center font-semibold text-light ">
-            Checkout
-          </Text>
-        </Pressable>
+        <OrderProcessModal primaryAddress={primaryAddress} />
       </View>
     </SafeAreaView>
   );

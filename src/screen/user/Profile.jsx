@@ -110,11 +110,14 @@ const Profile = ({navigation}) => {
                 </Text>
               </View>
             )}
-            <Pressable
+            {
+              isAuthenticated &&  <Pressable
               className="absolute right-0 bottom-0 bg-black rounded-full w-6 h-6 justify-center items-center border border-white"
               onPress={() => navigation.navigate('EditProfile')}>
               <FontAwesome6 name="pen" size={10} color="#fff" />
             </Pressable>
+            }
+           
           </View>
           <Text className="text-lg font-bold text-gray-800 mb-1">
             {isAuthenticated ? user?.name || 'User Name' : 'Guest User'}

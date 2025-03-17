@@ -14,18 +14,18 @@ import {
 import React, {useState} from 'react';
 import SmallHeader from '../../components/SmallHeader';
 import Toast from 'react-native-toast-message';
+import MakeRequest from '../../utils/axiosInstance';
+import { ADD_ADDRESS_API } from '../../service/API';
 
 const AddAddress = ({navigation}) => {
   const [form, setForm] = useState({
-    name: '',
-    phone: '',
-    address: '',
+    address_line1: '',
+    address_line2: '',
     city: '',
     state: '',
-    pincode: '',
+    postal_code: '',
     country: '',
-    landmark: '',
-    type: '',
+    primary_address: '',
   });
 
   const [errors, setErrors] = useState({});
@@ -34,16 +34,8 @@ const AddAddress = ({navigation}) => {
     let valid = true;
     let newErrors = {};
 
-    if (!form.name.trim()) {
-      newErrors.name = 'Name is required';
-      valid = false;
-    }
-    if (!form.phone.trim() || !/^\+?\d{10,15}$/.test(form.phone)) {
-      newErrors.phone = 'Enter a valid phone number';
-      valid = false;
-    }
-    if (!form.address.trim()) {
-      newErrors.address = 'Address is required';
+    if (!form.address_line1.trim()) {
+      newErrors.address_line1 = 'Address line 1 is required';
       valid = false;
     }
     if (!form.city.trim()) {
@@ -54,16 +46,12 @@ const AddAddress = ({navigation}) => {
       newErrors.state = 'State is required';
       valid = false;
     }
-    if (!form.pincode.trim() || !/^\d{5,6}$/.test(form.pincode)) {
-      newErrors.pincode = 'Enter a valid pincode';
+    if (!form.postal_code.trim() || !/^\d{5,6}$/.test(form.postal_code)) {
+      newErrors.postal_code = 'Enter a valid Postal code';
       valid = false;
     }
     if (!form.country.trim()) {
       newErrors.country = 'Country is required';
-      valid = false;
-    }
-    if (!form.type.trim()) {
-      newErrors.type = 'Address type is required';
       valid = false;
     }
 
@@ -76,15 +64,43 @@ const AddAddress = ({navigation}) => {
     setErrors({...errors, [key]: ''});
   };
 
-  const handleSubmit = () => {
+  const handleSubmit =  async () => {
     if (validate()) {
-      Toast.show({
-        type: 'GreenToast',
-        text1: 'Address added successfully',
-        position: 'bottom',
-        visibilityTime: 2000,
-      });
-      console.log(form);
+
+      try {
+        const data = await MakeRequest(
+          ADD_ADDRESS_API,
+          {
+           ...form
+          },
+          {},
+          'application/json',
+        );
+  
+        if (data.status == 1) {
+
+          console.log(data)
+          Toast.show({
+            type: 'GreenToast',
+            text1: 'Address added successfully',
+            position: 'bottom',
+            visibilityTime: 2000,
+          });
+
+          setTimeout(()=>{
+            // navigation.goBack()
+            navigation.navigate('Address')
+          },2500)
+        }
+      } catch (error) {
+        console.error('Verification failed:', error);
+        Toast.show({
+          type: 'BasicToast',
+          text1: 'Something went wrong. Please try again.',
+          position: 'bottom',
+          visibilityTime: 5000,
+        });
+      }
     }
   };
 
@@ -98,23 +114,16 @@ const AddAddress = ({navigation}) => {
           <ScrollView className="flex-1">
             <View className="px-4 flex-1 mt-6 mb-20">
               {[
-                {key: 'name', placeholder: 'Name'},
-                {
-                  key: 'phone',
-                  placeholder: 'Phone Number',
-                  keyboardType: 'phone-pad',
-                },
-                {key: 'address', placeholder: 'Address'},
+                {key: 'address_line1', placeholder: 'Address line 1'},
+                {key: 'address_line2', placeholder: 'Address line 2'},
                 {key: 'city', placeholder: 'City'},
                 {key: 'state', placeholder: 'State'},
                 {
-                  key: 'pincode',
-                  placeholder: 'Pincode',
+                  key: 'postal_code',
+                  placeholder: 'Postal code',
                   keyboardType: 'numeric',
                 },
                 {key: 'country', placeholder: 'Country'},
-                {key: 'landmark', placeholder: 'Landmark (Optional)'},
-                {key: 'type', placeholder: 'Address Type (Home, Work, etc.)'},
               ].map(({key, placeholder, keyboardType}) => (
                 <View key={key} className="mt-2">
                   <TextInput

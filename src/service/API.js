@@ -17,3 +17,8 @@ export const GET_CART_API = 'cart/v1/get-cart'
 
 export const CART_ACTION_API = 'cart/v1/action-cart'
 export const CONTACT_FORM_API = 'user/v1/contact-us'
+export const MAKE_ORDER_API = 'order/v1/make-order'
+export const ADD_ADDRESS_API = 'user/v1/address'
+export const GET_ADDRESS_API = 'user/v1/addresses'
+export const SET_PRIMARY_ADDRESS_API = 'user/v1/set-primary-address'
+export const DELETE_ADDRESS_API = 'user/v1/delete-address'

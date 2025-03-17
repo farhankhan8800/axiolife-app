@@ -29,7 +29,7 @@ import Swiper from 'react-native-swiper';
 import BestDeal from '../components/BestDeal';
 import WithValidation from '../components/WithValidation';
 import MakeRequest from '../utils/axiosInstance';
-import {GET_CART_API, HOME_API, WISHLIST_GET_API} from '../service/API';
+import {GET_ADDRESS_API, GET_CART_API, HOME_API, WISHLIST_GET_API} from '../service/API';
 import {useDispatch, useSelector} from 'react-redux';
 import {setWishlist} from '../reduxstore/slice/wishlist_slice';
 import {setCart} from '../reduxstore/slice/cart_slice';
@@ -44,8 +44,8 @@ const HomeScreen = ({navigation}) => {
   });
   const [loading, setLoading] = useState(false);
   const {user, token, isAuthenticated} = useSelector(state => state.auth);
-  const dispatch = useDispatch();
-
+   const dispatch = useDispatch();
+   const [primaryAddress, setPrimaryAddress] = useState(null);
   const gethomedata = async () => {
     setLoading(true);
     try {
@@ -113,11 +113,44 @@ const HomeScreen = ({navigation}) => {
     }
   };
 
+  const get_primary_address = async () => {
+    try {
+      const data = await MakeRequest(
+        GET_ADDRESS_API,
+        {},
+        {},
+        'application/json',
+      );
+
+      if (data.status == 1) {
+        const primaryAddr = data.response.addresses.find(
+          (address) => address.primary_address == 1
+        );
+  
+        if (primaryAddr) {
+          setPrimaryAddress(primaryAddr);
+        }
+      }
+    } catch (error) {
+      console.error('address get failed:', error);
+      Toast.show({
+        type: 'BasicToast',
+        text1: 'Something went wrong. Please try again.',
+        position: 'bottom',
+        visibilityTime: 5000,
+      });
+    }
+  };
+
+
+  // console.log(primaryAddress)
+
   useEffect(() => {
     if (isAuthenticated) {
       setTimeout(() => {
         getWishlistdata();
         getCartItem();
+        get_primary_address()
       }, 2000);
     }
   }, [isAuthenticated]);
@@ -142,7 +175,8 @@ const HomeScreen = ({navigation}) => {
             </Text>
           </Pressable>
         </View>
-        <View className="px-5 mt-2">
+        {
+          isAuthenticated &&  <View className="px-5 mt-2">
           <View className="flex-row justify-between items-center py-2">
             <View className="flex-row items-center ">
               <MapPin
@@ -150,13 +184,16 @@ const HomeScreen = ({navigation}) => {
                 color={TYPO.colors.slate900}
               />
               <View className="flex-row items-center">
-                <Text className="text-base text-dark font-mulish_medium ml-2 ">
-                  Ship top
+                <Text className="text-base text-dark font-mulish_medium mx-2 ">
+                  Ship top:
                 </Text>
                 <Text
                   numberOfLines={1}
                   className="text-base text-dark font-mulish_semibold max-w-72">
-                  JiMalioboro. Block z no.18 oboro. Block z no.18
+                  {/* JiMalioboro. Block z no.18 oboro. Block z no.18 */}
+                  {
+                    primaryAddress ? <>{ primaryAddress.address_line1 } {primaryAddress.address_line2 } {primaryAddress.city } {primaryAddress.postal_code }</>:' Add and set your primary address'
+                  }
                 </Text>
               </View>
             </View>
@@ -168,6 +205,8 @@ const HomeScreen = ({navigation}) => {
             </Pressable>
           </View>
         </View>
+        }
+       
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}

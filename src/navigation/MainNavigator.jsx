@@ -27,6 +27,7 @@ import PrivacyTc from '../screen/common/PrivacyTc';
 import { useDispatch } from 'react-redux';
 import { loadAuthState } from '../reduxstore/slice/auth_slice';
 import { useEffect } from 'react';
+import OrderSuccess from '../screen/OrderSuccess';
 
 
 
@@ -69,6 +70,7 @@ useEffect(() => {
       <Stack.Screen name="EditProfile" component={EditProfile} />
       <Stack.Screen name="Address" component={UserAddress} />
       <Stack.Screen name="UserOrder" component={UserOrder} />
+      <Stack.Screen name="OrderSuccess" component={OrderSuccess} />
       <Stack.Screen name="UserFavorite" component={UserFavorite} />
    
       <Stack.Screen name="AddAddress" component={AddAddress} />
