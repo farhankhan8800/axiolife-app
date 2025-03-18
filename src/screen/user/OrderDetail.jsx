@@ -11,7 +11,6 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
-import {Search} from 'react-native-feather';
 import SmallHeader from '../../components/SmallHeader';
 import {order_detail_data} from '../../utils/data_';
 import Entypo from 'react-native-vector-icons/Entypo';
@@ -21,23 +20,53 @@ import {
   responsiveFontSize,
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
+import MakeRequest from '../../utils/axiosInstance';
+import { ORDER_DETAILS_API } from '../../service/API';
 
 const OrderDetail = ({navigation, route}) => {
-  const order_id = route.params.order_id;
-  const [trackopen, setTrackopen] = useState(null);
 
-  useState(() => {
-    setTrackopen(order_detail_data.items[0].product.product_id);
-  }, []);
+const order_key = route.params
 
-  const trackopenfunction = id => {
-    if (trackopen == id) {
-      setTrackopen(null);
-    } else {
-      setTrackopen(id);
+const [trackopen, setTrackopen] = useState(null);
+const [itemList, setItemList] = useState([])
+const [orderSummary, setOrderSummary] = useState({})
+
+const getorderdetails = async () => {
+  
+  try {
+    const data = await MakeRequest(
+      ORDER_DETAILS_API,
+      {
+        order_number: order_key.order_number
+      },
+      {}, // Empty headers
+      'application/json',
+    );
+   
+    if (data.status == 1) {
+      // console.log('order details', data.response);
+      setItemList(data.response.items)
     }
-  };
+  } catch (error) {
+    console.error('Error fetching order details:', error);
+  } 
+};
 
+useEffect(() => {
+  getorderdetails();
+}, []);
+
+useEffect(() => {
+  if (Array.isArray(itemList) && itemList.length > 0) {
+    setTrackopen(itemList[0]?.product_id);
+  }
+}, [itemList]);
+
+const trackopenfunction = (id) => {
+  setTrackopen(prev => (prev === id ? null : id));
+};
+
+console.log(itemList?.[0]);
 
   return (
     <SafeAreaView className="flex-1 bg-[#F6F6F6]">
@@ -50,35 +79,36 @@ const OrderDetail = ({navigation, route}) => {
             </Text>
           </View>
           <View>
-            {order_detail_data.items.map((item, i) => {
+            {itemList.map((item, i) => {
               return (
                 <View
                   key={i}
                   className="py-4 px-5 rounded-md mt-5 border-[1px] border-gray-200">
                   <Pressable
                     onPress={() =>
-                      navigation.navigate('ProductDetail', {slug: ''})
+                      navigation.navigate('ProductDetail', {slug: item.product_name})
                     }
                     className="mb-4  pb-6 border-b-[1px] border-gray-200">
                     <Text className="text-base text-gray-700 font-mulish_medium leading-tight">
-                      Product: {item.product.name}
+                      Product: {item.product_name}
                     </Text>
 
                     <View className="flex-row justify-between items-start">
                       <View className="pr-2">
                         <Text className="text-base text-gray-600 font-mulish_regular">
-                          Quantity: {item.product.quantity}
+                          Quantity: {item.quantity}
+                        </Text>
+                        
+                        <Text className="text-base text-gray-600 font-mulish_regular">
+                          Price: {item.price}
                         </Text>
                         <Text className="text-base text-gray-600 font-mulish_regular">
-                          Brand: {item.product.brand}
-                        </Text>
-                        <Text className="text-base text-gray-600 font-mulish_regular">
-                          Price: {item.product.price}
+                          Status: {item.product_status}
                         </Text>
                       </View>
                       <View>
                         <Image
-                          source={{uri: item.product.image}}
+                          source={{uri: item.product_image}}
                           resizeMode="contin"
                           className="w-20 h-20"
                         />
@@ -110,12 +140,12 @@ const OrderDetail = ({navigation, route}) => {
                       </Text>
                       <Pressable
                         onPress={() =>
-                          trackopenfunction(item.product.product_id)
+                          trackopenfunction(item.product_id)
                         }
                         className="px-8">
                         <Entypo
                           name={
-                            item.product.product_id === trackopen
+                            item.product_id === trackopen
                               ? 'chevron-up'
                               : 'chevron-down'
                           }
@@ -126,8 +156,8 @@ const OrderDetail = ({navigation, route}) => {
                     </View>
 
                     <View>
-                      {item.product.product_id === trackopen && (
-                        <OrderTracker />
+                      {item.product_id === trackopen && (
+                        <OrderTracker item={item} />
                       )}
                     </View>
                   </View>
@@ -211,8 +241,40 @@ const steps = [
   {label: 'Delivered', icon: 'check-circle-outline', date: '24-Dec-2019'},
 ];
 
-const OrderTracker = () => {
+const OrderTracker = ({item}) => {
   const [currentStep, setCurrentStep] = useState(0);
+
+
+useEffect(() => {
+    if (item?.product_status) {
+      switch (item.product_status) {
+        case 'Order Placed':
+          setCurrentStep(0);
+          break;
+        case 'Processing':
+          setCurrentStep(1);
+          break;
+        case 'Shipped':
+          setCurrentStep(2);
+          break;
+        case 'Out for Delivery':
+          setCurrentStep(3);
+          break;
+        case 'Delivered':
+          setCurrentStep(4);
+          break;
+        case 'cancelled':
+          setCurrentStep(-1); 
+          break;
+        default:
+          setCurrentStep(0);
+      }
+    }
+  }, [item?.status]);
+
+
+
+
 
   return (
     <View className="my-5 pt-5 relative">
@@ -239,9 +301,9 @@ const OrderTracker = () => {
                   }`}>
                   {step.label}
                 </Text>
-                <Text className="text-sm text-light_gray font-mulish_light">
+                {/* <Text className="text-sm text-light_gray font-mulish_light">
                   We received your order on {step.date}
-                </Text>
+                </Text> */}
               </View>
             </View>
 

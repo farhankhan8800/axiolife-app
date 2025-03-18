@@ -15,6 +15,8 @@ import {TYPO} from '../assets/typo';
 import MakeRequest from '../utils/axiosInstance';
 import {GET_CART_API, MAKE_ORDER_API} from '../service/API';
 import Toast from 'react-native-toast-message';
+import BackPressHandler from './BackPressHandler';
+import { emptyCart } from '../reduxstore/slice/cart_slice';
 
 const OrderProcessModal = ({primaryAddress}) => {
   const navigation = useNavigation();
@@ -24,7 +26,13 @@ const OrderProcessModal = ({primaryAddress}) => {
   const [cartItem, setCartItem] = useState([]);
 
 
-  console.log(primaryAddress)
+
+
+  const handleEmptyCart = () => {
+    dispatch(emptyCart());
+  };
+
+
 
   const toggleModal = useCallback(() => {
 
@@ -39,7 +47,7 @@ const OrderProcessModal = ({primaryAddress}) => {
 
     setIsModalVisible(prev => !prev);
     setPaymentMethod('');
-  }, []);
+  }, [primaryAddress]);
 
   const handlePaymentSelection = useCallback(
     value => {
@@ -48,7 +56,7 @@ const OrderProcessModal = ({primaryAddress}) => {
         create_cod_order();
       }
     },
-    [paymentMethod],
+    [paymentMethod, primaryAddress],
   );
 
   const getCartItem = async () => {
@@ -104,6 +112,7 @@ const OrderProcessModal = ({primaryAddress}) => {
       if (data.status == 1) {
         setTimeout(()=>{
           setIsModalVisible(false);
+          handleEmptyCart()
           navigation.navigate('OrderSuccess', {orderId: data.response.order_id, order_number:data.response.order_number});
         },1000)
       }
@@ -120,6 +129,7 @@ const OrderProcessModal = ({primaryAddress}) => {
 
   return (
     <>
+      
       <TouchableOpacity
         onPress={toggleModal}
         className="border border-black justify-center items-center bg-black py-2 px-5 rounded-full">

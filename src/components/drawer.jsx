@@ -10,12 +10,16 @@ import {useDispatch, useSelector} from 'react-redux';
 import {BlurView} from '@react-native-community/blur';
 
 import LogoutScreen from './LogoutScreen';
+import { NativeModules } from 'react-native';
+
 
 const Drawer = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const {user, token, isAuthenticated} = useSelector(state => state.auth);
   const [greeting, setGreeting] = useState('Welcome');
   const navigation = useNavigation();
+
+
   useEffect(() => {
     // Get current hour
     const updateGreeting = () => {
@@ -33,14 +37,16 @@ const Drawer = () => {
       }
     };
 
-    // Set initial greeting
-    updateGreeting();
-
-    // Optional: Update greeting if component stays mounted across time boundaries
-    const intervalId = setInterval(updateGreeting, 60000); // Check every minute
+    updateGreeting()
+   
+    const intervalId = setInterval(updateGreeting, 60000);
 
     return () => clearInterval(intervalId);
   }, []);
+
+
+
+
   return (
     <>
       <Pressable onPress={() => setModalVisible(true)}>
@@ -51,21 +57,21 @@ const Drawer = () => {
         style={{margin: 0}}
         animationIn="slideInLeft"
         animationOut="slideOutLeft"
-        onBackButtonPress={() => setModalVisible(false)}
-        onBackdropPress={() => setModalVisible(false)}
+        // onBackButtonPress={() => setModalVisible(false)}
+        // onBackdropPress={() => setModalVisible(false)}
         useNativeDriver={true}
         backdropOpacity={0.3}
         avoidKeyboard={true}
         isVisible={isModalVisible}>
         {/* Container for the drawer with BlurView as background */}
-        <View style={styles.drawerContainer}>
+        <View style={[styles.drawerContainer,{backgroundColor:'#000'}]}>
           {/* BlurView as background - positioned correctly */}
-          <BlurView
-            style={styles.absolute}
+          {/* <BlurView
+            style={styles.absolute_}
             blurType="dark"
             blurAmount={20}
             reducedTransparencyFallbackColor="rgb(15, 15, 4,0.5)"
-          />
+          /> */}
 
           {/* Content overlaid on the blur */}
           <View style={styles.contentContainer}>
@@ -199,6 +205,7 @@ const Drawer = () => {
               </View>
             </View>
             <View className="flex-row justify-between items-center pb-3">
+              
               {isAuthenticated && (
                 <LogoutScreen setModalVisible={setModalVisible} />
               )}
@@ -225,7 +232,7 @@ const styles = StyleSheet.create({
     borderTopRightRadius: 16,
     borderBottomRightRadius: 16,
   },
-  absolute: {
+  absolute_: {
     position: 'absolute',
     top: 0,
     left: 0,

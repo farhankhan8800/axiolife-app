@@ -30,7 +30,7 @@ const HomeHeader = () => {
       <Pressable
         className="relative pr-3"
         onPress={() =>
-          navigation.navigate(isAuthenticated ? 'Cart' : 'SignIn')
+          navigation.push(isAuthenticated ? 'Cart' : 'SignIn')
         }>
         <ShoppingBag color={TYPO.colors.slate900} />
         {cart && cart.length > 0 && (

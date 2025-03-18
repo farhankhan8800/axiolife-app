@@ -8,6 +8,7 @@ import {
   StyleSheet,
   Text,
   TextInput,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
@@ -40,22 +41,26 @@ const CartScreen = ({navigation}) => {
   const [cartSummary, setCartSummary] = useState({});
   const [loading, setLoading] = useState(false);
   const [primaryAddress, setPrimaryAddress] = useState(null);
-
-
-
-
-
+  const [cartState, setCartState] = useState('LOADING'); //LOADING, NODATA, HAVEINDATA
 
   const dispatch = useDispatch();
 
   const getCartItem = async () => {
-    setLoading(true);
+   
     try {
       const data = await MakeRequest(GET_CART_API, {}, {}, 'application/json');
 
+
+      console.log(data)
+
       if (data.status == 1) {
-        setCartItem(data.response.cartitems.cartitems);
-        setCartSummary(data.response.cartitems.cartSummary);
+        if(data.response.cartitems.cartitems.length > 0) {
+          setCartItem(data.response.cartitems.cartitems);
+          setCartSummary(data.response.cartitems.cartSummary);
+          setCartState('HAVEINDATA');
+        }else{
+          setCartState('NODATA');
+        }
       }
     } catch (error) {
       console.error('Verification failed:', error);
@@ -66,7 +71,7 @@ const CartScreen = ({navigation}) => {
         visibilityTime: 5000,
       });
     } finally {
-      setLoading(false);
+      
     }
   };
 
@@ -107,13 +112,6 @@ const CartScreen = ({navigation}) => {
     getCartItem();
     get_primary_address()
   }, []);
-
-  
-
-
-
-
-
 
 
   const manage_product = async (item, action) => {
@@ -156,6 +154,8 @@ const CartScreen = ({navigation}) => {
 
   // console.log(cartSummary);
 
+
+
   return (
     <SafeAreaView className="flex-1 bg-[#fff]">
       <ScrollView className="w-full">
@@ -188,8 +188,22 @@ const CartScreen = ({navigation}) => {
             </Pressable>
           </View>
         </View>
-        <View className="mt-7 px-3">
-          {cartItem.length > 0 &&
+        {
+          cartState == 'LOADING' && <Text>Loading...</Text>
+        }
+         {
+          cartState == 'NODATA' && <View style={{height:responsiveHeight(70)}} className='flex-1  justify-center items-center'>
+<Image
+                      source={require('../assets/image/empty_cart.webp')}
+                      resizeMode="contain"
+                      className="h-40 w-40"
+                    />
+
+          </View>
+        }
+        {
+          cartState == 'HAVEINDATA' && <View className="mt-7 px-3">
+          {
             cartItem.map((item, i) => {
               return (
                 <View key={i} className="flex-row mb-5 gap-4">
@@ -239,7 +253,10 @@ const CartScreen = ({navigation}) => {
               );
             })}
         </View>
-        <View
+        }
+        {
+          cartState == 'HAVEINDATA' && <>
+           <View
           className="mt-5 px-3"
           style={{marginBottom: showCoupponBox ? 0 : responsiveHeight(10)}}>
           <View className="flex-row items-center ">
@@ -361,9 +378,21 @@ const CartScreen = ({navigation}) => {
             </Text>
           </View>
         </View>
+          </>
+        }
+       
       </ScrollView>
       <View className="px-4 py-2 pt-1 ">
-        <OrderProcessModal primaryAddress={primaryAddress} />
+        {
+          cartState == 'HAVEINDATA' ? <OrderProcessModal primaryAddress={primaryAddress} /> :    <TouchableOpacity
+                  onPress={()=>navigation.navigate('Product')}
+                  className="border border-black justify-center items-center bg-black py-2 px-5 rounded-full">
+                  <Text className="text-base text-center font-semibold text-light">
+                  Explore our products
+                  </Text>
+                </TouchableOpacity>
+        }
+        
       </View>
     </SafeAreaView>
   );

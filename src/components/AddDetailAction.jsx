@@ -91,7 +91,7 @@ const AddDetailAction = ({product_, navigation}) => {
     }
 
     if (isInCart) {
-      return navigation.navigate('Cart');
+      return navigation.push('Cart');
     }
 
     try {
@@ -112,7 +112,7 @@ const AddDetailAction = ({product_, navigation}) => {
           position: 'bottom',
           visibilityTime: 5000,
         });
-        navigation.navigate('Cart');
+        navigation.push('Cart');
       }
     } catch (error) {
       console.error('Verification failed:', error);

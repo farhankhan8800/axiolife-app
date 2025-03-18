@@ -13,7 +13,7 @@ import com.facebook.react.soloader.OpenSourceMergedSoMapping
 import com.facebook.soloader.SoLoader
 import com.horcrux.svg.SvgPackage
 import com.oblador.vectoricons.VectorIconsPackage;
-
+// import com.cmcewen.blurview.BlurViewPackage
 
 
 
@@ -27,7 +27,9 @@ class MainApplication : Application(), ReactApplication {
               // Packages that cannot be autolinked yet can be added manually here, for example:
               // add(MyReactNativePackage())
               add(SvgPackage())
-              add(VectorIconsPackage())    
+              add(VectorIconsPackage()) 
+              // add(BlurViewPackage()) 
+              
               
             }
 

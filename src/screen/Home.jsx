@@ -9,7 +9,7 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 
 import HomeHeader from '../components/HomeHeader';
 import BottomTab from '../components/BottomTab';
@@ -33,6 +33,7 @@ import {GET_ADDRESS_API, GET_CART_API, HOME_API, WISHLIST_GET_API} from '../serv
 import {useDispatch, useSelector} from 'react-redux';
 import {setWishlist} from '../reduxstore/slice/wishlist_slice';
 import {setCart} from '../reduxstore/slice/cart_slice';
+import { useFocusEffect } from '@react-navigation/native';
 
 const HomeScreen = ({navigation}) => {
   const [homeData, setHomeData] = useState({
@@ -75,7 +76,7 @@ const HomeScreen = ({navigation}) => {
   };
 
   useEffect(() => {
-    gethomedata();
+   
   }, []);
 
   const getWishlistdata = async () => {
@@ -143,17 +144,22 @@ const HomeScreen = ({navigation}) => {
   };
 
 
-  // console.log(primaryAddress)
+  useFocusEffect(
+    useCallback(() => {
+      if (isAuthenticated) {
+        setTimeout(() => {
+          getWishlistdata();
+          getCartItem();
+          get_primary_address();
+        }, 2000);
+      }
+      gethomedata();
+    }, [isAuthenticated]) 
+  );
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      setTimeout(() => {
-        getWishlistdata();
-        getCartItem();
-        get_primary_address()
-      }, 2000);
-    }
-  }, [isAuthenticated]);
+
+
+
 
   return (
     <SafeAreaView className="flex-1 bg-light">

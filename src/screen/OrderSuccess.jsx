@@ -14,14 +14,18 @@ import {
   responsiveWidth,
 } from 'react-native-responsive-dimensions';
 import FastImage from 'react-native-fast-image';
-const OrderSuccess = ({navigation}) => {
+import BackPressHandler from '../components/BackPressHandler';
+const OrderSuccess = ({navigation, route}) => {
   const {user, token, isAuthenticated} = useSelector(state => state.auth);
   // console.log(user, isAuthenticated, token);
+
+  const data_ = route.params;
 
   useEffect(() => {}, []);
 
   return (
     <SafeAreaView className="flex-1 bg-white">
+       <BackPressHandler navigateTo='Home' />
       <View className="flex-1 justify-center items-center bg-white">
         <FastImage
           source={require('../assets/image/order_success_gif.gif')}
@@ -34,7 +38,11 @@ const OrderSuccess = ({navigation}) => {
           <Text className='text-base font-mulish_semibold text-dark_blue'>Home</Text>
         </Pressable>
         {/* <View className='w-[3px] bg-gray-500' /> */}
-        <Pressable className='py-3 px-8'>
+        <Pressable onPress={()=>{
+          navigation.pop(2);
+          navigation.push('OrderDetail',{orderId: data_.order_id, order_number:data_.order_number})
+
+        }} className='py-3 px-8'>
           <Text className='text-base font-mulish_semibold text-dark_blue'>View Order</Text>
         </Pressable>
       </View>

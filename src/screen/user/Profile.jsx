@@ -24,10 +24,10 @@ const menuItems = [
   },
   {
     id: 2,
-    name: 'Registered passenger',
+    name: 'Order',
     icon: 'account-group-outline',
     iconType: 'MaterialCommunityIcons',
-    route: 'RegisteredPassenger',
+    route: 'UserOrder',
   },
   {
     id: 3,
