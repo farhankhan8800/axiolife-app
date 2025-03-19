@@ -29,11 +29,17 @@ import Swiper from 'react-native-swiper';
 import BestDeal from '../components/BestDeal';
 import WithValidation from '../components/WithValidation';
 import MakeRequest from '../utils/axiosInstance';
-import {GET_ADDRESS_API, GET_CART_API, HOME_API, WISHLIST_GET_API} from '../service/API';
+import {
+  GET_ADDRESS_API,
+  GET_CART_API,
+  HOME_API,
+  WISHLIST_GET_API,
+} from '../service/API';
 import {useDispatch, useSelector} from 'react-redux';
 import {setWishlist} from '../reduxstore/slice/wishlist_slice';
 import {setCart} from '../reduxstore/slice/cart_slice';
-import { useFocusEffect } from '@react-navigation/native';
+import {useFocusEffect} from '@react-navigation/native';
+import {Skeleton} from 'react-native-skeletons';
 
 const HomeScreen = ({navigation}) => {
   const [homeData, setHomeData] = useState({
@@ -45,8 +51,9 @@ const HomeScreen = ({navigation}) => {
   });
   const [loading, setLoading] = useState(false);
   const {user, token, isAuthenticated} = useSelector(state => state.auth);
-   const dispatch = useDispatch();
-   const [primaryAddress, setPrimaryAddress] = useState(null);
+  const dispatch = useDispatch();
+  const [primaryAddress, setPrimaryAddress] = useState(null);
+
   const gethomedata = async () => {
     setLoading(true);
     try {
@@ -74,10 +81,6 @@ const HomeScreen = ({navigation}) => {
       setLoading(false);
     }
   };
-
-  useEffect(() => {
-   
-  }, []);
 
   const getWishlistdata = async () => {
     try {
@@ -125,9 +128,9 @@ const HomeScreen = ({navigation}) => {
 
       if (data.status == 1) {
         const primaryAddr = data.response.addresses.find(
-          (address) => address.primary_address == 1
+          address => address.primary_address == 1,
         );
-  
+
         if (primaryAddr) {
           setPrimaryAddress(primaryAddr);
         }
@@ -143,7 +146,6 @@ const HomeScreen = ({navigation}) => {
     }
   };
 
-
   useFocusEffect(
     useCallback(() => {
       if (isAuthenticated) {
@@ -154,12 +156,8 @@ const HomeScreen = ({navigation}) => {
         }, 2000);
       }
       gethomedata();
-    }, [isAuthenticated]) 
+    }, [isAuthenticated]),
   );
-
-
-
-
 
   return (
     <SafeAreaView className="flex-1 bg-light">
@@ -181,43 +179,59 @@ const HomeScreen = ({navigation}) => {
             </Text>
           </Pressable>
         </View>
-        {
-          isAuthenticated &&  <View className="px-5 mt-2">
-          <View className="flex-row justify-between items-center py-2">
-            <View className="flex-row items-center ">
-              <MapPin
-                width={responsiveFontSize(2)}
-                color={TYPO.colors.slate900}
-              />
-              <View className="flex-row items-center">
-                <Text className="text-base text-dark font-mulish_medium mx-2 ">
-                  Ship top:
-                </Text>
-                <Text
-                  numberOfLines={1}
-                  className="text-base text-dark font-mulish_semibold max-w-72">
-                  {/* JiMalioboro. Block z no.18 oboro. Block z no.18 */}
-                  {
-                    primaryAddress ? <>{ primaryAddress.address_line1 } {primaryAddress.address_line2 } {primaryAddress.city } {primaryAddress.postal_code }</>:' Add and set your primary address'
-                  }
-                </Text>
+        {isAuthenticated && (
+          <View className="px-5 mt-2">
+            <View className="flex-row justify-between items-center py-2">
+              <View className="flex-row items-center ">
+                <MapPin
+                  width={responsiveFontSize(2)}
+                  color={TYPO.colors.slate900}
+                />
+                <View className="flex-row items-center">
+                  <Text className="text-base text-dark font-mulish_medium mx-2 ">
+                    Ship top:
+                  </Text>
+                  <Text
+                    numberOfLines={1}
+                    className="text-base text-dark font-mulish_semibold max-w-72">
+                    {/* JiMalioboro. Block z no.18 oboro. Block z no.18 */}
+                    {primaryAddress ? (
+                      <>
+                        {primaryAddress.address_line1}{' '}
+                        {primaryAddress.address_line2} {primaryAddress.city}{' '}
+                        {primaryAddress.postal_code}
+                      </>
+                    ) : (
+                      ' Add and set your primary address'
+                    )}
+                  </Text>
+                </View>
               </View>
+              <Pressable onPress={() => navigation.navigate('Address')}>
+                <ChevronRight
+                  width={responsiveFontSize(2.3)}
+                  color={TYPO.colors.dark}
+                />
+              </Pressable>
             </View>
-            <Pressable onPress={() => navigation.navigate('Address')}>
-              <ChevronRight
-                width={responsiveFontSize(2.3)}
-                color={TYPO.colors.dark}
-              />
-            </Pressable>
           </View>
-        </View>
-        }
-       
+        )}
+
         <ScrollView
           horizontal={true}
           showsHorizontalScrollIndicator={false}
           className="mt-7">
           <View className="px-2 flex-row">
+            {loading && (
+              <View className="flex-row gap-5 px-3">
+                <Skeleton
+                  circle
+                  count={4}
+                  width={responsiveWidth(20)}
+                  height={responsiveWidth(20)}
+                />
+              </View>
+            )}
             {homeData.stores?.length > 0 &&
               homeData.stores?.map((item, i) => {
                 return (
@@ -242,12 +256,22 @@ const HomeScreen = ({navigation}) => {
               })}
           </View>
         </ScrollView>
+
         <Swiper
           autoplay={true}
           height={responsiveHeight(24)}
           showsPagination={false}
           containerStyle={{marginTop: responsiveHeight(2)}}
           style={{}}>
+          {loading && (
+            <View className=" px-3">
+              <Skeleton
+                borderRadius={10}
+                width={responsiveWidth(95)}
+                height={responsiveWidth(45)}
+              />
+            </View>
+          )}
           {homeData.banners?.length > 0 &&
             homeData.banners.map((item, i) => {
               return (
@@ -266,9 +290,32 @@ const HomeScreen = ({navigation}) => {
 
         {/* <Banner navigation={navigation} /> */}
 
+
+        {loading && (
+            <View className="justify-center items-center flex-col gap-5 px-3 my-6">
+              <Image
+                    source={require('../assets/image/placeholder_image.png')}
+                    resizeMode="cover"
+                    className="w-full h-64 rounded-xl opacity-30 "
+                  />
+                                {/* <Skeleton
+                borderRadius={10}
+                width={responsiveWidth(94)}
+                height={responsiveWidth(50)}
+              /> */}
+              <Skeleton
+                borderRadius={10}
+                width={responsiveWidth(44)}
+                height={responsiveWidth(12)}
+              />
+            </View>
+          )}
+
         {homeData.best_deals?.length > 0 && (
           <BestDeal navigation={navigation} products={homeData.best_deals} />
         )}
+
+
 
         <View className="mx-3">
           <View className="flex-row items-center justify-between mb-3">
@@ -292,12 +339,24 @@ const HomeScreen = ({navigation}) => {
                   <ProductCard key={i} item={item} navigation={navigation} />
                 );
               })}
+
+{loading && (
+            <View className="justify-start items-center flex-row flex-wrap gap-2 ">
+             
+              <Skeleton
+                borderRadius={4}
+                count={5}
+                width={responsiveWidth(46)}
+                height={responsiveWidth(58)}
+              />
+            </View>
+          )}  
           </View>
         </View>
 
         <View className="mt-14">
           <View className="flex-row mx-3 items-center justify-between mb-3">
-            <Text className="text-xl font-mulish_semibold text-dark_blue">
+            <Text className="text-xl font-mulisrh_semibold text-dark_blue">
               Category
             </Text>
             <Pressable onPress={() => navigation.navigate('AllCategory')}>
