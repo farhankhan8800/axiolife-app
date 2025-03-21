@@ -25,7 +25,7 @@ const BottomTab = () => {
     <View style={{zIndex: 999}} className="absolute bottom-0 w-full">
       <View
         style={{backgroundColor: TYPO.colors.axiocolor}}
-        className=" px-4 py-6 flex-row w-full justify-around rounded-t-3xl">
+        className=" px-6  py-5 flex-row w-[96%] justify-around mx-2 rounded-full">
         <Pressable
           onPress={() => navigation.navigate('Home')}
           className={`px-5 py-2 rounded-full flex-row items-center ${
@@ -33,7 +33,7 @@ const BottomTab = () => {
           }`}>
           <Ionicons
             name={currentRouteName === 'Home' ? 'home' : 'home-outline'}
-            color={TYPO.colors.slate900}
+            color={currentRouteName === 'Home' ? TYPO.colors.slate900 : 'white'}
             size={responsiveFontSize(2.4)}
           />
           {currentRouteName === 'Home' && (
@@ -44,7 +44,7 @@ const BottomTab = () => {
         <Pressable
           onPress={() => navigation.navigate('AllStore')}
           className={`px-5 py-2 rounded-full flex-row items-center ${
-            currentRouteName === 'AllStore' ? 'bg-black' : ''
+            currentRouteName === 'AllStore' ? 'bg-white' : ''
           }`}>
           <Ionicons
             name={
@@ -52,41 +52,47 @@ const BottomTab = () => {
                 ? 'pricetags'
                 : 'pricetags-outline'
             }
-            color={TYPO.colors.light}
+            color={
+              currentRouteName === 'AllStore' ? TYPO.colors.slate900 : 'white'
+            }
             size={responsiveFontSize(2.4)}
           />
           {currentRouteName === 'AllStore' && (
-            <Text className="text-white ml-2">Store</Text>
+            <Text className="text-black ml-2">Store</Text>
           )}
         </Pressable>
 
         <Pressable
           onPress={() => navigation.navigate('Search')}
           className={`px-5 py-2 rounded-full flex-row items-center ${
-            currentRouteName === 'Search' ? 'bg-black' : ''
+            currentRouteName === 'Search' ? 'bg-white' : ''
           }`}>
           <Ionicons
             name={'search'}
-            color={TYPO.colors.light}
+            color={
+              currentRouteName === 'Search' ? TYPO.colors.slate900 : 'white'
+            }
             size={responsiveFontSize(2.5)}
           />
           {currentRouteName === 'Search' && (
-            <Text className="text-white ml-2">Search</Text>
+            <Text className="text-black ml-2">Search</Text>
           )}
         </Pressable>
 
         <Pressable
           onPress={() => navigation.navigate('Profile')}
           className={`px-5 py-2 rounded-full flex-row items-center ${
-            currentRouteName === 'Profile' ? 'bg-black' : ''
+            currentRouteName === 'Profile' ? 'bg-white' : ''
           }`}>
           <FontAwesome
             name={currentRouteName === 'Profile' ? 'user' : 'user-o'}
-            color={TYPO.colors.light}
+            color={
+              currentRouteName === 'Profile' ? TYPO.colors.slate900 : 'white'
+            }
             size={responsiveFontSize(2.3)}
           />
           {currentRouteName === 'Profile' && (
-            <Text className="text-white ml-2">Profile</Text>
+            <Text className="text-black ml-2">Profile</Text>
           )}
         </Pressable>
 
@@ -97,7 +103,7 @@ const BottomTab = () => {
           className={`px-5 py-2 rounded-full flex-row items-center ${
             currentRouteName === 'Notification' ||
             currentRouteName === 'Notifications'
-              ? 'bg-black'
+              ? 'bg-white'
               : ''
           }`}>
           <FontAwesome
@@ -107,12 +113,16 @@ const BottomTab = () => {
                 ? 'bell'
                 : 'bell-o'
             }
-            color={TYPO.colors.light}
+            color={
+              currentRouteName === 'Notification'
+                ? TYPO.colors.slate900
+                : 'white'
+            }
             size={responsiveFontSize(2.3)}
           />
           {(currentRouteName === 'Notification' ||
             currentRouteName === 'Notifications') && (
-            <Text className="text-white ml-2">Alerts</Text>
+            <Text className="text-black ml-2">Alerts</Text>
           )}
         </Pressable>
       </View>

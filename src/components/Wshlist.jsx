@@ -15,6 +15,7 @@ import {
 } from '../reduxstore/slice/wishlist_slice';
 
 const Wishlist = ({product_}) => {
+  console.log('productf', product_);
   const dispatch = useDispatch();
 
   const {isAuthenticated} = useSelector(state => state.auth);
