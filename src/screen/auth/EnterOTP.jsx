@@ -205,6 +205,6 @@ const styles = StyleSheet.create({
     color: TYPO.colors.light_gray,
   },
   activePinCodeContainer: {
-    borderColor: TYPO.colors.main,
+    borderColor: TYPO.colors.axiocolor,
   },
 });

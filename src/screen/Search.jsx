@@ -87,7 +87,7 @@ const SearchScreen = ({navigation}) => {
           {loading && (
             <ActivityIndicator
               size="large"
-              color={TYPO.colors.main}
+              color={TYPO.colors.axiocolor}
               className="mt-4"
             />
           )}

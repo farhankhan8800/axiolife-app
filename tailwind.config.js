@@ -11,7 +11,7 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        main: TYPO.colors.main,
+        main: TYPO.colors.axiocolor,
         dark: TYPO.colors.dark,
         light_gray: TYPO.colors.light_gray,
         light: TYPO.colors.light,

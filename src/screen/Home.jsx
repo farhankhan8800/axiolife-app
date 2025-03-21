@@ -323,9 +323,9 @@ const HomeScreen = ({navigation}) => {
               onPress={() =>
                 navigation.navigate('Product', {slug: 'Featured Products'})
               }>
-              <Text className="text-sm font-mulish_semibold text-slate-900">
+              {/* <Text className="text-sm font-mulish_semibold text-slate-900">
                 See All
-              </Text>
+              </Text> */}
             </Pressable>
           </View>
 
@@ -341,13 +341,23 @@ const HomeScreen = ({navigation}) => {
               <View className="justify-start items-center flex-row flex-wrap gap-2 ">
                 <Skeleton
                   borderRadius={4}
-                  count={5}
+                  count={7}
                   width={responsiveWidth(46)}
                   height={responsiveWidth(58)}
                 />
               </View>
             )}
           </View>
+          {
+            homeData.products?.length > 0 &&  <View className="justify-center items-center pt-8">
+            <Pressable className="bg-main rounded-full px-10 border-2 border-main py-2 ">
+              <Text className="text-white text-base font-mulish_regular">
+                View More
+              </Text>
+            </Pressable>
+          </View>
+          }
+         
         </View>
 
         <View className="mt-14">
