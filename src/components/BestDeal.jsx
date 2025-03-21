@@ -55,7 +55,7 @@ const BestDeal = ({navigation, products = []}) => {
               <View className=" justify-center items-center">
                 <Image
                   source={{
-                    uri: item.image,
+                    uri: item.featured_image,
                   }}
                   resizeMode="cover"
                   style={{

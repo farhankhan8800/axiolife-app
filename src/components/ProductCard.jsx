@@ -24,7 +24,7 @@ const ProductCard = ({item, navigation}) => {
           <Wishlist product_={item} />
         </View>
         <Image
-          source={{uri: item?.image}}
+          source={{uri: item?.featured_image}}
           resizeMode="contain"
           className="w-[90%] h-44"
         />
