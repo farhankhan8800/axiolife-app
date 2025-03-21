@@ -35,7 +35,7 @@ const Splash = ({navigation}) => {
       <View className="flex-1 justify-center items-center">
         <Image
           source={{
-            uri: 'https://axioimages.blr1.cdn.digitaloceanspaces.com/logo/axio-black.png',
+            uri: 'https://axioimages.blr1.cdn.digitaloceanspaces.com/logo/axio-black-logo.png',
           }}
           className="w-64 h-64 mr-2"
           resizeMode="contain"

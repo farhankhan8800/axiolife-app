@@ -1,6 +1,6 @@
 export const TYPO = {
   colors: {
-    main: '#059C6A',
+    main: '#1e293b',
     dark: '#212121',
     light_gray: '#676767',
     light: '#fff',
@@ -8,6 +8,7 @@ export const TYPO = {
     error: '#FF0000',
     darkblack: '#000',
     slate900: '#0f172a',
+    axiocolor: '#1e293b',
   },
   fontfamily: {
     mulish_bold: 'Mulish-Bold',

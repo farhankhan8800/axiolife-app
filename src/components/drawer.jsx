@@ -10,15 +10,13 @@ import {useDispatch, useSelector} from 'react-redux';
 import {BlurView} from '@react-native-community/blur';
 
 import LogoutScreen from './LogoutScreen';
-import { NativeModules } from 'react-native';
-
+import {NativeModules} from 'react-native';
 
 const Drawer = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const {user, token, isAuthenticated} = useSelector(state => state.auth);
   const [greeting, setGreeting] = useState('Welcome');
   const navigation = useNavigation();
-
 
   useEffect(() => {
     // Get current hour
@@ -37,15 +35,12 @@ const Drawer = () => {
       }
     };
 
-    updateGreeting()
-   
+    updateGreeting();
+
     const intervalId = setInterval(updateGreeting, 60000);
 
     return () => clearInterval(intervalId);
   }, []);
-
-
-
 
   return (
     <>
@@ -64,14 +59,14 @@ const Drawer = () => {
         avoidKeyboard={true}
         isVisible={isModalVisible}>
         {/* Container for the drawer with BlurView as background */}
-        <View style={[styles.drawerContainer,{backgroundColor:'#000'}]}>
+        <View style={[styles.drawerContainer, {backgroundColor: '#000'}]}>
           {/* BlurView as background - positioned correctly */}
-          {/* <BlurView
+          <BlurView
             style={styles.absolute_}
             blurType="dark"
             blurAmount={20}
             reducedTransparencyFallbackColor="rgb(15, 15, 4,0.5)"
-          /> */}
+          />
 
           {/* Content overlaid on the blur */}
           <View style={styles.contentContainer}>
@@ -205,7 +200,6 @@ const Drawer = () => {
               </View>
             </View>
             <View className="flex-row justify-between items-center pb-3">
-              
               {isAuthenticated && (
                 <LogoutScreen setModalVisible={setModalVisible} />
               )}
@@ -243,6 +237,6 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     paddingTop: 40,
-    backgroundColor: 'rgb(0, 0, 0,0.8)', // Semi-transparent overlay on the blur
+    // backgroundColor: 'rgb(0, 0, 0,0.8)', // Semi-transparent overlay on the blur
   },
 });

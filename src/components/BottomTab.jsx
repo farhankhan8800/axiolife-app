@@ -1,4 +1,4 @@
-import {View, Pressable} from 'react-native';
+import {View, Pressable, Text} from 'react-native';
 import React from 'react';
 import {TYPO} from '../assets/typo';
 import {gstyle} from '../assets/gstyle';
@@ -10,35 +10,42 @@ import {
   useNavigation,
   useNavigationState,
 } from '@react-navigation/native';
-import { useSelector } from 'react-redux';
+import {useSelector} from 'react-redux';
 
 const BottomTab = () => {
   const navigation = useNavigation();
 
   const {user, token, isAuthenticated} = useSelector(state => state.auth);
 
-
-
   const currentRouteName = useNavigationState(
     state => state.routes[state.index]?.name,
   );
 
   return (
-    <View
-      style={{zIndex: 999}}
-      className="absolute bottom-2 w-[76%] left-[12%] right-[12%]">
+    <View style={{zIndex: 999}} className="absolute bottom-0 w-full">
       <View
-        style={gstyle.shadow_m}
-        className="bg-dark px-4 py-5 flex-row w-full justify-around rounded-full">
-        <Pressable onPress={() => navigation.navigate('Home')}>
+        style={{backgroundColor: TYPO.colors.axiocolor}}
+        className=" px-4 py-6 flex-row w-full justify-around rounded-t-3xl">
+        <Pressable
+          onPress={() => navigation.navigate('Home')}
+          className={`px-5 py-2 rounded-full flex-row items-center ${
+            currentRouteName === 'Home' ? 'bg-white' : ''
+          }`}>
           <Ionicons
             name={currentRouteName === 'Home' ? 'home' : 'home-outline'}
-            color={TYPO.colors.light}
+            color={TYPO.colors.slate900}
             size={responsiveFontSize(2.4)}
           />
+          {currentRouteName === 'Home' && (
+            <Text className="text-black ml-2">Home</Text>
+          )}
         </Pressable>
 
-        <Pressable onPress={() => navigation.navigate('AllStore')}>
+        <Pressable
+          onPress={() => navigation.navigate('AllStore')}
+          className={`px-5 py-2 rounded-full flex-row items-center ${
+            currentRouteName === 'AllStore' ? 'bg-black' : ''
+          }`}>
           <Ionicons
             name={
               currentRouteName === 'AllStore'
@@ -48,33 +55,65 @@ const BottomTab = () => {
             color={TYPO.colors.light}
             size={responsiveFontSize(2.4)}
           />
+          {currentRouteName === 'AllStore' && (
+            <Text className="text-white ml-2">Store</Text>
+          )}
         </Pressable>
 
-        <Pressable onPress={() => navigation.navigate('Search')}>
+        <Pressable
+          onPress={() => navigation.navigate('Search')}
+          className={`px-5 py-2 rounded-full flex-row items-center ${
+            currentRouteName === 'Search' ? 'bg-black' : ''
+          }`}>
           <Ionicons
             name={'search'}
             color={TYPO.colors.light}
             size={responsiveFontSize(2.5)}
           />
+          {currentRouteName === 'Search' && (
+            <Text className="text-white ml-2">Search</Text>
+          )}
         </Pressable>
 
-        <Pressable onPress={() => navigation.navigate('Profile')}>
+        <Pressable
+          onPress={() => navigation.navigate('Profile')}
+          className={`px-5 py-2 rounded-full flex-row items-center ${
+            currentRouteName === 'Profile' ? 'bg-black' : ''
+          }`}>
           <FontAwesome
             name={currentRouteName === 'Profile' ? 'user' : 'user-o'}
             color={TYPO.colors.light}
             size={responsiveFontSize(2.3)}
           />
+          {currentRouteName === 'Profile' && (
+            <Text className="text-white ml-2">Profile</Text>
+          )}
         </Pressable>
 
-        {/* Notifications Button */}
         <Pressable
-          className=""
-          onPress={() => navigation.navigate(isAuthenticated ? 'Notification':'SignIn')}>
+          onPress={() =>
+            navigation.navigate(isAuthenticated ? 'Notification' : 'SignIn')
+          }
+          className={`px-5 py-2 rounded-full flex-row items-center ${
+            currentRouteName === 'Notification' ||
+            currentRouteName === 'Notifications'
+              ? 'bg-black'
+              : ''
+          }`}>
           <FontAwesome
-            name={currentRouteName === 'Notifications' ? 'bell' : 'bell-o'}
+            name={
+              currentRouteName === 'Notification' ||
+              currentRouteName === 'Notifications'
+                ? 'bell'
+                : 'bell-o'
+            }
             color={TYPO.colors.light}
             size={responsiveFontSize(2.3)}
           />
+          {(currentRouteName === 'Notification' ||
+            currentRouteName === 'Notifications') && (
+            <Text className="text-white ml-2">Alerts</Text>
+          )}
         </Pressable>
       </View>
     </View>

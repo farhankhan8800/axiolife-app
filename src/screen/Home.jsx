@@ -290,32 +290,29 @@ const HomeScreen = ({navigation}) => {
 
         {/* <Banner navigation={navigation} /> */}
 
-
         {loading && (
-            <View className="justify-center items-center flex-col gap-5 px-3 my-6">
-              <Image
-                    source={require('../assets/image/placeholder_image.png')}
-                    resizeMode="cover"
-                    className="w-full h-64 rounded-xl opacity-30 "
-                  />
-                                {/* <Skeleton
+          <View className="justify-center items-center flex-col gap-5 px-3 my-6">
+            <Image
+              source={require('../assets/image/placeholder_image.png')}
+              resizeMode="cover"
+              className="w-full h-64 rounded-xl opacity-30 "
+            />
+            {/* <Skeleton
                 borderRadius={10}
                 width={responsiveWidth(94)}
                 height={responsiveWidth(50)}
               /> */}
-              <Skeleton
-                borderRadius={10}
-                width={responsiveWidth(44)}
-                height={responsiveWidth(12)}
-              />
-            </View>
-          )}
+            <Skeleton
+              borderRadius={10}
+              width={responsiveWidth(44)}
+              height={responsiveWidth(12)}
+            />
+          </View>
+        )}
 
         {homeData.best_deals?.length > 0 && (
           <BestDeal navigation={navigation} products={homeData.best_deals} />
         )}
-
-
 
         <View className="mx-3">
           <View className="flex-row items-center justify-between mb-3">
@@ -340,17 +337,16 @@ const HomeScreen = ({navigation}) => {
                 );
               })}
 
-{loading && (
-            <View className="justify-start items-center flex-row flex-wrap gap-2 ">
-             
-              <Skeleton
-                borderRadius={4}
-                count={5}
-                width={responsiveWidth(46)}
-                height={responsiveWidth(58)}
-              />
-            </View>
-          )}  
+            {loading && (
+              <View className="justify-start items-center flex-row flex-wrap gap-2 ">
+                <Skeleton
+                  borderRadius={4}
+                  count={5}
+                  width={responsiveWidth(46)}
+                  height={responsiveWidth(58)}
+                />
+              </View>
+            )}
           </View>
         </View>
 

@@ -1,43 +1,40 @@
 import {
   BackHandler,
-  Button,
   FlatList,
   Image,
   Pressable,
   SafeAreaView,
   ScrollView,
-  StyleSheet,
   Text,
   View,
+  ActivityIndicator,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
-import {TYPO} from '../assets/typo';
-import {
-  responsiveFontSize,
-  responsiveHeight,
-  responsiveWidth,
-} from 'react-native-responsive-dimensions';
-
-import {_product_data, _store_data} from '../utils/data_';
-import {gstyle} from '../assets/gstyle';
+import React, {useEffect, useState, useRef} from 'react';
 import FontAwesome6 from 'react-native-vector-icons/FontAwesome6';
 import Octicons from 'react-native-vector-icons/Octicons';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import ProductCard from '../components/ProductCard';
 import Modal from 'react-native-modal';
-import {AlignLeft, Menu, X} from 'react-native-feather';
+import {X} from 'react-native-feather';
 import Swiper from 'react-native-swiper';
 import MakeRequest from '../utils/axiosInstance';
-import { ALL_PRODUCTS_API } from '../service/API';
+import {ALL_PRODUCTS_API} from '../service/API';
+import {TYPO} from '../assets/typo';
 
 const ProductScreen = ({navigation, route}) => {
   const {slug} = route.params || {};
+  const scrollRef = useRef(null);
 
   const [showFilter, setShowFilter] = useState(false);
   const [allProducts, setAllProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [scrollOffset, setScrollOffset] = useState(0);
 
+  const categories = ['All', 'Featured', 'New Arrivals', 'Bestsellers', 'Sale'];
 
-
-  const getAllProducts = async ()=>{
+  const getAllProducts = async () => {
+    setLoading(true);
     try {
       const data = await MakeRequest(
         ALL_PRODUCTS_API,
@@ -46,127 +43,330 @@ const ProductScreen = ({navigation, route}) => {
         'application/json',
       );
 
-      console.log('data.response', data.response.products);
       if (data.status == 1) {
-        setAllProducts(data.response.products)
+        setAllProducts(data.response.products);
       }
     } catch (error) {
-      console.error('Error fetching search results:', error);
+      console.error('Error fetching products:', error);
     } finally {
-      
+      setLoading(false);
     }
-  }
+  };
 
-useEffect(()=>{
-  getAllProducts()
-},[])
+  useEffect(() => {
+    getAllProducts();
+    return () => {
+      // Cleanup
+    };
+  }, []);
 
+  const handleScroll = event => {
+    setScrollOffset(event.nativeEvent.contentOffset.y);
+  };
 
-
-
-
-  return (
-    <SafeAreaView className="flex-1 bg-[#F6F6F6]">
-      <View className="px-3 pt-4 pb-2 flex-row  justify-between items-center">
-        <View className="flex-row items-center">
+  const renderHeaderBar = () => {
+    return (
+      <View className="px-4 py-1.5  bg-gray-50/95">
+        <View className="flex-row items-center justify-between">
           <Pressable
-            style={gstyle.shadow_s}
-            onPress={() => navigation.goBack()}
-            className="p-2 bg-gray-200 rounded-full">
+            className="p-2 rounded-xl shadow bg-gray-100"
+            onPress={() => navigation.goBack()}>
             <FontAwesome6
               name={'arrow-left-long'}
               color={TYPO.colors.dark}
-              size={responsiveFontSize(2.2)}
+              size={20}
             />
           </Pressable>
 
           <Text
-            style={{paddingLeft: 15}}
-            className="text-dark_blue text-lg capitalize font-medium max-w-64 "
+            className="flex-1 text-lg font-semibold ml-3 capitalize text-slate-800"
             numberOfLines={1}>
-            {slug || 'All Product'}
+            {slug || 'Curated Collection'}
           </Text>
-        </View>
 
-        <Pressable
-          onPress={() => setShowFilter(!showFilter)}
-          style={gstyle.shadow_s}
-          className="relative p-2">
-          <Octicons
-            name={'filter'}
-            color={TYPO.colors.dark}
-            size={responsiveFontSize(2.4)}
-          />
-        </Pressable>
+          <View className="flex-row items-center">
+            <Pressable
+              className="p-2 ml-2 rounded-xl shadow bg-gray-100"
+              onPress={() => navigation.navigate('SearchScreen')}>
+              <Ionicons
+                name="search-outline"
+                color={TYPO.colors.dark}
+                size={22}
+              />
+            </Pressable>
+
+            <Pressable
+              className="p-2 ml-2 rounded-xl shadow bg-gray-100"
+              onPress={() => setShowFilter(!showFilter)}>
+              <Octicons name="filter" color={TYPO.colors.dark} size={20} />
+            </Pressable>
+          </View>
+        </View>
       </View>
-      <ScrollView className="flex-1">
+    );
+  };
+
+  const renderCategoryBar = () => {
+    return (
+      <View className="mt-1 mb-1">
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          className="px-4 py-1">
+          {categories.map((category, index) => (
+            <Pressable
+              key={index}
+              className={`px-4 py-1 mr-2 rounded-lg ${
+                selectedCategory === category ? 'bg-slate-800' : 'bg-gray-100'
+              }`}
+              onPress={() => setSelectedCategory(category)}>
+              <Text
+                className={`text-sm font-medium ${
+                  selectedCategory === category
+                    ? 'text-white font-semibold'
+                    : 'text-slate-500'
+                }`}>
+                {category}
+              </Text>
+            </Pressable>
+          ))}
+        </ScrollView>
+      </View>
+    );
+  };
+
+  const renderFeaturedSlider = () => {
+    if (allProducts.length === 0) return null;
+
+    return (
+      <View className="mt-4 mb-2">
         <Swiper
           autoplay={true}
-          height={responsiveHeight(18)}
-          showsPagination={false}
-          containerStyle={{marginTop: responsiveHeight(2)}}
-          style={{}}>
-          {allProducts?.map((item, i) => {
-            return (
-              <Pressable key={i} className="px-3 ">
-                <Image
-                  source={{
-                    uri: item.image,
-                  }}
-                  resizeMode="cover"
-                  className="w-full h-40 rounded-md "
-                />
-              </Pressable>
-            );
-          })}
+          height={250}
+          loop={true}
+          autoplayTimeout={5}
+          showsPagination={true}
+          paginationStyle={{bottom: 10}}
+          dotStyle={{
+            width: 8,
+            height: 8,
+            borderRadius: 4,
+            backgroundColor: 'rgba(255, 255, 255, 0.4)',
+            marginHorizontal: 4,
+          }}
+          activeDotStyle={{
+            width: 16,
+            height: 8,
+            borderRadius: 4,
+            backgroundColor: '#000',
+            marginHorizontal: 4,
+          }}>
+          {allProducts.slice(0, 5).map((item, i) => (
+            <Pressable
+              key={i}
+              className="mx-4 rounded-2xl overflow-hidden h-full relative">
+              <Image
+                source={{
+                  uri: item.featured_image,
+                }}
+                className="w-full h-full"
+                resizeMode="cover"
+              />
+              <View className="absolute bottom-0 left-0 right-0 bg-black/50 px-4 py-1.5">
+                <Text className="text-white text-xl font-bold mb-0.5">
+                  {item.name}
+                </Text>
+                <Text className="text-white text-lg font-semibold">
+                  ₹ {item.price}
+                </Text>
+              </View>
+            </Pressable>
+          ))}
         </Swiper>
+      </View>
+    );
+  };
 
-        <View className="justify-start pt-5 px-3 flex-row flex-wrap items-start w-full gap-y-5 gap-x-[4%] pb-28">
-          {allProducts.map((item, i) => {
-            return <ProductCard key={i} item={item} navigation={navigation} />;
-          })}
+  const renderProductGrid = () => {
+    if (loading) {
+      return (
+        <View className="h-32 justify-center items-center">
+          <ActivityIndicator size="large" color="#334155" />
         </View>
+      );
+    }
+
+    return (
+      <View className="px-4">
+        <Text className="text-lg font-bold text-slate-800 mb-2">
+          {selectedCategory === 'All' ? 'Our Collection' : selectedCategory}
+        </Text>
+        <View className="flex-row flex-wrap justify-between">
+          {allProducts.map((item, i) => (
+            <ProductCard
+              key={i}
+              item={item}
+              navigation={navigation}
+              className="w-[48%] mb-2"
+            />
+          ))}
+        </View>
+      </View>
+    );
+  };
+
+  return (
+    <SafeAreaView className="flex-1 bg-gray-50">
+      {renderHeaderBar()}
+      <ScrollView
+        ref={scrollRef}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        className="pb-10">
+        {renderCategoryBar()}
+        {renderFeaturedSlider()}
+        {renderProductGrid()}
       </ScrollView>
-      <FilterModel showFilter={showFilter} setShowFilter={setShowFilter} />
+      <FilterModal showFilter={showFilter} setShowFilter={setShowFilter} />
     </SafeAreaView>
   );
 };
 
-export default ProductScreen;
+const FilterModal = ({showFilter, setShowFilter}) => {
+  const [priceRange, setPriceRange] = useState([0, 1000]);
+  const [selectedBrands, setSelectedBrands] = useState([]);
+  const [selectedColors, setSelectedColors] = useState([]);
+  const [expanded, setExpanded] = useState(false);
 
-const FilterModel = ({showFilter, setShowFilter}) => {
+  const brands = ['Luxury Brand', 'Premium Co.', 'Designer House', 'Artisan'];
+  const colors = ['Black', 'White', 'Navy', 'Beige', 'Brown'];
+
   const closeFilter = () => {
     setShowFilter(false);
+    // Reset expanded state when modal closes
+    setTimeout(() => setExpanded(false), 300);
   };
 
-  useEffect(() => {
-    return () => {};
-  }, []);
+  const toggleBrand = brand => {
+    if (selectedBrands.includes(brand)) {
+      setSelectedBrands(selectedBrands.filter(item => item !== brand));
+    } else {
+      setSelectedBrands([...selectedBrands, brand]);
+    }
+  };
+
+  const toggleColor = color => {
+    if (selectedColors.includes(color)) {
+      setSelectedColors(selectedColors.filter(item => item !== color));
+    } else {
+      setSelectedColors([...selectedColors, color]);
+    }
+  };
+
+  const toggleExpand = () => {
+    setExpanded(!expanded);
+  };
 
   return (
-    <Modal style={{margin: 0}} avoidKeyboard={true} isVisible={showFilter}>
+    <Modal
+      style={{margin: 0, justifyContent: 'flex-end'}}
+      avoidKeyboard={true}
+      isVisible={showFilter}
+      onBackdropPress={closeFilter}
+      onSwipeComplete={closeFilter}
+      swipeDirection="down"
+      propagateSwipe={true}
+      backdropOpacity={0.5}
+      animationIn="slideInUp"
+      animationOut="slideOutDown">
       <View
-        className="bg-white absolute px-2 py-4"
-        style={{
-          height: responsiveHeight(50),
-          bottom: 0,
-          width: responsiveWidth(100),
-        }}>
-        <View className="justify-between flex-row">
-          <View className="flex justify-center flex-row gap-2 items-baseline">
-            <Text className="text-dark_blue text-2xl font-mulish_exbold">
-              Product
-            </Text>
-            <Text className="text-dark_blue text-lg font-mulish_medium">
-              Filter
-            </Text>
-          </View>
-          <Pressable onPress={closeFilter}>
-            <X color={TYPO.colors.dark_blue} />
+        className={`bg-white rounded-t-3xl ${expanded ? 'h-2/4' : 'h-4/5'}`}>
+        {/* Handle for dragging */}
+        <View className="items-center pt-2 pb-4">
+          <Pressable onPress={toggleExpand}>
+            <View className="w-16 h-1 bg-gray-300 rounded-full my-1" />
           </Pressable>
         </View>
-        <View></View>
+
+        <View className="flex-row justify-between items-center px-6 border-b border-slate-100 pb-2">
+          <View className="flex-row items-baseline">
+            <Text className="text-xl font-bold text-slate-800 mr-2">
+              Refine
+            </Text>
+            <Text className="text-base text-slate-500">Selection</Text>
+          </View>
+          <Pressable onPress={closeFilter} className="p-2">
+            <X color="#1e293b" size={24} />
+          </Pressable>
+        </View>
+
+        <ScrollView className="px-6 py-2">
+          <View className="mb-3">
+            <Text className="text-base font-semibold text-slate-800 mb-1.5">
+              Brands
+            </Text>
+            <View className="flex-row flex-wrap">
+              {brands.map((brand, index) => (
+                <Pressable
+                  key={index}
+                  className={`px-4 py-1 mr-2.5 mb-1.5 rounded-lg border ${
+                    selectedBrands.includes(brand)
+                      ? 'bg-slate-800 border-slate-800'
+                      : 'bg-slate-100 border-slate-200'
+                  }`}
+                  onPress={() => toggleBrand(brand)}>
+                  <Text
+                    className={`text-sm ${
+                      selectedBrands.includes(brand)
+                        ? 'text-white'
+                        : 'text-slate-500'
+                    }`}>
+                    {brand}
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
+          </View>
+
+          <View className="mb-3">
+            <Text className="text-base font-semibold text-slate-800 mb-1.5">
+              Colors
+            </Text>
+            <View className="flex-row flex-wrap">
+              {colors.map((color, index) => (
+                <Pressable
+                  key={index}
+                  className={`px-4 py-1 mr-2.5 mb-1.5 rounded-lg border ${
+                    selectedColors.includes(color)
+                      ? 'bg-slate-800 border-slate-800'
+                      : 'bg-slate-100 border-slate-200'
+                  }`}
+                  onPress={() => toggleColor(color)}>
+                  <Text
+                    className={`text-sm ${
+                      selectedColors.includes(color)
+                        ? 'text-white'
+                        : 'text-slate-500'
+                    }`}>
+                    {color}
+                  </Text>
+                </Pressable>
+              ))}
+            </View>
+          </View>
+        </ScrollView>
+
+        <View className="flex-row justify-between px-6 py-2 border-t border-slate-100">
+          <Pressable className="px-6 py-1.5 rounded-lg border border-slate-800 w-[48%] items-center">
+            <Text className="text-base font-medium text-slate-800">Reset</Text>
+          </Pressable>
+          <Pressable className="px-6 py-1.5 rounded-lg bg-slate-800 w-[48%] items-center">
+            <Text className="text-base font-medium text-white">Apply</Text>
+          </Pressable>
+        </View>
       </View>
     </Modal>
   );
 };
+
+export default ProductScreen;
