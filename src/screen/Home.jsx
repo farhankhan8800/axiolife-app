@@ -40,6 +40,7 @@ import {setWishlist} from '../reduxstore/slice/wishlist_slice';
 import {setCart} from '../reduxstore/slice/cart_slice';
 import {useFocusEffect} from '@react-navigation/native';
 import {Skeleton} from 'react-native-skeletons';
+import LoadMore from '../components/LoadMore';
 
 const HomeScreen = ({navigation}) => {
   const [homeData, setHomeData] = useState({
@@ -175,7 +176,7 @@ const HomeScreen = ({navigation}) => {
               color={TYPO.colors.dark}
             />
             <Text className="text-base text-dark font-mulish_medium ml-2">
-              What are you lokking for?
+              What are you looking for?
             </Text>
           </Pressable>
         </View>
@@ -256,7 +257,15 @@ const HomeScreen = ({navigation}) => {
               })}
           </View>
         </ScrollView>
-
+        {loading && (
+          <View className="justify-center items-center flex-col gap-5 px-3 my-6">
+            <Skeleton
+              borderRadius={10}
+              width={responsiveWidth(90)}
+              height={responsiveWidth(45)}
+            />
+          </View>
+        )}
         <Swiper
           autoplay={true}
           height={responsiveHeight(24)}
@@ -292,20 +301,16 @@ const HomeScreen = ({navigation}) => {
 
         {loading && (
           <View className="justify-center items-center flex-col gap-5 px-3 my-6">
-            <Image
+            {/* <Image
               source={require('../assets/image/placeholder_image.png')}
               resizeMode="cover"
               className="w-full h-64 rounded-xl opacity-30 "
-            />
-            {/* <Skeleton
-                borderRadius={10}
-                width={responsiveWidth(94)}
-                height={responsiveWidth(50)}
-              /> */}
+            /> */}
+
             <Skeleton
               borderRadius={10}
-              width={responsiveWidth(44)}
-              height={responsiveWidth(12)}
+              width={responsiveWidth(90)}
+              height={responsiveWidth(45)}
             />
           </View>
         )}
@@ -323,9 +328,9 @@ const HomeScreen = ({navigation}) => {
               onPress={() =>
                 navigation.navigate('Product', {slug: 'Featured Products'})
               }>
-              {/* <Text className="text-sm font-mulish_semibold text-slate-900">
+              <Text className="text-sm font-mulish_semibold text-slate-900">
                 See All
-              </Text> */}
+              </Text>
             </Pressable>
           </View>
 
@@ -348,16 +353,7 @@ const HomeScreen = ({navigation}) => {
               </View>
             )}
           </View>
-          {
-            homeData.products?.length > 0 &&  <View className="justify-center items-center pt-8">
-            <Pressable className="bg-main rounded-full px-10 border-2 border-main py-2 ">
-              <Text className="text-white text-base font-mulish_regular">
-                View More
-              </Text>
-            </Pressable>
-          </View>
-          }
-         
+          {homeData.products?.length > 0 && <LoadMore />}
         </View>
 
         <View className="mt-14">
