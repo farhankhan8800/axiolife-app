@@ -64,6 +64,13 @@ const menuItems = [
     iconType: 'MaterialCommunityIcons',
     route: 'Privacy',
   },
+  {
+    id: 7,
+    name: 'UserFavorite',
+    icon: 'shield-check-outline',
+    iconType: 'MaterialCommunityIcons',
+    route: 'UserFavorite',
+  },
 ];
 
 const Profile = ({navigation}) => {

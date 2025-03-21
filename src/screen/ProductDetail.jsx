@@ -27,6 +27,7 @@ import {PRODUCT_DETAIL_API} from '../service/API';
 import NotFound from '../components/NotFound';
 import Wshlist from '../components/Wshlist';
 import AddDetailAction from '../components/AddDetailAction';
+import {Skeleton} from 'react-native-skeletons';
 
 const ProductDetail = ({navigation, route}) => {
   const [showImage, setShowImage] = useState(
@@ -102,6 +103,15 @@ const ProductDetail = ({navigation, route}) => {
             showsHorizontalScrollIndicator={false}
             className="mt-3">
             <View className="px-3 flex-row">
+              {loading && (
+                <View className="flex-row gap-x-5 ">
+                  <Skeleton
+                    count={3}
+                    width={responsiveWidth(20)}
+                    height={responsiveWidth(20)}
+                  />
+                </View>
+              )}
               {product_.hasOwnProperty('more_images') &&
                 product_.more_images.map((item, i) => {
                   return (
@@ -131,6 +141,15 @@ const ProductDetail = ({navigation, route}) => {
           </ScrollView>
 
           <View className="flex-row px-4 mt-5 justify-between items-start">
+            {loading && (
+              <View className="flex-row gap-x-5 ">
+                <Skeleton
+                  count={1}
+                  width={responsiveWidth(70)}
+                  height={responsiveWidth(7)}
+                />
+              </View>
+            )}
             <Text
               numberOfLines={2}
               style={{width: responsiveWidth(76)}}
@@ -140,6 +159,15 @@ const ProductDetail = ({navigation, route}) => {
             <Wshlist product_={product_} />
           </View>
           <View className="flex-row px-4 mt-7 justify-start items-baseline">
+            {loading && (
+              <View className="flex-row gap-x-5">
+                <Skeleton
+                  count={1}
+                  width={responsiveWidth(40)}
+                  height={responsiveWidth(8)}
+                />
+              </View>
+            )}
             <Text className="text-2xl font-mulish_bold text-dark_blue leading-tight pr-3">
               ₹{product_?.selected_variation?.price}
             </Text>
@@ -153,6 +181,16 @@ const ProductDetail = ({navigation, route}) => {
             </View>
           </View>
           <View className="flex-row px-4 mt-7 justify-start items-center gap-3 flex-wrap">
+            {loading && (
+              <View className="flex-row gap-x-5">
+                <Skeleton
+                  count={3}
+                  style={{borderRadius: 30}}
+                  width={responsiveWidth(20)}
+                  height={responsiveWidth(6)}
+                />
+              </View>
+            )}
             <View className="px-4 py-1 bg-gray-200 rounded-full">
               <Text className="text-xs text-black font-mulish_italic ">
                 Brand: {product_?.brand}
@@ -178,6 +216,16 @@ const ProductDetail = ({navigation, route}) => {
               horizontal={true}
               showsHorizontalScrollIndicator={false}>
               <View className="flex-row px-4 gap-6 mt-5">
+                {loading && (
+                  <View className="flex-row gap-x-5">
+                    <Skeleton
+                      count={4}
+                      style={{borderRadius: 30}}
+                      width={responsiveWidth(15)}
+                      height={responsiveWidth(15)}
+                    />
+                  </View>
+                )}
                 {product_.hasOwnProperty('colors') &&
                   product_.colors.map((item, i) => {
                     return (
