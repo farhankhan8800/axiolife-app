@@ -9,10 +9,12 @@ import {
   Text,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {_category_data, _product_data, _store_data} from '../utils/data_';
 import ProductCard from '../components/ProductCard';
 import SmallHeader from '../components/SmallHeader';
+import MakeRequest from '../utils/axiosInstance';
+import { GET_BRAND_DETAIL_API } from '../service/API';
 
 
 const StoreDetail = ({
@@ -21,6 +23,34 @@ const StoreDetail = ({
 }) => {
   const slug = route.params.slug;
 
+
+  const [brands, setBrands] = useState({});
+  const [loading, setLoading] = useState(false);
+
+  const getBrandDetail = async () => {
+    setLoading(true);
+    try {
+      const data = await MakeRequest(GET_BRAND_DETAIL_API, {
+        brand_id:slug,
+      }, {}, 'application/json');
+
+      console.log(data)
+
+      if (data.status == 1) {
+        setBrands(data.response.brands);
+      }
+    } catch (error) {
+      console.error('Error fetching Brand :', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    getBrandDetail();
+  }, [slug]);
+
+  console.log(slug);
 
   return (
     <SafeAreaView className="flex-1 bg-[#F6F6F6]">

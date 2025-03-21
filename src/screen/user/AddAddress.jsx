@@ -112,7 +112,7 @@ const AddAddress = ({navigation}) => {
         className="flex-1">
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <ScrollView className="flex-1">
-            <View className="px-4 flex-1 mt-6 mb-20">
+            <View className="px-8 flex-1 mt-6 mb-20">
               {[
                 {key: 'address_line1', placeholder: 'Address line 1'},
                 {key: 'address_line2', placeholder: 'Address line 2'},
