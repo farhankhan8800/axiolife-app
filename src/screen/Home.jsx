@@ -41,6 +41,7 @@ import {setCart} from '../reduxstore/slice/cart_slice';
 import {useFocusEffect} from '@react-navigation/native';
 import {Skeleton} from 'react-native-skeletons';
 import LoadMore from '../components/LoadMore';
+import StackDesigne from '../components/StackDesigne';
 
 const HomeScreen = ({navigation}) => {
   const [homeData, setHomeData] = useState({
@@ -356,6 +357,10 @@ const HomeScreen = ({navigation}) => {
           {homeData.products?.length > 0 && <LoadMore />}
         </View>
 
+        {homeData.best_deals?.length > 0 && (
+          <StackDesigne navigation={navigation} products={homeData.best_deals} />
+        )}
+            
         <View className="mt-14">
           <View className="flex-row mx-3 items-center justify-between mb-3">
             <Text className="text-xl font-mulisrh_semibold text-dark_blue">
