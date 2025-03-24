@@ -15,12 +15,12 @@ const Splash = ({navigation}) => {
         navigation.navigate('Onboarding');
       } else if (isAuthenticated == true) {
         if (user && user.name) {
-          navigation.navigate('Home');
+          navigation.replace('Home');
         } else {
-          navigation.navigate('SignUp');
+          navigation.replace('SignUp');
         }
       } else {
-        navigation.navigate('Home');
+        navigation.replace('Home');
       }
     };
 

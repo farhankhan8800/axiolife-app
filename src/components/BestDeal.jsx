@@ -11,7 +11,7 @@ import {_category_data, _product_data, _store_data} from '../utils/data_';
 import Carousel from 'react-native-reanimated-carousel';
 import {width} from '../utils/dimension';
 import {useSharedValue} from 'react-native-reanimated';
-
+import FastImage from 'react-native-fast-image';
 const BestDeal = ({navigation, products = []}) => {
   // console.log(products)
 
@@ -53,15 +53,12 @@ const BestDeal = ({navigation, products = []}) => {
           return (
             <View key={index} className="">
               <View className=" justify-center items-center">
-                <Image
+                <FastImage
                   source={{
                     uri: item.featured_image,
                   }}
                   resizeMode="cover"
-                  style={{
-                    height: responsiveHeight(23),
-                  }}
-                  className="w-full "
+                  style={{width: '100%', height: responsiveHeight(23)}}
                 />
               </View>
 

@@ -27,6 +27,7 @@ import {CategoryCardHome} from '../components/CategoryCard';
 import BackPressHandler from '../components/BackPressHandler';
 import Swiper from 'react-native-swiper';
 import BestDeal from '../components/BestDeal';
+
 import WithValidation from '../components/WithValidation';
 import MakeRequest from '../utils/axiosInstance';
 import {
@@ -191,7 +192,7 @@ const HomeScreen = ({navigation}) => {
                 />
                 <View className="flex-row items-center">
                   <Text className="text-base text-dark font-mulish_medium mx-2 ">
-                    Ship top:
+                    Ship to:
                   </Text>
                   <Text
                     numberOfLines={1}

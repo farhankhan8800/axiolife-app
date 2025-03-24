@@ -1,4 +1,4 @@
-import {View, Pressable, Text} from 'react-native';
+import {View, Pressable, Platform, Text} from 'react-native';
 import React from 'react';
 import {TYPO} from '../assets/typo';
 import {gstyle} from '../assets/gstyle';
@@ -22,10 +22,14 @@ const BottomTab = () => {
   );
 
   return (
-    <View style={{zIndex: 999}} className="absolute bottom-0 w-full">
+    <View
+      style={{zIndex: 999}}
+      className={`absolute ${
+        Platform.OS === 'ios' ? 'bottom-5' : 'bottom-0'
+      } w-full`}>
       <View
         style={{backgroundColor: TYPO.colors.axiocolor}}
-        className=" px-6  py-5 flex-row w-[96%] justify-around mx-2 rounded-full">
+        className=" px-6  py-4 flex-row w-[96%] items-center justify-around mx-2 rounded-full">
         <Pressable
           onPress={() => navigation.navigate('Home')}
           className={`px-5 py-2 rounded-full flex-row items-center ${
@@ -49,20 +53,20 @@ const BottomTab = () => {
           <Ionicons
             name={
               currentRouteName === 'AllStore'
-                ? 'pricetags'
-                : 'pricetags-outline'
+                ? 'bag-handle'
+                : 'bag-handle-outline'
             }
             color={
               currentRouteName === 'AllStore' ? TYPO.colors.slate900 : 'white'
             }
-            size={responsiveFontSize(2.4)}
+            size={responsiveFontSize(2.8)}
           />
           {currentRouteName === 'AllStore' && (
             <Text className="text-black ml-2">Store</Text>
           )}
         </Pressable>
 
-        <Pressable
+        {/* <Pressable
           onPress={() => navigation.navigate('Search')}
           className={`px-5 py-2 rounded-full flex-row items-center ${
             currentRouteName === 'Search' ? 'bg-white' : ''
@@ -77,25 +81,7 @@ const BottomTab = () => {
           {currentRouteName === 'Search' && (
             <Text className="text-black ml-2">Search</Text>
           )}
-        </Pressable>
-
-        <Pressable
-          onPress={() => navigation.navigate('Profile')}
-          className={`px-5 py-2 rounded-full flex-row items-center ${
-            currentRouteName === 'Profile' ? 'bg-white' : ''
-          }`}>
-          <FontAwesome
-            name={currentRouteName === 'Profile' ? 'user' : 'user-o'}
-            color={
-              currentRouteName === 'Profile' ? TYPO.colors.slate900 : 'white'
-            }
-            size={responsiveFontSize(2.3)}
-          />
-          {currentRouteName === 'Profile' && (
-            <Text className="text-black ml-2">Profile</Text>
-          )}
-        </Pressable>
-
+        </Pressable> */}
         <Pressable
           onPress={() =>
             navigation.navigate(isAuthenticated ? 'Notification' : 'SignIn')
@@ -106,12 +92,12 @@ const BottomTab = () => {
               ? 'bg-white'
               : ''
           }`}>
-          <FontAwesome
+          <Ionicons
             name={
               currentRouteName === 'Notification' ||
               currentRouteName === 'Notifications'
-                ? 'bell'
-                : 'bell-o'
+                ? 'notifications-outline'
+                : 'notifications'
             }
             color={
               currentRouteName === 'Notification'
@@ -123,6 +109,22 @@ const BottomTab = () => {
           {(currentRouteName === 'Notification' ||
             currentRouteName === 'Notifications') && (
             <Text className="text-black ml-2">Alerts</Text>
+          )}
+        </Pressable>
+        <Pressable
+          onPress={() => navigation.navigate('Profile')}
+          className={`px-5 py-2 rounded-full flex-row items-center ${
+            currentRouteName === 'Profile' ? 'bg-white' : ''
+          }`}>
+          <Ionicons
+            name={currentRouteName === 'Profile' ? 'apps-outline' : 'apps'}
+            color={
+              currentRouteName === 'Profile' ? TYPO.colors.slate900 : 'white'
+            }
+            size={responsiveFontSize(2.3)}
+          />
+          {currentRouteName === 'Profile' && (
+            <Text className="text-black ml-2">Profile</Text>
           )}
         </Pressable>
       </View>

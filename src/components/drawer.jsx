@@ -1,4 +1,4 @@
-import {View, Text, Pressable, StyleSheet} from 'react-native';
+import {View, Text, Pressable, Platform, StyleSheet} from 'react-native';
 import React, {useState, useEffect} from 'react';
 import {AlignLeft, ChevronLeft, LogOut, Menu, X} from 'react-native-feather';
 import {TYPO} from '../assets/typo';
@@ -59,7 +59,11 @@ const Drawer = () => {
         avoidKeyboard={true}
         isVisible={isModalVisible}>
         {/* Container for the drawer with BlurView as background */}
-        <View style={[styles.drawerContainer, {backgroundColor: '#000'}]}>
+        <View
+          style={[
+            styles.drawerContainer,
+            {paddingVertical: Platform.OS === 'ios' ? 20 : 0},
+          ]}>
           {/* BlurView as background - positioned correctly */}
           <BlurView
             style={styles.absolute_}

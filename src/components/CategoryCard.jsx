@@ -8,7 +8,6 @@ import {
 
 import FastImage from 'react-native-fast-image';
 export const CategoryCardHome = ({item, navigation}) => {
- 
   return (
     <Pressable
       className=" w-[130px]"

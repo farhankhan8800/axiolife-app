@@ -1,6 +1,6 @@
 import {Pressable} from 'react-native';
 import React from 'react';
-import Icon from 'react-native-vector-icons/AntDesign';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import {TYPO} from '../assets/typo';
 import {responsiveFontSize} from 'react-native-responsive-dimensions';
 import {WISHLIST_ADD_API, WISHLIST_REMOVE_API} from '../service/API';
@@ -65,8 +65,8 @@ const Wishlist = ({product_}) => {
 
   return (
     <Pressable onPress={toggle_wishlist}>
-      <Icon
-        name={isLiked ? 'heart' : 'hearto'}
+      <Ionicons
+        name={isLiked ? 'heart' : 'heart-outline'}
         color={isLiked ? TYPO.colors.slate900 : 'gray'}
         size={responsiveFontSize(2.2)}
       />
