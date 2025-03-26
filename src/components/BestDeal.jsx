@@ -40,12 +40,17 @@ const BestDeal = ({navigation, products = []}) => {
   if (!products || !Array.isArray(products) || products.length !== 0) {
     return (
       <Carousel
-        ref={ref}
         width={width}
         height={responsiveHeight(48)}
         mode="parallax"
         loop={true}
+        onConfigurePanGesture={gestureChain => (
+          gestureChain.activeOffsetX([-10, 10])
+        )}
+      
         // autoPlay={true}
+        scrollEnabled={true} 
+     
         autoPlayInterval={2000}
         data={products || []}
         onProgressChange={progress}

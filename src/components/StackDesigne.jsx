@@ -33,16 +33,18 @@ const renderItem = ({item}) => {
 };
 
 function StackDesigne({navigation, products = []}) {
-  const ref = React.useRef(null);
+  
 
   return (
     <View
       id="carousel_stack_designe "
       className="mt-16"
       dataSet={{kind: 'basic-layouts', name: 'stack'}}>
-      <Carousel
-        ref={ref}
-        autoPlayInterval={2000}
+      <Carousel 
+       onConfigurePanGesture={gestureChain => (
+        gestureChain.activeOffsetX([-10, 10])
+      )}
+       autoPlayInterval={2000}
         data={defaultDataWith6Colors}
         height={340}
         loop={true}
@@ -61,7 +63,7 @@ function StackDesigne({navigation, products = []}) {
           stackInterval: 18,
         }}
         customConfig={() => ({type: 'positive', viewCount: 5})}
-        renderItem={renderItem} // ✅ Passing function reference, not calling it
+        renderItem={renderItem} 
       />
     </View>
   );
