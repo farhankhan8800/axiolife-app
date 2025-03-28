@@ -16,7 +16,7 @@
 		696977A612CC3EBEE75C723E /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */; };
 		761780ED2CA45674006654EE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 761780EC2CA45674006654EE /* AppDelegate.swift */; };
 		7ADF40C1141242669A9D5810 /* Mulish-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = EA6C582CC17F43B58A569327 /* Mulish-Bold.ttf */; };
-		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
+		844DAC622D9717C000962DAA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 844DAC612D9717C000962DAA /* LaunchScreen.storyboard */; };
 		C6924A87025B4027BAA30D84 /* Mulish-ExtraLight.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D6603E19A33E496880B9F7FF /* Mulish-ExtraLight.ttf */; };
 		D7CFBDAC3AF2476A9266EF54 /* Mulish-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B55D0F4B467349BEA0807938 /* Mulish-Light.ttf */; };
 		E4EFD2A039F14886A5BBCEA0 /* Mulish-ExtraBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 078D406D81BE45F88A824AC9 /* Mulish-ExtraBold.ttf */; };
@@ -33,7 +33,7 @@
 		5DCACB8F33CDC322A6C60F78 /* libPods-AxioLife.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AxioLife.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6B39196962D245E1ADDF72B8 /* Mulish-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Mulish-Regular.ttf"; path = "../src/assets/fonts/Mulish-Regular.ttf"; sourceTree = "<group>"; };
 		761780EC2CA45674006654EE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = AxioLife/AppDelegate.swift; sourceTree = "<group>"; };
-		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = AxioLife/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		844DAC612D9717C000962DAA /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		B55D0F4B467349BEA0807938 /* Mulish-Light.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Mulish-Light.ttf"; path = "../src/assets/fonts/Mulish-Light.ttf"; sourceTree = "<group>"; };
 		D22BF654E9A44CC49BCFC23D /* Mulish-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Mulish-Medium.ttf"; path = "../src/assets/fonts/Mulish-Medium.ttf"; sourceTree = "<group>"; };
 		D6603E19A33E496880B9F7FF /* Mulish-ExtraLight.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Mulish-ExtraLight.ttf"; path = "../src/assets/fonts/Mulish-ExtraLight.ttf"; sourceTree = "<group>"; };
@@ -61,8 +61,8 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				761780EC2CA45674006654EE /* AppDelegate.swift */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
-				81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */,
 				13B07FB81A68108700A75B9A /* PrivacyInfo.xcprivacy */,
+				844DAC612D9717C000962DAA /* LaunchScreen.storyboard */,
 			);
 			name = AxioLife;
 			sourceTree = "<group>";
@@ -190,7 +190,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				7ADF40C1141242669A9D5810 /* Mulish-Bold.ttf in Resources */,
 				E4EFD2A039F14886A5BBCEA0 /* Mulish-ExtraBold.ttf in Resources */,
@@ -200,6 +199,7 @@
 				3A180E6BAF594FFAB47C1365 /* Mulish-Medium.ttf in Resources */,
 				267BC79C1FCA4E64ACC073D0 /* Mulish-Regular.ttf in Resources */,
 				46C4D12FB7904C10B0863222 /* Mulish-SemiBold.ttf in Resources */,
+				844DAC622D9717C000962DAA /* LaunchScreen.storyboard in Resources */,
 				696977A612CC3EBEE75C723E /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -303,6 +303,8 @@
 				DEVELOPMENT_TEAM = ZNGD55BHZ7;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = AxioLife/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = AXIO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.shopping";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -316,8 +318,12 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = AxioLife;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -331,6 +337,8 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = ZNGD55BHZ7;
 				INFOPLIST_FILE = AxioLife/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = AXIO;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.shopping";
 				IPHONEOS_DEPLOYMENT_TARGET = 15.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -344,7 +352,11 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = AxioLife;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_XR_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
