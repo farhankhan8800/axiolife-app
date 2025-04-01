@@ -1,15 +1,16 @@
-import {View, Text, Pressable} from 'react-native';
+import {View, Text, Pressable, TouchableOpacity} from 'react-native';
 import React, {useState} from 'react';
 import {LogOut} from 'react-native-feather';
 import Modal from 'react-native-modal';
 import {responsiveWidth} from 'react-native-responsive-dimensions';
 import {CommonActions, useNavigation} from '@react-navigation/native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {logout} from '../reduxstore/slice/auth_slice';
 import Toast from 'react-native-toast-message';
 
-const LogoutScreen = ({setModalVisible}) => {
+const LogoutScreen = ({setModalVisible, option}) => {
   const [isLogoutVisible, setIsLogoutVisible] = useState(false);
   const {user, token, isAuthenticated} = useSelector(state => state.auth);
   const navigation = useNavigation();
@@ -18,7 +19,9 @@ const LogoutScreen = ({setModalVisible}) => {
 
   const logoutuser = () => {
     setIsLogoutVisible(false);
-    setModalVisible(false);
+    {
+      option == 'drawer' && setModalVisible(false);
+    }
 
     dispatch(logout());
 
@@ -41,14 +44,27 @@ const LogoutScreen = ({setModalVisible}) => {
 
   return (
     <>
-      <Pressable
-        className=" px-4 flex-row justify-center gap-2  items-center"
-        onPress={() => setIsLogoutVisible(true)}>
-        <LogOut width={responsiveWidth(6)} color="#fff" />
-        <Text className="text-base text-white uppercase font-mulish_bold">
-          Logout
-        </Text>
-      </Pressable>
+      {option == 'drawer' ? (
+        <Pressable
+          className=" px-4 flex-row justify-center gap-2  items-center"
+          onPress={() => setIsLogoutVisible(true)}>
+          <LogOut width={responsiveWidth(6)} color="#fff" />
+          <Text className="text-base text-white uppercase font-mulish_bold">
+            Logout
+          </Text>
+        </Pressable>
+      ) : (
+        <TouchableOpacity
+          className="mx-16  my-6 bg-white py-4 rounded-full items-center justify-center"
+          onPress={() => setIsLogoutVisible(true)}>
+          <View className="flex-row items-center">
+            <Ionicons name="log-in-outline" size={20} color="#1e293b" />
+            <Text className="ml-2 text-lg text-[#1e293b] font-medium">
+              Logout
+            </Text>
+          </View>
+        </TouchableOpacity>
+      )}
       <Modal
         style={{margin: 0}}
         avoidKeyboard={true}

@@ -27,10 +27,10 @@ const UserFavorite = ({navigation}) => {
   // console.log(wishlistItems)
 
   return (
-    <SafeAreaView className="flex-1 bg-[#F6F6F6]">
+    <SafeAreaView className="flex-1 bg-white">
       <SmallHeader name="Your Favorite" />
       <ScrollView className="flex-1">
-        <View className="justify-start pt-7 flex-row flex-wrap px-3 items-start w-full gap-y-5 gap-x-[4%] mb-20">
+        <View className="justify-start pt-6 flex-row flex-wrap px-2 items-start w-full gap-y-5 gap-x-[2%] mb-20">
           {wishlistItems.length > 0 &&
             wishlistItems?.map((item, i) => {
               return (

@@ -18,14 +18,11 @@ const SmallHeader = ({name, showSearch = true}) => {
 
   return (
     <View className="px-3 pt-4 pb-2 flex-row  justify-between items-center">
-      <Pressable
-        style={gstyle.shadow_s}
-        onPress={() => navigation.goBack()}
-        className="p-2 bg-gray-200 rounded-full">
-        <FontAwesome6
-          name={'arrow-left-long'}
+      <Pressable onPress={() => navigation.goBack()}>
+        <Ionicons
+          name="arrow-back-outline"
           color={TYPO.colors.dark}
-          size={responsiveFontSize(2.2)}
+          size={24}
         />
       </Pressable>
 

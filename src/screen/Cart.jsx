@@ -1,26 +1,15 @@
 import {
-  Button,
-  FlatList,
   Image,
   Pressable,
   SafeAreaView,
   ScrollView,
-  StyleSheet,
   Text,
   TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useEffect, useState} from 'react';
-
-import {
-  _product_data,
-  _store_data,
-  coupon_code,
-  product_details,
-} from '../utils/data_';
-import SmallHeader from '../components/SmallHeader';
-import {ChevronDown, ChevronRight, MapPin, Search} from 'react-native-feather';
+import {ChevronDown, MapPin} from 'react-native-feather';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {TYPO} from '../assets/typo';
@@ -36,14 +25,17 @@ import {addToCart, decreaseQuantity} from '../reduxstore/slice/cart_slice';
 import {useDispatch} from 'react-redux';
 import OrderProcessModal from '../components/OrderProcess';
 import {Skeleton} from 'react-native-skeletons';
+import SmallHeader from '../components/SmallHeader';
+import {coupon_code} from '../utils/data_';
+import LinearGradient from 'react-native-linear-gradient';
 
 const CartScreen = ({navigation}) => {
-  const [showCoupponBox, setShowCoupponBox] = useState(false);
+  const [showCouponBox, setShowCouponBox] = useState(false);
   const [cartItem, setCartItem] = useState([]);
   const [cartSummary, setCartSummary] = useState({});
-
   const [primaryAddress, setPrimaryAddress] = useState(null);
-  const [cartState, setCartState] = useState('LOADING'); //LOADING, NODATA, HAVEINDATA
+  const [cartState, setCartState] = useState('LOADING'); // LOADING, NODATA, HAVEINDATA
+  const [couponCode, setCouponCode] = useState('');
 
   const dispatch = useDispatch();
 
@@ -60,16 +52,14 @@ const CartScreen = ({navigation}) => {
         }
       }
     } catch (error) {
-      console.error('Verification failed:', error);
-      setCartState('');
+      console.error('Cart fetch failed:', error);
+      setCartState('NODATA');
       Toast.show({
         type: 'BasicToast',
-        text1: 'Something went wrong. Please try again.',
+        text1: 'Unable to fetch cart items. Please try again.',
         position: 'bottom',
         visibilityTime: 5000,
       });
-    } finally {
-      // setCartState('LOADING');
     }
   };
 
@@ -92,10 +82,10 @@ const CartScreen = ({navigation}) => {
         }
       }
     } catch (error) {
-      console.error('address get failed:', error);
+      console.error('Address fetch failed:', error);
       Toast.show({
         type: 'BasicToast',
-        text1: 'Something went wrong. Please try again.',
+        text1: 'Unable to fetch delivery address. Please try again.',
         position: 'bottom',
         visibilityTime: 5000,
       });
@@ -135,268 +125,288 @@ const CartScreen = ({navigation}) => {
         getCartItem();
       }
     } catch (error) {
-      console.error('Verification failed:', error);
+      console.error('Cart update failed:', error);
       Toast.show({
         type: 'BasicToast',
-        text1: 'Something went wrong. Please try again.',
+        text1: 'Unable to update cart. Please try again.',
         position: 'bottom',
         visibilityTime: 5000,
       });
-    } finally {
     }
   };
 
-  // console.log(cartSummary);
+  const renderCartItem = (item, index) => (
+    <View key={index} className="mb-7 bg-white rounded-2xl p-4 shadow-sm">
+      <View className="flex-row gap-5">
+        <View className="w-[35%] p-4 bg-gray-50 rounded-xl overflow-hidden justify-center items-center">
+          <Image
+            source={{uri: item.featured_image}}
+            resizeMode="contain"
+            className="h-28 w-28"
+            style={{marginVertical: 4}}
+          />
+        </View>
+        <View className="w-[60%] py-2 justify-between">
+          <Text
+            className="text-lg font-mulish_semibold text-gray-800"
+            numberOfLines={2}>
+            {item.title}
+          </Text>
 
-  return (
-    <SafeAreaView className="flex-1 bg-[#fff]">
-      <ScrollView className="w-full">
-        <SmallHeader name="Cart" />
-        <View className="px-5 mt-2">
-          <View className="flex-row justify-between items-center py-2">
-            <View className="flex-row items-center ">
-              <MapPin
-                width={responsiveFontSize(2)}
-                color={TYPO.colors.slate900}
-              />
-              <View className="flex-row items-center">
-                <Text className="text-base text-dark font-mulish_medium mx-2 ">
-                  Ship to:
-                </Text>
-                <Text
-                  numberOfLines={1}
-                  className="text-base text-dark font-mulish_semibold max-w-64">
-                  {primaryAddress ? (
-                    <>
-                      {primaryAddress.address_line1}{' '}
-                      {primaryAddress.address_line2} {primaryAddress.city}{' '}
-                      {primaryAddress.postal_code}
-                    </>
-                  ) : (
-                    ' Add and set your primary address'
-                  )}
-                </Text>
-              </View>
+          <View className="mt-4 flex-row justify-between items-center">
+            <Text className="text-2xl font-mulish_bold text-gray-900">
+              ${item.price}
+            </Text>
+            <View className="flex-row justify-between items-center bg-gray-100 rounded-full p-1.5">
+              <Pressable
+                onPress={() => manage_product(item, 'minus')}
+                className="rounded-full bg-white p-1.5 shadow-sm">
+                <Entypo
+                  name="minus"
+                  color={TYPO.colors.slate900}
+                  size={responsiveFontSize(2.2)}
+                />
+              </Pressable>
+              <Text className="text-lg text-gray-800 font-mulish_bold w-10 text-center">
+                {item.quantity}
+              </Text>
+              <Pressable
+                onPress={() => manage_product(item, 'plus')}
+                className="rounded-full bg-gray-900 p-1.5 shadow-sm">
+                <Entypo
+                  name="plus"
+                  color={TYPO.colors.light}
+                  size={responsiveFontSize(2.2)}
+                />
+              </Pressable>
             </View>
-            <Pressable onPress={() => navigation.navigate('Address')}>
-              <ChevronDown
-                width={responsiveFontSize(2.3)}
-                color={TYPO.colors.dark}
-              />
-            </Pressable>
           </View>
         </View>
-        {cartState == 'LOADING' && (
-          <View className="gap-2 px-3 mt-6">
-            <Skeleton
-              borderRadius={10}
-              count={2}
-              width={responsiveWidth(94)}
-              height={responsiveWidth(25)}
+      </View>
+    </View>
+  );
+
+  const renderAddressBar = () => (
+    <TouchableOpacity
+      onPress={() => navigation.navigate('Address')}
+      className="flex-row justify-between items-center bg-gray-50 p-4 rounded-xl mt-4 mb-6">
+      <View className="flex-row items-center">
+        <MapPin
+          width={responsiveFontSize(2.2)}
+          color={TYPO.colors.slate900}
+          className="mr-2"
+        />
+        <View>
+          <Text className="text-base text-gray-500 font-mulish_medium mb-1">
+            Deliver to:
+          </Text>
+          <Text
+            numberOfLines={1}
+            className="text-base text-gray-800 font-mulish_semibold max-w-64">
+            {primaryAddress ? (
+              <>
+                {primaryAddress.address_line1} {primaryAddress.address_line2},{' '}
+                {primaryAddress.city} {primaryAddress.postal_code}
+              </>
+            ) : (
+              'Add your delivery address'
+            )}
+          </Text>
+        </View>
+      </View>
+      <ChevronDown width={responsiveFontSize(2.3)} color={TYPO.colors.dark} />
+    </TouchableOpacity>
+  );
+
+  const renderSummaryItem = (
+    label,
+    value,
+    isHighlighted = false,
+    isDiscount = false,
+  ) => (
+    <View className="flex-row justify-between items-center py-2.5">
+      <Text
+        className={`text-base font-mulish_medium ${
+          isHighlighted ? 'text-gray-900' : 'text-gray-600'
+        }`}>
+        {label}
+      </Text>
+      <Text
+        className={`text-base font-mulish_bold ${
+          isDiscount
+            ? 'text-green-600'
+            : isHighlighted
+            ? 'text-gray-900'
+            : 'text-gray-700'
+        }`}>
+        {isDiscount ? '- ' : ''}
+        {value}
+      </Text>
+    </View>
+  );
+
+  const renderOrderSummary = () => (
+    <View className="bg-white rounded-2xl p-6 shadow-sm mt-6 mb-8">
+      <Text className="text-xl font-mulish_bold text-gray-900 mb-4">
+        Order Summary
+      </Text>
+
+      {renderSummaryItem('Subtotal', cartSummary?.total_price)}
+      {renderSummaryItem('Items', cartSummary?.total_items)}
+      {renderSummaryItem('Platform Fee', cartSummary?.platform_charge)}
+      {renderSummaryItem('Service Fee', cartSummary?.service_fee)}
+      {renderSummaryItem('Discount', '$200.00', false, true)}
+      {renderSummaryItem('Delivery', cartSummary?.delivery_charge)}
+
+      <View className="border-t border-gray-200 my-3" />
+
+      <View className="flex-row justify-between items-center mt-2">
+        <Text className="text-lg font-mulish_bold text-gray-900">Total</Text>
+        <Text className="text-2xl font-mulish_bold text-gray-900">
+          {cartSummary?.final_price}
+        </Text>
+      </View>
+    </View>
+  );
+
+  const renderCouponSection = () => (
+    <View className="bg-white rounded-2xl p-6 shadow-sm">
+      <View className="flex-row justify-between items-center mb-4">
+        <Text className="text-lg font-mulish_bold text-gray-900">
+          Apply Coupon
+        </Text>
+        <TouchableOpacity onPress={() => setShowCouponBox(!showCouponBox)}>
+          <Text className="text-base font-mulish_medium text-blue-600">
+            {showCouponBox ? 'Hide coupons' : 'View all'}
+          </Text>
+        </TouchableOpacity>
+      </View>
+
+      <View className="relative">
+        <TextInput
+          value={couponCode}
+          onChangeText={setCouponCode}
+          placeholder="Enter coupon code"
+          placeholderTextColor="#6B7280"
+          className="pl-4 pr-24 rounded-xl w-full bg-gray-50 px-4 py-3 text-base border border-gray-200"
+        />
+        <View className="absolute right-4 top-2.5">
+          <View className="flex-row items-center gap-1.5">
+            <FontAwesome5
+              name="check-circle"
+              size={responsiveFontSize(1.6)}
+              color="#22C55E"
             />
+            <Text className="text-green-600 text-base font-mulish_medium">
+              Available
+            </Text>
           </View>
-        )}
-        {cartState == 'NODATA' && (
-          <View
-            style={{height: responsiveHeight(70)}}
-            className="flex-1  justify-center items-center">
-            <Image
-              source={require('../assets/image/empty_cart.webp')}
-              resizeMode="contain"
-              className="h-40 w-40"
-            />
+        </View>
+      </View>
+
+      {showCouponBox && (
+        <View className="mt-5">
+          <Text className="text-base font-mulish_medium text-gray-600 mb-3">
+            Available coupons:
+          </Text>
+          <View className="flex-row flex-wrap gap-2">
+            {coupon_code.map((code, index) => (
+              <TouchableOpacity
+                key={index}
+                className="bg-gray-50 py-2 px-4 rounded-full border border-gray-200"
+                onPress={() => {
+                  setCouponCode(code.code);
+                  setShowCouponBox(false);
+                }}>
+                <Text className="text-base text-gray-800 font-mulish_medium">
+                  {code.code}
+                </Text>
+              </TouchableOpacity>
+            ))}
           </View>
-        )}
-        {cartState == 'HAVEINDATA' && (
-          <View className="mt-7 px-3">
-            {cartItem.map((item, i) => {
-              return (
-                <View key={i} className="flex-row mb-5 gap-4">
-                  <View className="w-[30%] p-3  bg-gray-100 rounded-2xl overflow-hidden justify-center items-center">
-                    <Image
-                      source={{uri: item.featured_image}}
-                      resizeMode="contain"
-                      className="h-20 w-24"
-                    />
-                  </View>
-                  <View className="w-[65%] py-1 justify-between">
-                    <Text
-                      className="text-base font-mulish_medium text-dark_blue"
-                      numberOfLines={2}>
-                      {item.title}
-                    </Text>
-                    <View className="flex-row justify-between items-center">
-                      <Text className="text-xl font-mulish_bold text-dark_blue">
-                        ${item.price}
-                      </Text>
-                      <View className="flex-row justify-between items-center bg-gray-100 rounded-full p-1">
-                        <Pressable
-                          onPress={() => manage_product(item, 'minus')}
-                          className="rounded-full bg-light p-[1px]">
-                          <Entypo
-                            name="minus"
-                            color={TYPO.colors.slate900}
-                            size={responsiveFontSize(2.4)}
-                          />
-                        </Pressable>
-                        <Text className="text-base text-dark font-mulish_semibold w-8 text-center">
-                          {item.quantity}
-                        </Text>
-                        <Pressable
-                          onPress={() => manage_product(item, 'plus')}
-                          className="rounded-full bg-slate-900 p-[1px]">
-                          <Entypo
-                            name="plus"
-                            color={TYPO.colors.light}
-                            size={responsiveFontSize(2.4)}
-                          />
-                        </Pressable>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              );
-            })}
-          </View>
-        )}
-        {cartState == 'HAVEINDATA' && (
+        </View>
+      )}
+    </View>
+  );
+
+  const renderLoading = () => (
+    <View className="px-5 py-6">
+      <Skeleton
+        borderRadius={16}
+        count={1}
+        width={responsiveWidth(90)}
+        height={responsiveWidth(25)}
+        gap={16}
+      />
+      <View className="h-6" />
+      <Skeleton
+        borderRadius={16}
+        count={2}
+        width={responsiveWidth(90)}
+        height={responsiveWidth(30)}
+        gap={16}
+      />
+    </View>
+  );
+
+  const renderEmptyCart = () => (
+    <View
+      style={{height: responsiveHeight(70)}}
+      className="flex-1 justify-center items-center">
+      <Image
+        source={require('../assets/image/empty_cart.webp')}
+        resizeMode="contain"
+        className="h-56 w-56"
+      />
+      <Text className="text-2xl font-mulish_bold text-gray-800 mt-6 mb-2">
+        Your cart is empty
+      </Text>
+      <Text className="text-base font-mulish_medium text-gray-500 text-center px-12 mb-8">
+        Looks like you haven't added anything to your cart yet
+      </Text>
+    </View>
+  );
+
+  return (
+    <SafeAreaView className="flex-1 bg-gray-50">
+      <SmallHeader name="Shopping Cart" />
+
+      <ScrollView
+        className="flex-1"
+        contentContainerStyle={{paddingHorizontal: 16, paddingBottom: 100}}>
+        {renderAddressBar()}
+
+        {cartState === 'LOADING' && renderLoading()}
+
+        {cartState === 'NODATA' && renderEmptyCart()}
+
+        {cartState === 'HAVEINDATA' && (
           <>
-            <View
-              className="mt-5 px-3"
-              style={{marginBottom: showCoupponBox ? 0 : responsiveHeight(10)}}>
-              <View className="flex-row items-center ">
-                <Text className="text-base font-mulish_medium mr-2 text-dark">
-                  Have a coupon code?
-                </Text>
-                <Pressable
-                  className=""
-                  onPress={() => {
-                    setShowCoupponBox(!showCoupponBox);
-                  }}>
-                  <Text className="text-base font-mulish_medium text-blue-500">
-                    All coupon
-                  </Text>
-                </Pressable>
-              </View>
-              <View className=" relative mt-3">
-                <TextInput
-                  placeholder="Enter coupon code"
-                  placeholderTextColor="#6B7280"
-                  className="pl-4 pr-36 rounded-xl w-full bg-gray-100 px-4 py-2 text-base h-10 border border-gray-200"
-                />
-                <View className="absolute right-3 top-1">
-                  {/* <Pressable className="" onPress={() => {}}>
-                <Text className="text-blue-500 text-lg font-mulish_semibold  ">
-                  Apply
-                </Text>
-              </Pressable> */}
-                  <View className="flex-row justify-center items-center gap-1 pt-1">
-                    <FontAwesome5
-                      name="check-circle"
-                      size={responsiveFontSize(1.6)}
-                      color={TYPO.colors.slate900}
-                    />
-                    <Text className="text-slate-900 text-base font-mulish_medium ">
-                      Available
-                    </Text>
-                  </View>
-                </View>
-              </View>
-              {showCoupponBox && (
-                <View className="border-[1px] border-gray-200 rounded-md my-6 p-4">
-                  <View className="flex-row flex-wrap gap-2 ">
-                    {coupon_code.map((code, index) => {
-                      return (
-                        <Pressable
-                          className="bg-gray-100 py-1 px-2 rounded-full"
-                          onPress={() => {
-                            setShowCoupponBox(false);
-                          }}>
-                          <Text
-                            key={index}
-                            className="text-sm text-dark_blue font-mulish_medium ml-2">
-                            {code.code}
-                          </Text>
-                        </Pressable>
-                      );
-                    })}
-                  </View>
-                </View>
-              )}
-            </View>
-            <View className="mt-5 px-3 mb-24">
-              <View className="flex-row justify-between items-center mb-1">
-                <Text className="text-base font-mulish_semibold text-dark_blue">
-                  Sub Total
-                </Text>
-                <Text className="text-base font-mulish_bold text-dark_blue">
-                  {cartSummary?.total_price}
-                </Text>
-              </View>
-              <View className="flex-row justify-between items-center mb-1">
-                <Text className="text-base font-mulish_semibold text-dark_blue">
-                  Total Item
-                </Text>
-                <Text className="text-base font-mulish_bold text-dark_blue">
-                  {cartSummary?.total_items}
-                </Text>
-              </View>
-              <View className="flex-row justify-between items-center mb-1">
-                <Text className="text-base font-mulish_semibold text-dark_blue">
-                  Platform Charge
-                </Text>
-                <Text className="text-base font-mulish_bold text-dark_blue">
-                  {cartSummary?.platform_charge}
-                </Text>
-              </View>
-              <View className="flex-row justify-between items-center mb-1">
-                <Text className="text-base font-mulish_semibold text-dark_blue">
-                  Service Fee
-                </Text>
-                <Text className="text-base font-mulish_bold text-dark_blue">
-                  {cartSummary?.service_fee}
-                </Text>
-              </View>
-              <View className="flex-row justify-between items-center mb-1">
-                <Text className="text-base font-mulish_semibold text-dark_blue">
-                  Discount
-                </Text>
-                <Text className="text-base font-mulish_bold text-slate-900">
-                  - $200.00
-                </Text>
-              </View>
-              <View className="flex-row justify-between items-center mb-4">
-                <Text className="text-base font-mulish_semibold text-dark_blue">
-                  Delivery Charge
-                </Text>
-                <Text className="text-base font-mulish_bold text-slate-900">
-                  {cartSummary?.delivery_charge}
-                </Text>
-              </View>
-              <View className="w-full border-b-[1px] border-dashed opacity-60" />
-              <View className="flex-row justify-between items-center mt-4">
-                <Text className="text-base font-mulish_bold text-dark_blue">
-                  Total
-                </Text>
-                <Text className="text-xl font-mulish_bold text-dark_blue">
-                  {cartSummary?.final_price}
-                </Text>
-              </View>
-            </View>
+            <View>{cartItem.map(renderCartItem)}</View>
+
+            {renderCouponSection()}
+            {renderOrderSummary()}
           </>
         )}
       </ScrollView>
-      <View className="px-4 py-2 pt-1 ">
-        {cartState == 'HAVEINDATA' ? (
+
+      <View className="absolute bottom-0 left-0 right-0 px-5 py-4 bg-white border-t border-gray-100 shadow-lg">
+        {cartState === 'HAVEINDATA' ? (
           <OrderProcessModal primaryAddress={primaryAddress} />
         ) : (
-          <TouchableOpacity
-            onPress={() => navigation.navigate('Product')}
-            className="border border-black justify-center items-center bg-black py-2 px-5 rounded-full">
-            <Text className="text-base text-center font-semibold text-light">
-              Explore our products
-            </Text>
-          </TouchableOpacity>
+          <LinearGradient
+            colors={['#202020', '#000000']}
+            start={{x: 0, y: 0}}
+            end={{x: 1, y: 1}}
+            className="rounded-full overflow-hidden">
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Product')}
+              className="justify-center items-center py-4">
+              <Text className="text-lg text-center font-mulish_bold text-white">
+                Discover Products
+              </Text>
+            </TouchableOpacity>
+          </LinearGradient>
         )}
       </View>
     </SafeAreaView>

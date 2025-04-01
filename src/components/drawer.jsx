@@ -45,7 +45,7 @@ const Drawer = () => {
   return (
     <>
       <Pressable onPress={() => setModalVisible(true)}>
-        <AlignLeft color={TYPO.colors.slate900} />
+        <AlignLeft color={TYPO.colors.light} />
       </Pressable>
 
       <Modal
@@ -205,7 +205,10 @@ const Drawer = () => {
             </View>
             <View className="flex-row justify-between items-center pb-3">
               {isAuthenticated && (
-                <LogoutScreen setModalVisible={setModalVisible} />
+                <LogoutScreen
+                  setModalVisible={setModalVisible}
+                  option="drawer"
+                />
               )}
 
               <Text className="text-[12px] font-thin  text-white text-center font-mulish_light">

@@ -5,6 +5,7 @@ import {
   Pressable,
   SafeAreaView,
   ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
   View,
@@ -42,26 +43,32 @@ import {setCart} from '../reduxstore/slice/cart_slice';
 import {useFocusEffect} from '@react-navigation/native';
 import {Skeleton} from 'react-native-skeletons';
 import LoadMore from '../components/LoadMore';
-import StackDesigne from '../components/StackDesigne';
+import StackDesigne from '../components/TopPicks';
+import BannerSwiper from '../components/MultipleBanners';
 
 const HomeScreen = ({navigation}) => {
+  const searchItems = [
+    'formal shoes',
+    'sports shoes',
+    'jeans',
+    'belt',
+    'perfumes',
+    'sunglasses',
+    'watches',
+  ];
   const [homeData, setHomeData] = useState({
     banners: [],
     categories: [],
     best_deals: [],
     products: [],
+    toppicks: [],
     stores: [],
   });
   const [loading, setLoading] = useState(false);
   const {user, token, isAuthenticated} = useSelector(state => state.auth);
   const dispatch = useDispatch();
   const [primaryAddress, setPrimaryAddress] = useState(null);
-
- 
-
-
-
-
+  const [placeholder, setPlaceholder] = useState(searchItems[0]);
   const gethomedata = async () => {
     setLoading(true);
     try {
@@ -75,6 +82,7 @@ const HomeScreen = ({navigation}) => {
           best_deals: data.response.products,
           products: data.response.products,
           stores: data.response.brands,
+          toppicks: data.response.toppicks,
         });
       }
     } catch (error) {
@@ -166,246 +174,243 @@ const HomeScreen = ({navigation}) => {
       gethomedata();
     }, [isAuthenticated]),
   );
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const randomItem =
+        searchItems[Math.floor(Math.random() * searchItems.length)];
+      setPlaceholder(randomItem);
+    }, 3000); // Har 3 second me update hoga
 
+    return () => clearInterval(interval); // Cleanup on unmount
+  }, []);
   return (
-    <SafeAreaView  className="flex-1 bg-light">
-    <HomeHeader />
-    <BottomTab />
-    {/* <BackPressHandler /> */}
-    <ScrollView className="flex-1">
-      <View className="px-3 mt-3">
-        <Pressable
-          onPress={() => navigation.navigate('Search')}
-          className="flex-row justify-start items-center bg-gray-100 px-5 py-3 rounded-full">
-          <Search
-            height={responsiveFontSize(2.2)}
-            width={responsiveFontSize(2.2)}
-            color={TYPO.colors.dark}
-          />
-          <Text className="text-base text-dark font-mulish_medium ml-2">
-            What are you looking for?
-          </Text>
-        </Pressable>
-      </View>
-      {isAuthenticated && (
-        <View className="px-5 mt-2">
-          <View className="flex-row justify-between items-center py-2">
-            <View className="flex-row items-center ">
-              <MapPin
-                width={responsiveFontSize(2)}
-                color={TYPO.colors.slate900}
+    <View className="flex-1">
+      <BottomTab />
+      {/* <BackPressHandler /> */}
+      <ScrollView className="flex-1 bg-white">
+        <HomeHeader />
+        <View
+          style={{backgroundColor: TYPO.colors.axiocolor}}
+          className="flex-1 rounded-b-3xl">
+          <View className="px-4 my-5">
+            <Pressable
+              onPress={() => navigation.navigate('Search')}
+              className="flex-row justify-start items-center bg-white px-6 py-4 rounded-full shadow-md border border-gray-200">
+              <Search
+                height={responsiveFontSize(3)}
+                width={responsiveFontSize(3)}
+                color="#454545"
               />
-              <View className="flex-row items-center">
-                <Text className="text-base text-dark font-mulish_medium mx-2 ">
-                  Ship to:
-                </Text>
-                <Text
-                  numberOfLines={1}
-                  className="text-base text-dark font-mulish_semibold max-w-72">
-                  {/* JiMalioboro. Block z no.18 oboro. Block z no.18 */}
-                  {primaryAddress ? (
-                    <>
-                      {primaryAddress.address_line1}{' '}
-                      {primaryAddress.address_line2} {primaryAddress.city}{' '}
-                      {primaryAddress.postal_code}
-                    </>
-                  ) : (
-                    ' Add and set your primary address'
-                  )}
-                </Text>
-              </View>
-            </View>
-            <Pressable onPress={() => navigation.navigate('Address')}>
-              <ChevronRight
-                width={responsiveFontSize(2.3)}
-                color={TYPO.colors.dark}
-              />
+              <Text className="text-lg text-gray-700 font-mulish_medium ml-3">
+                What are you looking for
+              </Text>
+              <Text className="text-lg font-mulish_bold ml-2 text-gray-900">
+                {placeholder}
+              </Text>
             </Pressable>
           </View>
-        </View>
-      )}
+          {isAuthenticated && (
+            <View className="px-5 mt-2">
+              <View className="flex-row justify-between items-center py-2">
+                <View className="flex-row items-center ">
+                  <MapPin
+                    width={responsiveFontSize(2)}
+                    color={TYPO.colors.light}
+                  />
+                  <View className="flex-row items-center">
+                    <Text className="text-base text-white font-mulish_medium mx-2 ">
+                      Ship to:
+                    </Text>
+                    <Text
+                      numberOfLines={1}
+                      className="text-base text-white font-mulish_semibold max-w-72">
+                      {/* JiMalioboro. Block z no.18 oboro. Block z no.18 */}
+                      {primaryAddress ? (
+                        <>
+                          {primaryAddress.address_line1}{' '}
+                          {primaryAddress.address_line2} {primaryAddress.city}{' '}
+                          {primaryAddress.postal_code}
+                        </>
+                      ) : (
+                        ' Add and set your primary address'
+                      )}
+                    </Text>
+                  </View>
+                </View>
+                <Pressable onPress={() => navigation.navigate('Address')}>
+                  <ChevronRight
+                    width={responsiveFontSize(2.3)}
+                    color={TYPO.colors.light}
+                  />
+                </Pressable>
+              </View>
+            </View>
+          )}
 
-      <ScrollView
-        horizontal={true}
-        showsHorizontalScrollIndicator={false}
-        className="mt-7">
-        <View className="px-2 flex-row">
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            className="mt-7">
+            <View className="px-2 flex-row">
+              {loading && (
+                <View className="flex-row gap-5 px-3">
+                  <Skeleton
+                    circle
+                    count={4}
+                    width={responsiveWidth(20)}
+                    height={responsiveWidth(20)}
+                  />
+                </View>
+              )}
+              {homeData.stores?.length > 0 &&
+                homeData.stores?.map((item, i) => {
+                  return (
+                    <Pressable
+                      className="mx-2 items-start mb-2"
+                      key={i}
+                      onPress={() =>
+                        navigation.navigate('StoreDetail', {slug: item.slug})
+                      }>
+                      <View
+                        className="bg-white rounded-full shadow-md "
+                        style={{
+                          elevation: 3,
+                          shadowColor: '#000',
+                          shadowOffset: {width: 0, height: 2},
+                          shadowOpacity: 0.1,
+                          shadowRadius: 4,
+                        }}>
+                        <Image
+                          source={{uri: item.image}}
+                          resizeMode="cover"
+                          style={{
+                            height: responsiveWidth(16),
+                            width: responsiveWidth(16),
+                            borderRadius: responsiveWidth(10),
+                          }}
+                        />
+                      </View>
+                    </Pressable>
+                  );
+                })}
+            </View>
+          </ScrollView>
           {loading && (
-            <View className="flex-row gap-5 px-3">
+            <View className="justify-center items-center flex-col gap-5 px-3 my-6">
               <Skeleton
-                circle
-                count={4}
-                width={responsiveWidth(20)}
-                height={responsiveWidth(20)}
+                borderRadius={16}
+                width={responsiveWidth(90)}
+                height={responsiveWidth(45)}
               />
             </View>
           )}
-          {homeData.stores?.length > 0 &&
-            homeData.stores?.map((item, i) => {
-              return (
-                <Pressable
-                  key={i}
-                  onPress={() =>
-                    navigation.navigate('StoreDetail', {slug: item.slug})
-                  }>
-                  <View className="mx-1 bg-slate-500 rounded-full ">
-                    <Image
-                      source={{uri: item.image}}
-                      resizeMode="contain"
-                      style={{
-                        height: responsiveWidth(20),
-                        width: responsiveWidth(20),
-                      }}
-                      // className="h-20 w-20"
-                    />
-                  </View>
-                </Pressable>
-              );
-            })}
-        </View>
-      </ScrollView>
-      {loading && (
-        <View className="justify-center items-center flex-col gap-5 px-3 my-6">
-          <Skeleton
-            borderRadius={10}
-            width={responsiveWidth(90)}
-            height={responsiveWidth(45)}
+          <BannerSwiper
+            banners={homeData.banners}
+            onBannerPress={(banner, index) => {
+              // Handle banner press, e.g. navigate or open URL
+              console.log(`Banner ${index} pressed:`, banner);
+            }}
+            // Optional: customize height or autoplayTimeout
+            // height={responsiveHeight(30)}
+            // autoplayTimeout={7}
           />
         </View>
-      )}
-      <Swiper
-        autoplay={true}
-        height={responsiveHeight(24)}
-        showsPagination={false}
-        containerStyle={{marginTop: responsiveHeight(2)}}
-        style={{}}>
+
+        {/* <Banner navigation={navigation} /> */}
+
         {loading && (
-          <View className=" px-3">
-            <Skeleton
-              borderRadius={10}
-              width={responsiveWidth(95)}
-              height={responsiveWidth(45)}
-            />
-          </View>
-        )}
-        {homeData.banners?.length > 0 &&
-          homeData.banners.map((item, i) => {
-            return (
-              <Pressable key={i} className="px-3">
-                <Image
-                  source={{
-                    uri: item.mobileImage,
-                  }}
-                  resizeMode="cover"
-                  className="w-full h-56 mt-[1] rounded-xl"
-                />
-              </Pressable>
-            );
-          })}
-      </Swiper>
-
-      {/* <Banner navigation={navigation} /> */}
-
-      {loading && (
-        <View className="justify-center items-center flex-col gap-5 px-3 my-6">
-          {/* <Image
+          <View className="justify-center items-center flex-col gap-5 px-3 my-6">
+            {/* <Image
           source={require('../assets/image/placeholder_image.png')}
           resizeMode="cover"
           className="w-full h-64 rounded-xl opacity-30 "
         /> */}
 
-          <Skeleton
-            borderRadius={10}
-            width={responsiveWidth(90)}
-            height={responsiveWidth(45)}
-          />
-        </View>
-      )}
-
-      <View>
-        {homeData.best_deals?.length > 0 && (
-          <BestDeal
-            navigation={navigation}
-            products={homeData.best_deals}
-           
-          />
+            <Skeleton
+              borderRadius={10}
+              width={responsiveWidth(90)}
+              height={responsiveWidth(45)}
+            />
+          </View>
         )}
-      </View>
 
-      <View className="mx-3">
-        <View className="flex-row items-center justify-between mb-3">
-          <Text className="text-xl font-mulish_semibold text-dark_blue">
-            Featured Products
-          </Text>
-          <Pressable
-            onPress={() =>
-              navigation.navigate('Product', {slug: 'Featured Products'})
-            }>
-            <Text className="text-sm font-mulish_semibold text-slate-900">
-              See All
-            </Text>
-          </Pressable>
-        </View>
-
-        <View className="justify-start flex-row flex-wrap items-start w-full gap-y-2 gap-x-[2%] ">
-          {homeData.products?.length > 0 &&
-            homeData.products.map((item, i) => {
-              return (
-                <ProductCard key={i} item={item} navigation={navigation} />
-              );
-            })}
-
-          {loading && (
-            <View className="justify-start items-center flex-row flex-wrap gap-2 ">
-              <Skeleton
-                borderRadius={4}
-                count={7}
-                width={responsiveWidth(46)}
-                height={responsiveWidth(58)}
-              />
-            </View>
+        <View>
+          {homeData.best_deals?.length > 0 && (
+            <BestDeal navigation={navigation} products={homeData.best_deals} />
           )}
         </View>
-        {homeData.products?.length > 0 && <LoadMore />}
-      </View>
 
-      {homeData.best_deals?.length > 0 && (
-        <StackDesigne
-          navigation={navigation}
-          products={homeData.best_deals}
-        />
-      )}
-
-      <View className="mt-14">
-        <View className="flex-row mx-3 items-center justify-between mb-3">
-          <Text className="text-xl font-mulisrh_semibold text-dark_blue">
-            Category
-          </Text>
-          <Pressable onPress={() => navigation.navigate('AllCategory')}>
-            <Text className="text-sm font-mulish_semibold text-slate-900">
-              See All
+        <View className="mx-3">
+          <View className="flex-row items-center justify-between mb-3">
+            <Text className="text-xl font-mulish_semibold text-dark_blue">
+              Featured Products
             </Text>
-          </Pressable>
-        </View>
-        <ScrollView
-          horizontal={true}
-          showsHorizontalScrollIndicator={false}
-          className="mt-2 pb-28">
-          <View className="px-3 flex-row gap-x-5">
-            {_category_data.map((item, i) => {
-              return (
-                <CategoryCardHome
-                  key={i}
-                  item={item}
-                  navigation={navigation}
-                />
-              );
-            })}
+            <Pressable
+              onPress={() =>
+                navigation.navigate('Product', {slug: 'Featured Products'})
+              }>
+              <Text className="text-sm font-mulish_semibold text-slate-900">
+                See All
+              </Text>
+            </Pressable>
           </View>
-        </ScrollView>
-      </View>
-    </ScrollView>
-  </SafeAreaView>
+
+          <View className="justify-start flex-row flex-wrap items-start w-full gap-y-2 gap-x-[2%] ">
+            {homeData.products?.length > 0 &&
+              homeData.products.map((item, i) => {
+                return (
+                  <ProductCard key={i} item={item} navigation={navigation} />
+                );
+              })}
+
+            {loading && (
+              <View className="justify-start items-center flex-row flex-wrap gap-2 ">
+                <Skeleton
+                  borderRadius={4}
+                  count={7}
+                  width={responsiveWidth(46)}
+                  height={responsiveWidth(58)}
+                />
+              </View>
+            )}
+          </View>
+          {homeData.products?.length > 0 && <LoadMore />}
+        </View>
+
+        {homeData.best_deals?.length > 0 && (
+          <StackDesigne navigation={navigation} products={homeData.toppicks} />
+        )}
+
+        <View className="mt-14">
+          <View className="flex-row mx-3 items-center justify-between mb-3">
+            <Text className="text-xl font-mulisrh_semibold text-dark_blue">
+              Category
+            </Text>
+            <Pressable onPress={() => navigation.navigate('AllCategory')}>
+              <Text className="text-sm font-mulish_semibold text-slate-900">
+                See All
+              </Text>
+            </Pressable>
+          </View>
+          <ScrollView
+            horizontal={true}
+            showsHorizontalScrollIndicator={false}
+            className="mt-2 pb-28">
+            <View className="px-3 flex-row gap-x-5">
+              {_category_data.map((item, i) => {
+                return (
+                  <CategoryCardHome
+                    key={i}
+                    item={item}
+                    navigation={navigation}
+                  />
+                );
+              })}
+            </View>
+          </ScrollView>
+        </View>
+      </ScrollView>
+    </View>
   );
 };
 

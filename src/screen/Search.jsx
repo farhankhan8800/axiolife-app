@@ -9,30 +9,31 @@ import {
   StatusBar,
 } from 'react-native';
 import React, {useState, useEffect, useRef} from 'react';
-import Icon from 'react-native-vector-icons/Feather'; // Using vector-icons instead of react-native-feather
+
 import {debounce} from '../utils/debounce';
 import {TYPO} from '../assets/typo';
 import MakeRequest from '../utils/axiosInstance';
 import {SEARCH_API} from '../service/API';
 import ProductCard from '../components/ProductCard';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 // Domain icons component to avoid displayName errors
 const DomainIcon = ({name}) => {
   switch (name) {
     case 'Shopping':
-      return <Icon name="shopping-bag" size={22} color="#404040" />;
+      return <Icon name="bag-outline" size={26} color="#404040" />;
     case 'Food & Grocery':
-      return <Icon name="coffee" size={22} color="#404040" />;
+      return <Icon name="cafe-outline" size={26} color="#404040" />;
     case 'Entertainment':
-      return <Icon name="film" size={22} color="#404040" />;
+      return <Icon name="videocam-outline" size={26} color="#404040" />;
     case 'Travel':
-      return <Icon name="plane" size={22} color="#404040" />;
+      return <Icon name="train-outline" size={26} color="#404040" />;
     case 'Utility':
-      return <Icon name="credit-card" size={22} color="#404040" />;
+      return <Icon name="card-outline" size={26} color="#404040" />;
     case 'Finance':
-      return <Icon name="dollar-sign" size={22} color="#404040" />;
+      return <Icon name="cash-outline" size={26} color="#404040" />;
     default:
-      return <Icon name="circle" size={22} color="#404040" />;
+      return <Icon name="refresh-outline" size={26} color="#404040" />;
   }
 };
 
@@ -46,8 +47,10 @@ const SearchScreen = ({navigation}) => {
 
   // Top brands data
   const topBrands = [
-    {id: 1, name: 'AJIO', logo: null}, // Use null since we're handling the case where there's no logo
-    // Add more brands as needed
+    {id: 1, name: 'NIKE', logo: null},
+    {id: 2, name: 'ADIDAS', logo: null},
+    {id: 3, name: 'PUMA', logo: null},
+    {id: 4, name: 'LEVIS', logo: null},
   ];
 
   // Domain categories
@@ -114,112 +117,157 @@ const SearchScreen = ({navigation}) => {
     debouncedSearch(query);
   }, [query, debouncedSearch]);
 
-  // Render AJIO logo instead of using an image that might not exist
-  const renderAjioLogo = () => {
+  // Render brand logo with enhanced styling
+  const renderBrandLogo = name => {
     return (
-      <View className="w-16 h-16 rounded-full bg-gray-900 items-center justify-center">
-        <Text className="font-bold text-lg text-white">AJIO</Text>
+      <View
+        className="w-20 h-20 rounded-full bg-gray-800 items-center justify-center shadow-lg elevation-5"
+        style={{
+          borderWidth: 1.5,
+          borderColor: '#f0f0f0',
+          shadowColor: '#000',
+          shadowOffset: {width: 0, height: 4},
+          shadowOpacity: 0.15,
+          shadowRadius: 6,
+        }}>
+        <Text className="font-bold text-xl text-white">{name}</Text>
       </View>
     );
   };
 
   return (
-    <SafeAreaView className="flex-1 bg-gray-50">
-      <StatusBar barStyle="dark-content" backgroundColor="#F9FAFB" />
-
-      {/* Search Header */}
-      <View className="px-5 pt-4 pb-4">
-        <View className="relative flex-row items-center">
+    <SafeAreaView className="flex-1 bg-white">
+      {/* Search Header with centered elements */}
+      <View className="px-5 pt-6 pb-6 bg-white">
+        <View className="flex-row items-center justify-center">
           <TouchableOpacity
             onPress={() => navigation.goBack()}
-            className="pr-2">
-            <Icon name="chevron-left" size={24} color="#404040" />
+            className="pr-4">
+            <Icon name="arrow-back-outline" size={28} color="#333333" />
           </TouchableOpacity>
 
           <View className="flex-1 relative">
-            <View className="absolute left-3 top-3 z-10">
-              <Icon name="search" size={18} color="#6B7280" />
+            {/* Centered search input with elegant styling */}
+            <View className="flex-row items-center bg-gray-50 rounded-full py-4 px-6 shadow-sm">
+              <Icon name="search-outline" size={22} color="#555555" />
+              <TextInput
+                placeholder="Search for brands and products"
+                placeholderTextColor="#555555"
+                className="flex-1 text-lg ml-3 text-gray-800"
+                value={query}
+                onChangeText={handleSearch}
+              />
+              {query.length > 0 && (
+                <TouchableOpacity onPress={clearSearch}>
+                  <Icon name="close-circle" size={22} color="#555555" />
+                </TouchableOpacity>
+              )}
             </View>
-            <TextInput
-              placeholder="K"
-              placeholderTextColor="#404040"
-              className="bg-white rounded-full pl-10 pr-10 py-2.5 text-base font-medium text-gray-800 w-full shadow-sm"
-              value={query}
-              onChangeText={handleSearch}
-            />
-            {query.length > 0 && (
-              <TouchableOpacity
-                className="absolute right-3 top-3 z-10"
-                onPress={clearSearch}>
-                <Icon name="x" size={18} color="#6B7280" />
-              </TouchableOpacity>
-            )}
           </View>
-
-          <TouchableOpacity onPress={clearSearch} className="pl-2">
-            <Icon name="x" size={24} color="#404040" />
-          </TouchableOpacity>
         </View>
       </View>
 
       <ScrollView className="flex-1">
-        {/* Categories Section */}
-        <View className="bg-white rounded-3xl mx-4 mb-4 p-5 shadow-sm">
-          {/* Top Brands */}
-          <View className="mb-6">
-            <Text className="text-xl font-bold text-gray-800 mb-4">
-              Search by Top Brands
-            </Text>
-            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-              <View className="flex-row">
-                {topBrands.map(brand => (
+        {/* Categories Section - Only show when no query */}
+        {query.length === 0 && (
+          <View className="px-5 pt-2">
+            {/* Top Brands Section with enhanced styling */}
+            <View
+              className="mb-8 p-5 rounded-xl"
+              style={{
+                backgroundColor: '#ffffff',
+                borderWidth: 1,
+                borderColor: '#f0f0f0',
+                shadowColor: '#000',
+                shadowOffset: {width: 0, height: 2},
+                shadowOpacity: 0.08,
+                shadowRadius: 8,
+                elevation: 3,
+              }}>
+              <Text className="text-2xl font-bold text-gray-800 mb-5">
+                Top Brands
+              </Text>
+              <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                <View className="flex-row">
+                  {topBrands.map(brand => (
+                    <TouchableOpacity
+                      key={brand.id}
+                      className="mr-5 items-center"
+                      onPress={() =>
+                        navigation.navigate('BrandProducts', {
+                          brandId: brand.id,
+                        })
+                      }>
+                      {renderBrandLogo(brand.name)}
+                      <Text className="text-base font-medium text-gray-800 mt-3">
+                        {brand.name}
+                      </Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </ScrollView>
+            </View>
+
+            {/* Domains/Categories Section with enhanced styling */}
+            <View
+              className="mb-6 p-5 rounded-xl"
+              style={{
+                backgroundColor: '#ffffff',
+                borderWidth: 1,
+                borderColor: '#f0f0f0',
+                shadowColor: '#000',
+                shadowOffset: {width: 0, height: 2},
+                shadowOpacity: 0.08,
+                shadowRadius: 8,
+                elevation: 3,
+              }}>
+              <Text className="text-2xl font-bold text-gray-800 mb-5">
+                Categories
+              </Text>
+              <View className="flex-row flex-wrap justify-between">
+                {domains.map(domain => (
                   <TouchableOpacity
-                    key={brand.id}
-                    className="mr-3 items-center"
+                    key={domain.id}
+                    className="bg-gray-50 rounded-xl px-5 py-4 mb-4 flex-row items-center justify-center w-[48%]"
+                    style={{
+                      borderWidth: 1,
+                      borderColor: '#f0f0f0',
+                      shadowColor: '#000',
+                      shadowOffset: {width: 0, height: 2},
+                      shadowOpacity: 0.1,
+                      shadowRadius: 4,
+                      elevation: 2,
+                    }}
                     onPress={() =>
-                      navigation.navigate('BrandProducts', {brandId: brand.id})
+                      navigation.navigate('DomainProducts', {
+                        domainId: domain.id,
+                      })
                     }>
-                    {renderAjioLogo()}
-                    <Text className="text-sm font-medium text-gray-800 mt-1">
-                      {brand.name}
+                    <DomainIcon name={domain.name} />
+                    <Text className="text-gray-800 font-medium text-base ml-3">
+                      {domain.name}
                     </Text>
                   </TouchableOpacity>
                 ))}
               </View>
-            </ScrollView>
-          </View>
-
-          {/* Domains/Categories */}
-          <View>
-            <Text className="text-xl font-bold text-gray-800 mb-4">
-              Search by Domain
-            </Text>
-            <View className="flex-row flex-wrap justify-between">
-              {domains.map(domain => (
-                <TouchableOpacity
-                  key={domain.id}
-                  className="bg-gray-50 rounded-full px-4 py-3 mb-3 items-center flex-row w-[48%]"
-                  onPress={() =>
-                    navigation.navigate('DomainProducts', {domainId: domain.id})
-                  }>
-                  <View className="mr-2">
-                    <DomainIcon name={domain.name} />
-                  </View>
-                  <Text className="text-gray-800 font-medium">
-                    {domain.name}
-                  </Text>
-                </TouchableOpacity>
-              ))}
             </View>
           </View>
-        </View>
+        )}
 
         {/* Search Results - Only show if there's a query */}
         {query.length > 0 && (
-          <View className="px-4 pt-2">
+          <View className="px-5 pt-2">
+            {/* Loading indicator */}
+            {loading && (
+              <View className="items-center py-8">
+                <Text className="text-gray-500 text-lg">Searching...</Text>
+              </View>
+            )}
+
+            {/* Products section */}
             {searchResults?.products?.length > 0 && (
               <View className="mb-8">
-                <Text className="text-xl font-bold text-gray-800 mb-4">
+                <Text className="text-2xl font-bold text-gray-800 mb-5">
                   Products
                 </Text>
                 <View className="flex-row flex-wrap justify-between">
@@ -230,34 +278,35 @@ const SearchScreen = ({navigation}) => {
               </View>
             )}
 
+            {/* Brands section */}
             {searchResults?.brands?.length > 0 && (
               <View className="mb-8">
-                <Text className="text-xl font-bold text-gray-800 mb-4">
+                <Text className="text-2xl font-bold text-gray-800 mb-5">
                   Brands
                 </Text>
                 <View className="flex-row flex-wrap justify-between">
                   {searchResults.brands.map(item => (
                     <TouchableOpacity
                       key={item.id}
-                      className="w-[48%] bg-white mb-4 rounded-lg overflow-hidden shadow-sm"
+                      className="w-[48%] bg-white mb-5 rounded-xl overflow-hidden shadow-sm"
                       onPress={() =>
                         navigation.navigate('BrandProducts', {brandId: item.id})
                       }>
                       {item.image ? (
                         <Image
                           source={{uri: item.image}}
-                          className="h-32 w-full"
+                          className="h-36 w-full"
                           resizeMode="cover"
                         />
                       ) : (
-                        <View className="h-32 w-full bg-gray-200 items-center justify-center">
-                          <Text className="text-gray-500 font-semibold">
+                        <View className="h-36 w-full bg-gray-100 items-center justify-center">
+                          <Text className="text-gray-500 font-semibold text-lg">
                             {item.name}
                           </Text>
                         </View>
                       )}
-                      <View className="p-3 items-center">
-                        <Text className="text-gray-800 font-semibold">
+                      <View className="p-4 items-center">
+                        <Text className="text-gray-800 font-semibold text-lg">
                           {item.name}
                         </Text>
                       </View>
@@ -267,11 +316,13 @@ const SearchScreen = ({navigation}) => {
               </View>
             )}
 
+            {/* No results message */}
             {searchResults?.products?.length === 0 &&
               searchResults?.brands?.length === 0 &&
               !loading && (
-                <View className="items-center py-12">
-                  <Text className="text-gray-700 text-lg font-semibold">
+                <View className="items-center py-16">
+                  <Icon name="search-outline" size={50} color="#DDDDDD" />
+                  <Text className="text-gray-700 text-xl font-semibold mt-4">
                     No results found for "{query}"
                   </Text>
                   <Text className="text-gray-500 text-base mt-2 text-center px-8">
