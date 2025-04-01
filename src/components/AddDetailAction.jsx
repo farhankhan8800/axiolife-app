@@ -127,48 +127,36 @@ const AddDetailAction = ({product_, navigation}) => {
 
   return (
     <>
-      <View className="flex-row justify-between items-center px-4 py-2 pt-1 ">
+      <View className="flex-row justify-between items-center px-4 py-2 pt-1">
         <Pressable
           onPress={add_cart_function}
-          className="flex-row gap-3 border-[1px] w-[40%] justify-center  items-center py-2 px-5 rounded-full border-black">
+          className={`flex-row gap-3 border-[1px] w-[40%] justify-center items-center py-2 px-5 rounded-full ${
+            isInCart ? 'bg-[#1e293b] border-[#1e293b]' : 'border-[#1e293b]'
+          }`}>
           <FontAwesome5
             name={isInCart ? 'check' : 'shopping-basket'}
-            color={TYPO.colors.slate900}
+            color={isInCart ? '#f8fafc' : '#1e293b'}
             size={responsiveFontSize(2.2)}
           />
 
-          <Text className="text-base font-semibold text-slate-900 ">
+          <Text
+            className={`text-base font-semibold ${
+              isInCart ? 'text-[#f8fafc]' : 'text-[#1e293b]'
+            }`}>
             Add to Cart
           </Text>
         </Pressable>
         <Pressable
           style={{width: '56%'}}
           onPress={buy_now_function}
-          className="border-[1px] justify-center  items-center bg-black py-2 px-5 rounded-full border-black">
-          <Text className="text-base text-center font-semibold text-light ">
+          className="border-[1px] justify-center items-center bg-[#1e293b] py-2 px-5 rounded-full border-[#1e293b]">
+          <Text className="text-base text-center font-semibold text-[#f8fafc]">
             Buy Now
           </Text>
         </Pressable>
       </View>
-      {/* {isInCart && (
-        <Pressable
-          onPress={() => navigation.navigate('Cart')}
-          style={{backgroundColor: TYPO.colors.darkblack}}
-          className="mt-2 gap-3 flex-row justify-center items-center py-3 ">
-          <Text className="text-lg text-white font-mulish_semibold">
-            Check Out
-          </Text>
-          <FontAwesome
-            name="chevron-circle-right"
-            color={TYPO.colors.light}
-            size={responsiveFontSize(3)}
-          />
-        </Pressable>
-      )} */}
     </>
   );
 };
 
 export default AddDetailAction;
-
-const styles = StyleSheet.create({});
