@@ -28,23 +28,32 @@ const ProductScreen = ({navigation, route}) => {
   const [showFilter, setShowFilter] = useState(false);
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [selectedCategory, setSelectedCategory] = useState('All');
-  const [scrollOffset, setScrollOffset] = useState(0);
-
-  const categories = ['All', 'Featured', 'New Arrivals', 'Bestsellers', 'Sale'];
+  const [tags, setTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState({});
+  const [brands, setBrands] = useState([]);
+  const [selectBrands, setSelectBrands] = useState([]);
+  const [page, setPage] = useState(1);
 
   const getAllProducts = async () => {
     setLoading(true);
     try {
       const data = await MakeRequest(
         ALL_PRODUCTS_API,
-        {},
+        {
+          group_id: selectedTags.group_id,
+          brand_id: selectBrands,
+          page:page
+        },
         {},
         'application/json',
       );
 
+      console.log('data', data)
+
       if (data.status == 1) {
         setAllProducts(data.response.products);
+        setBrands(data.response.brands);
+        setTags(data.response.tags);
       }
     } catch (error) {
       console.error('Error fetching products:', error);
@@ -58,11 +67,7 @@ const ProductScreen = ({navigation, route}) => {
     return () => {
       // Cleanup
     };
-  }, []);
-
-  const handleScroll = event => {
-    setScrollOffset(event.nativeEvent.contentOffset.y);
-  };
+  }, [selectedTags, selectBrands, page]);
 
   const renderHeaderBar = () => {
     return (
@@ -106,27 +111,27 @@ const ProductScreen = ({navigation, route}) => {
     );
   };
 
-  const renderCategoryBar = () => {
+  const renderTagsBar = () => {
     return (
       <View className="mt-1 mb-1">
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           className="px-4 py-1">
-          {categories.map((category, index) => (
+          {tags.map((tag, index) => (
             <Pressable
               key={index}
               className={`px-4 py-1 mr-2 rounded-lg ${
-                selectedCategory === category ? 'bg-slate-800' : 'bg-gray-100'
+                selectedTags?.slug === tag.slug ? 'bg-slate-800' : 'bg-gray-100'
               }`}
-              onPress={() => setSelectedCategory(category)}>
+              onPress={() => setSelectedTags(tag)}>
               <Text
                 className={`text-sm font-medium ${
-                  selectedCategory === category
+                  selectedTags?.slug === tag.slug
                     ? 'text-white font-semibold'
                     : 'text-slate-500'
                 }`}>
-                {category}
+                {tag.name}
               </Text>
             </Pressable>
           ))}
@@ -199,7 +204,9 @@ const ProductScreen = ({navigation, route}) => {
     return (
       <View className="px-4">
         <Text className="text-lg font-bold text-slate-800 mb-2">
-          {selectedCategory === 'All' ? 'Our Collection' : selectedCategory}
+          {Object.keys(selectedTags).length === 0
+            ? 'Our Collection'
+            : selectedTags.name}
         </Text>
         <View className="flex-row flex-wrap justify-between">
           {allProducts.map((item, i) => (
@@ -218,48 +225,49 @@ const ProductScreen = ({navigation, route}) => {
   return (
     <SafeAreaView className="flex-1 bg-gray-50">
       {renderHeaderBar()}
-      <ScrollView
-        ref={scrollRef}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-        className="pb-10">
-        {renderCategoryBar()}
+      <ScrollView ref={scrollRef} scrollEventThrottle={16} className="pb-10">
+        {renderTagsBar()}
         {renderFeaturedSlider()}
         {renderProductGrid()}
+        {!loading && (
+          <View className="flex justify-center items-center p-8">
+            <Pressable
+              className="bg-black py-3 rounded-full shadow-lg px-16 flex items-center"
+              onPress={() => setPage(page + 1)}>
+              <Text className="text-white text-base font-mulish_medium">
+                Loading
+              </Text>
+            </Pressable>
+          </View>
+        )}
       </ScrollView>
-      <FilterModal showFilter={showFilter} setShowFilter={setShowFilter} />
+      <FilterModal
+        showFilter={showFilter}
+        setShowFilter={setShowFilter}
+        brands={brands}
+        setSelectBrands={setSelectBrands}
+      />
     </SafeAreaView>
   );
 };
 
-const FilterModal = ({showFilter, setShowFilter}) => {
-  const [priceRange, setPriceRange] = useState([0, 1000]);
-  const [selectedBrands, setSelectedBrands] = useState([]);
-  const [selectedColors, setSelectedColors] = useState([]);
+const FilterModal = ({showFilter, setShowFilter, brands, setSelectBrands}) => {
+  const [selectedBrandsF, setSelectedBrandsF] = useState([]);
   const [expanded, setExpanded] = useState(false);
-
-  const brands = ['Luxury Brand', 'Premium Co.', 'Designer House', 'Artisan'];
-  const colors = ['Black', 'White', 'Navy', 'Beige', 'Brown'];
 
   const closeFilter = () => {
     setShowFilter(false);
-    // Reset expanded state when modal closes
+
     setTimeout(() => setExpanded(false), 300);
   };
 
   const toggleBrand = brand => {
-    if (selectedBrands.includes(brand)) {
-      setSelectedBrands(selectedBrands.filter(item => item !== brand));
-    } else {
-      setSelectedBrands([...selectedBrands, brand]);
-    }
-  };
+    const isSelected = selectedBrandsF.includes(brand.brand_id);
 
-  const toggleColor = color => {
-    if (selectedColors.includes(color)) {
-      setSelectedColors(selectedColors.filter(item => item !== color));
+    if (isSelected) {
+      setSelectedBrandsF(selectedBrandsF.filter(id => id !== brand.brand_id));
     } else {
-      setSelectedColors([...selectedColors, color]);
+      setSelectedBrandsF([...selectedBrandsF, brand.brand_id]);
     }
   };
 
@@ -306,61 +314,39 @@ const FilterModal = ({showFilter, setShowFilter}) => {
               Brands
             </Text>
             <View className="flex-row flex-wrap">
-              {brands.map((brand, index) => (
-                <Pressable
-                  key={index}
-                  className={`px-4 py-1 mr-2.5 mb-1.5 rounded-lg border ${
-                    selectedBrands.includes(brand)
-                      ? 'bg-slate-800 border-slate-800'
-                      : 'bg-slate-100 border-slate-200'
-                  }`}
-                  onPress={() => toggleBrand(brand)}>
-                  <Text
-                    className={`text-sm ${
-                      selectedBrands.includes(brand)
-                        ? 'text-white'
-                        : 'text-slate-500'
-                    }`}>
-                    {brand}
-                  </Text>
-                </Pressable>
-              ))}
-            </View>
-          </View>
-
-          <View className="mb-3">
-            <Text className="text-base font-semibold text-slate-800 mb-1.5">
-              Colors
-            </Text>
-            <View className="flex-row flex-wrap">
-              {colors.map((color, index) => (
-                <Pressable
-                  key={index}
-                  className={`px-4 py-1 mr-2.5 mb-1.5 rounded-lg border ${
-                    selectedColors.includes(color)
-                      ? 'bg-slate-800 border-slate-800'
-                      : 'bg-slate-100 border-slate-200'
-                  }`}
-                  onPress={() => toggleColor(color)}>
-                  <Text
-                    className={`text-sm ${
-                      selectedColors.includes(color)
-                        ? 'text-white'
-                        : 'text-slate-500'
-                    }`}>
-                    {color}
-                  </Text>
-                </Pressable>
-              ))}
+              {brands.map((brand, index) => {
+                const isSelected = selectedBrandsF.includes(brand.brand_id);
+                return (
+                  <Pressable
+                    key={index}
+                    className={`px-4 py-1 mr-2.5 mb-1.5 rounded-lg border ${
+                      isSelected
+                        ? 'bg-slate-800 border-slate-800'
+                        : 'bg-slate-100 border-slate-200'
+                    }`}
+                    onPress={() => toggleBrand(brand)}>
+                    <Text
+                      className={`text-sm ${
+                        isSelected ? 'text-white' : 'text-slate-500'
+                      }`}>
+                      {brand.name}
+                    </Text>
+                  </Pressable>
+                );
+              })}
             </View>
           </View>
         </ScrollView>
 
         <View className="flex-row justify-between px-6 py-2 border-t border-slate-100">
-          <Pressable className="px-6 py-1.5 rounded-lg border border-slate-800 w-[48%] items-center">
+          <Pressable
+            onPress={() => setSelectedBrandsF([])}
+            className="px-6 py-1.5 rounded-lg border border-slate-800 w-[48%] items-center">
             <Text className="text-base font-medium text-slate-800">Reset</Text>
           </Pressable>
-          <Pressable className="px-6 py-1.5 rounded-lg bg-slate-800 w-[48%] items-center">
+          <Pressable
+            onPress={() => setSelectBrands([...selectedBrandsF])}
+            className="px-6 py-1.5 rounded-lg bg-slate-800 w-[48%] items-center">
             <Text className="text-base font-medium text-white">Apply</Text>
           </Pressable>
         </View>

@@ -45,10 +45,12 @@ const OrderDetail = ({navigation, route}) => {
         {}, // Empty headers
         'application/json',
       );
-
+      // console.log('data.response', data.response)
       if (data.status == 1) {
         setItemList(data.response.items);
+        setOrderSummary(data.response.order)
       }
+      
     } catch (error) {
       console.error('Error fetching order details:', error);
     } finally {
@@ -115,6 +117,22 @@ const OrderDetail = ({navigation, route}) => {
     );
   }
 
+
+
+
+let readable_date = new Date(orderSummary.created_at);
+
+const date_options_ = {
+  day: '2-digit',
+  month: 'short',
+  year: 'numeric',
+  hour: '2-digit',
+  minute: '2-digit',
+  hour12: true
+};
+
+
+
   return (
     <SafeAreaView className="flex-1 bg-white">
       <SmallHeader name="Order Details" />
@@ -124,7 +142,7 @@ const OrderDetail = ({navigation, route}) => {
             <View className="bg-white rounded-xl shadow-md py-5 px-6 border-l-4 border-[#1e293b]">
               <View className="flex-row justify-between items-center">
                 <Text className="text-2xl text-[#1e293b] font-mulish_bold">
-                  Order #{order_detail_data.order_id}
+                  Order #{orderSummary.order_number}
                 </Text>
                 <AntDesign
                   name="filetext1"
@@ -133,7 +151,7 @@ const OrderDetail = ({navigation, route}) => {
                 />
               </View>
               <Text className="text-gray-500 font-mulish_medium mt-1">
-                Placed on {order_detail_data.date || 'Apr 01, 2025'}
+                Placed on {readable_date.toLocaleString('en-US', date_options_)}
               </Text>
             </View>
           </View>
@@ -164,7 +182,7 @@ const OrderDetail = ({navigation, route}) => {
                         className="w-24 h-24 rounded-lg"
                       />
                     </View>
-                    <View className="flex-1">
+                    <View className="flex-1 items-start">
                       <Text className="text-lg text-[#1e293b] font-mulish_bold mb-1">
                         {item.product_name}
                       </Text>
@@ -174,7 +192,7 @@ const OrderDetail = ({navigation, route}) => {
                         </Text>
                         <Text className="mx-2 text-gray-400">•</Text>
                         <Text className="text-lg text-[#1e293b] font-mulish_bold">
-                          ${item.price}
+                        {'\u20B9'}{item.price}
                         </Text>
                       </View>
                       <View className="mt-2">
